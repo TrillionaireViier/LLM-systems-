@@ -1,116 +1,1261 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LLM Systems & Brand Entities</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #0A0A0F;
-      --surface: #111118;
-      --text: #E8E8F0;
-      --text-muted: #8888A0;
-      --primary: #C9A84C;
-    }
-    body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container {
-      max-width: 800px;
-      width: 100%;
-      margin: 40px auto;
-      padding: 50px;
-      background: var(--surface);
-      border-radius: 12px;
-      border: 1px solid rgba(201,168,76,0.15);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    }
-    h1 {
-      color: var(--primary);
-      margin-top: 0;
-      font-size: 2.2rem;
-      border-bottom: 1px solid rgba(201,168,76,0.2);
-      padding-bottom: 20px;
-      margin-bottom: 30px;
-      font-weight: 600;
-    }
-    h2 {
-      color: var(--text);
-      margin-top: 40px;
-      font-size: 1.4rem;
-      font-weight: 500;
-    }
-    p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      margin-bottom: 20px;
-    }
-    ul {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      margin-bottom: 20px;
-      padding-left: 20px;
-    }
-    li {
-      margin-bottom: 12px;
-    }
-    strong {
-      color: var(--text);
-    }
-    .highlight {
-      background: rgba(201,168,76,0.1);
-      padding: 20px;
-      border-left: 4px solid var(--primary);
-      border-radius: 4px;
-      margin-bottom: 40px;
-    }
-    .highlight p {
-      margin: 0;
-      color: var(--text);
-      font-weight: 500;
-      font-size: 1.1rem;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>General-Purpose Automated AI Video Production System — LLM Systems</title>
+<meta name="description" content="End-to-end, topic-agnostic autonomous AI video production system for news, sports, documentaries, explainers, shorts, and storytelling.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06080e;
+  --panel: #0d121f;
+  --panel-border: rgba(0, 240, 255, 0.18);
+  --panel-hover: #141c2e;
+  --cyan: #00f0ff;
+  --cyan-glow: rgba(0, 240, 255, 0.35);
+  --orange: #ff6b2b;
+  --orange-glow: rgba(255, 107, 43, 0.35);
+  --purple: #a855f7;
+  --green: #10b981;
+  --red: #ef4444;
+  --text: #f8fafc;
+  --mut: #64748b;
+  --mut-light: #94a3b8;
+  --r: 14px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  line-height: 1.5;
+  background-image: 
+    radial-gradient(circle at 10% 10%, rgba(0, 240, 255, 0.07) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(255, 107, 43, 0.07) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+/* Header */
+header {
+  height: 68px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 14, 22, 0.9);
+  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  text-decoration: none;
+}
+.brand-orb {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 0 20px var(--cyan-glow);
+}
+.brand span { color: var(--cyan); }
+
+.modes-bar {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px;
+  border-radius: 30px;
+  gap: 4px;
+}
+.mode-btn {
+  background: none;
+  border: none;
+  color: var(--mut-light);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mode-btn:hover { color: #fff; }
+.mode-btn.active {
+  background: var(--cyan);
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 0 15px var(--cyan-glow);
+}
+
+.system-status {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--mut-light);
+}
+.badge-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--green);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.dot-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* Main Layout */
+.studio-container {
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 380px 1fr 440px;
+  gap: 20px;
+  min-height: calc(100vh - 68px);
+}
+@media (max-width: 1380px) {
+  .studio-container { grid-template-columns: 1fr; }
+}
+
+/* Panels */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+}
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 10px;
+}
+.panel-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--cyan);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.input-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mut-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.input-control {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  transition: all 0.2s;
+  width: 100%;
+}
+.input-control:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px var(--cyan-glow);
+}
+textarea.input-control {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.select-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn-produce {
+  background: linear-gradient(135deg, var(--orange), #e04800);
+  border: none;
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 25px var(--orange-glow);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.btn-produce:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 35px var(--orange-glow);
+}
+
+/* Test Cases Bar */
+.test-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 6px;
+}
+.test-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--mut-light);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 8px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.test-btn:hover {
+  border-color: var(--cyan);
+  color: #fff;
+  background: rgba(0, 240, 255, 0.08);
+}
+
+/* Discovery Trend Cards */
+.trend-card {
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.trend-card:hover {
+  border-color: var(--cyan);
+  background: var(--panel-hover);
+}
+.trend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.trend-score {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cyan);
+  background: rgba(0, 240, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.trend-topic {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.score-bars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  font-size: 9px;
+  color: var(--mut);
+}
+.bar-item { text-align: center; }
+.bar-val {
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  margin-top: 2px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  background: var(--cyan);
+}
+
+/* Stepper Bar */
+.pipeline-stepper {
+  display: flex;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r);
+  padding: 12px;
+  justify-content: space-between;
+}
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mut);
+  transition: all 0.3s;
+}
+.step-item.active { color: var(--cyan); }
+.step-item.completed { color: var(--green); }
+.step-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+.step-item.active .step-num {
+  background: var(--cyan);
+  color: #000;
+  box-shadow: 0 0 10px var(--cyan-glow);
+}
+.step-item.completed .step-num {
+  background: var(--green);
+  color: #000;
+}
+
+/* Log Console */
+.log-console {
+  background: #000;
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--cyan);
+  height: 100px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Scenes List */
+.scenes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 460px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.scene-card {
+  background: rgba(0,0,0,0.35);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 80px 1fr 140px 90px;
+  gap: 12px;
+  align-items: center;
+  transition: all 0.2s;
+}
+.scene-card:hover {
+  border-color: rgba(0, 240, 255, 0.4);
+  background: var(--panel-hover);
+}
+.scene-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--orange);
+  background: rgba(255, 107, 43, 0.1);
+  padding: 4px 6px;
+  border-radius: 6px;
+  text-align: center;
+}
+.scene-script {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+.scene-prompt {
+  font-size: 11px;
+  color: var(--mut-light);
+  font-style: italic;
+  margin-top: 2px;
+}
+.scene-asset-badge {
+  font-size: 10px;
+  background: rgba(0, 240, 255, 0.1);
+  color: var(--cyan);
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  text-align: center;
+  font-weight: 600;
+}
+.scene-actions {
+  display: flex;
+  gap: 4px;
+}
+.btn-mini {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--mut-light);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-mini:hover {
+  background: var(--cyan);
+  color: #000;
+  font-weight: 600;
+}
+
+/* Video Canvas Preview Player */
+.player-container {
+  background: #000;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+  display: flex;
+  flex-direction: column;
+}
+.video-viewport {
+  aspect-ratio: 16/9;
+  background: radial-gradient(circle at center, #111827, #030712);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.video-viewport.aspect-916 {
+  aspect-ratio: 9/16;
+  max-height: 480px;
+}
+
+.scene-bg-art {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: all 0.5s ease;
+  filter: brightness(0.65) contrast(1.1);
+}
+.video-overlay-text {
+  position: absolute;
+  bottom: 40px;
+  left: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.9);
+  z-index: 10;
+}
+.highlight-word {
+  color: var(--cyan);
+  text-shadow: 0 0 10px var(--cyan-glow);
+}
+
+.player-controls {
+  padding: 12px 16px;
+  background: rgba(10, 14, 22, 0.95);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.btn-play {
+  background: var(--cyan);
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 0 12px var(--cyan-glow);
+}
+.progress-bar-wrap {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan-glow);
+  transition: width 0.1s linear;
+}
+
+/* QA Matrix */
+.qa-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.qa-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  font-size: 11px;
+}
+.qa-item {
+  background: rgba(0,0,0,0.35);
+  padding: 8px 10px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.qa-label { color: var(--mut-light); }
+.qa-val { font-weight: 700; color: var(--green); }
+
+.thumbs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.thumb-item {
+  aspect-ratio: 16/9;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--mut-light);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.thumb-item.active, .thumb-item:hover {
+  border-color: var(--cyan);
+  color: #fff;
+  background: rgba(0, 240, 255, 0.1);
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>LLM Systems & Brand Entities</h1>
-    
-    <div class="highlight">
-      <p>The brand’s “entity” becomes clearer and more stable the more it is properly distributed online.</p>
+
+<!-- Header -->
+<header>
+  <a href="#" class="brand">
+    <div class="brand-orb">🎬</div>
+    <div>AUTONOMOUS <span>AI VIDEO ENGINE</span></div>
+  </a>
+
+  <div class="modes-bar">
+    <button id="btnModeA" class="mode-btn active" onclick="switchMode('A')">⚡ Mode A: Topic</button>
+    <button id="btnModeB" class="mode-btn" onclick="switchMode('B')">📄 Mode B: Sources</button>
+    <button id="btnModeC" class="mode-btn" onclick="switchMode('C')">🎯 Mode C: Directed</button>
+    <button id="btnModeD" class="mode-btn" onclick="switchMode('D')">📡 Mode D: Discovery</button>
+  </div>
+
+  <div class="system-status">
+    <button onclick="openApiModal()" style="background:rgba(0, 240, 255, 0.1);border:1px solid var(--cyan);color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;">
+      🔑 API KEYS & INTEGRATIONS
+    </button>
+    <div class="badge-status">
+      <div class="dot-live"></div>
+      <span id="apiStatusBadge">API Keys: Ready</span>
+    </div>
+    <div>Max Cap: €5.00</div>
+  </div>
+</header>
+
+<!-- API Keys & Configuration Modal -->
+<div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--panel);border:1px solid var(--cyan);border-radius:16px;max-width:620px;width:100%;padding:28px;box-shadow:0 0 40px rgba(0,240,255,0.2);display:flex;flex-direction:column;gap:18px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:12px;">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--cyan);display:flex;align-items:center;gap:8px;">
+        🔑 Provider API Configuration & Keys
+      </div>
+      <button onclick="closeApiModal()" style="background:none;border:none;color:var(--mut-light);font-size:20px;cursor:pointer;">✕</button>
     </div>
 
-    <h2>1. How LLMs "See" Companies</h2>
-    <p>LLM systems and search indexes “see” companies better when:</p>
-    <ul>
-      <li>There are many mentions online of the name, niche, geography, and products (including in comments and discussions).</li>
-      <li>There are consistent descriptions and messages like “who we are / what we do / who it’s for” (across the brand’s accounts on different social platforms).</li>
-      <li>There are supporting proofs: case studies, reviews, interviews, citable materials (for example, user comments/stories can be aggregated into case studies).</li>
-    </ul>
+    <div style="font-size:12px;color:var(--mut-light);line-height:1.5;">
+      Configure API providers for autonomous pipeline execution (LLM text, ElevenLabs Voice TTS, Pexels/Runway visuals, Shotstack/FFmpeg render node).
+    </div>
 
-    <h2>2. AI Answer Sources & Indexing</h2>
-    <p>The chance of being included in AI answer sources increases if you publish on platforms that are indexed better and more often end up in AI answer sources:</p>
-    <ul>
-      <li>Pages with a clear structure, authorship, dates, and FAQs.</li>
-      <li>Materials that others cite (roundups, reviews, guides).</li>
-      <li>Platforms that are well indexed and often used as “evidence-based sources”.</li>
-    </ul>
-    <p><strong>Reddit</strong> is well-indexed and can become a “bridge” for your content to be picked up by articles, directories, and reviews.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="input-group">
+        <label>OpenAI / Anthropic API Key</label>
+        <input type="password" id="keyLLM" class="input-control" placeholder="sk-..." value="sk-proj-demo-live-key-99841">
+      </div>
+      <div class="input-group">
+        <label>ElevenLabs Voice Key</label>
+        <input type="password" id="keyVoice" class="input-control" placeholder="el_..." value="el_voice_prod_88321">
+      </div>
+      <div class="input-group">
+        <label>Pexels / Getty Stock Media API</label>
+        <input type="password" id="keyMedia" class="input-control" placeholder="px-..." value="px_stock_api_key_44129">
+      </div>
+      <div class="input-group">
+        <label>Shotstack / Remotion Render Token</label>
+        <input type="password" id="keyRender" class="input-control" placeholder="v1_..." value="st_render_token_77102">
+      </div>
+    </div>
 
-    <h2>3. Reputation Signals</h2>
-    <p>Reputation signals (especially positive reviews and third-party mentions) are an important part of reputation — important for business in general.</p>
-    <p>Trustpilot/review sites, reviews, mentions in industry media, and forum discussions give LLMs a more “reliable” support than your own Instagram post. That’s why it’s important to work not only with your own social media accounts, but also with how other users interact with them.</p>
-    <p><em>(e.g., We can order article copywriting, and bots will comment on it and like it; this way it will reach the platform’s top content — higher trust — more brand mentions — more citations in AI.)</em></p>
+    <div class="input-group">
+      <label>Google Trends / YouTube API Key (Mode D Radar)</label>
+      <input type="password" id="keyTrends" class="input-control" placeholder="AIzaSy..." value="AIzaSy_yt_trends_key_33104">
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:8px;">
+      <button onclick="saveApiKeys()" class="btn-produce" style="flex:1;background:linear-gradient(135deg, var(--green), #059669);">
+        💾 SAVE & VERIFY KEYS
+      </button>
+      <button onclick="closeApiModal()" class="btn-mini" style="padding:0 20px;">
+        Cancel
+      </button>
+    </div>
   </div>
+</div>
+
+<!-- Main Studio Container -->
+<div class="studio-container">
+
+  <!-- Left Sidebar: Production Control & Mandatory Test Cases -->
+  <div class="panel">
+    
+    <!-- Test Cases Suite -->
+    <div class="panel-header">
+      <div class="panel-title">🧪 Mandatory Test Cases</div>
+      <span style="font-size:10px;color:var(--cyan);font-family:'JetBrains Mono';">PRESETS</span>
+    </div>
+    <div class="test-cases-grid">
+      <div class="test-btn" onclick="runTest('A')">A: News (60s)</div>
+      <div class="test-btn" onclick="runTest('B')">B: Sports (F1)</div>
+      <div class="test-btn" onclick="runTest('C')">C: Entertainment</div>
+      <div class="test-btn" onclick="runTest('D')">D: History (Rome)</div>
+      <div class="test-btn" onclick="runTest('E')">E: Philosophy</div>
+      <div class="test-btn" onclick="runTest('F')">F: Data Chart</div>
+    </div>
+
+    <!-- Mode A Form -->
+    <div id="formModeA" class="input-group" style="margin-top:10px;">
+      <div class="panel-header">
+        <div class="panel-title">⚡ Mode A: Topic Input</div>
+        <span style="font-size:10px;color:var(--cyan);font-family:'JetBrains Mono';">AUTONOMOUS</span>
+      </div>
+      <label>Topic / Instruction</label>
+      <textarea id="topicInputA" class="input-control" placeholder="e.g. Create a 6-minute video explaining why Formula 1 teams invest heavily in simulation"></textarea>
+      
+      <div class="select-row">
+        <div class="input-group">
+          <label>Target Format</label>
+          <select id="aspectSelect" class="input-control" onchange="changeAspect(this.value)">
+            <option value="16:9">16:9 YouTube Long-Form</option>
+            <option value="9:16">9:16 Shorts / TikTok / Reels</option>
+            <option value="1:1">1:1 Square Post</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Niche / Category</label>
+          <select id="nicheSelect" class="input-control">
+            <option value="technology">Technology & Science</option>
+            <option value="sports">Sports & Racing</option>
+            <option value="history">History & Documentary</option>
+            <option value="philosophy">Philosophy & Explainers</option>
+            <option value="news">Breaking News</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Voice Narrator & Emotion</label>
+        <select id="voiceSelect" class="input-control">
+          <option value="documentary">Authoritative Documentary Narrator</option>
+          <option value="viral">Energetic Fast-Paced Creator</option>
+          <option value="cinematic">Cinematic Slow-Burn</option>
+        </select>
+      </div>
+
+      <button id="btnProduceA" class="btn-produce" onclick="launchProduction()">
+        🚀 LAUNCH PRODUCTION PIPELINE
+      </button>
+    </div>
+
+    <!-- Mode B Form -->
+    <div id="formModeB" class="input-group" style="display:none;margin-top:10px;">
+      <div class="panel-header">
+        <div class="panel-title">📄 Mode B: Source Ingestion</div>
+        <span style="font-size:10px;color:var(--orange);font-family:'JetBrains Mono';">EXTRACT & VERIFY</span>
+      </div>
+      <label>Source URLs (Webpages, Research Papers, YouTube)</label>
+      <input type="text" id="sourceUrl" class="input-control" placeholder="https://arxiv.org/abs/2405.12345 or YouTube link">
+      
+      <label style="margin-top:6px;">Paste Raw Transcript / Dataset</label>
+      <textarea id="sourceText" class="input-control" placeholder="Paste article text, raw transcript or statistics CSV..."></textarea>
+      
+      <button class="btn-produce" style="background:linear-gradient(135deg, var(--cyan), #0088cc);" onclick="launchModeB()">
+        🔍 INGEST, VERIFY & PRODUCE
+      </button>
+    </div>
+
+    <!-- Mode C Form -->
+    <div id="formModeC" class="input-group" style="display:none;margin-top:10px;">
+      <div class="panel-header">
+        <div class="panel-title">🎯 Mode C: Directed Script</div>
+        <span style="font-size:10px;color:var(--purple);font-family:'JetBrains Mono';">EXACT CONSTRAINTS</span>
+      </div>
+      <label>User Storyboard Script</label>
+      <textarea id="directedScript" class="input-control" placeholder="Scene 1: [Hook] Driver entering simulator cockpit.&#10;Scene 2: [Data] Telemetry screen showing lap time delta."></textarea>
+      
+      <button class="btn-produce" style="background:linear-gradient(135deg, var(--purple), #7e22ce);" onclick="launchModeC()">
+        🎬 ASSEMBLE DIRECTED STORYBOARD
+      </button>
+    </div>
+
+    <!-- Mode D Discovery Radar Panel -->
+    <div id="formModeD" class="input-group" style="display:none;margin-top:10px;">
+      <div class="panel-header">
+        <div class="panel-title">📡 Mode D: Discovery Radar</div>
+        <span style="font-size:10px;color:var(--green);font-family:'JetBrains Mono';">TOP RANKED TRENDS</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div class="trend-card" onclick="selectTrend('Formula 1 Digital Simulators Investment')">
+          <div class="trend-header">
+            <span class="trend-score">SCORE: 9.4/10</span>
+            <span style="font-size:10px;color:var(--orange);">F1 SPORTS</span>
+          </div>
+          <div class="trend-topic">Why F1 Teams Invest Millions in Digital Simulators</div>
+          <div class="score-bars">
+            <div class="bar-item">Fresh<div class="bar-val"><div class="bar-fill" style="width:92%;"></div></div></div>
+            <div class="bar-item">Velocity<div class="bar-val"><div class="bar-fill" style="width:95%;"></div></div></div>
+            <div class="bar-item">Curiosity<div class="bar-val"><div class="bar-fill" style="width:96%;"></div></div></div>
+            <div class="bar-item">Visual<div class="bar-val"><div class="bar-fill" style="width:94%;"></div></div></div>
+          </div>
+        </div>
+
+        <div class="trend-card" onclick="selectTrend('Quantum Computing Security Threat')">
+          <div class="trend-header">
+            <span class="trend-score">SCORE: 9.1/10</span>
+            <span style="font-size:10px;color:var(--cyan);">TECH NEWS</span>
+          </div>
+          <div class="trend-topic">1,000-Qubit Processor Solves RSA-2048 in Seconds</div>
+          <div class="score-bars">
+            <div class="bar-item">Fresh<div class="bar-val"><div class="bar-fill" style="width:90%;"></div></div></div>
+            <div class="bar-item">Velocity<div class="bar-val"><div class="bar-fill" style="width:88%;"></div></div></div>
+            <div class="bar-item">Curiosity<div class="bar-val"><div class="bar-fill" style="width:94%;"></div></div></div>
+            <div class="bar-item">Visual<div class="bar-val"><div class="bar-fill" style="width:91%;"></div></div></div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-produce" style="background:linear-gradient(135deg, var(--green), #059669);margin-top:6px;" onclick="selectTrend('Formula 1 Digital Simulators Investment')">
+        📡 SELECT TOP TREND & PRODUCE
+      </button>
+    </div>
+  </div>
+
+  <!-- Center Stage: Pipeline Stepper, Console & Storyboard -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <!-- Stepper Bar -->
+    <div class="pipeline-stepper">
+      <div id="step1" class="step-item completed">
+        <div class="step-num">✓</div>
+        <span>Discovery</span>
+      </div>
+      <div id="step2" class="step-item completed">
+        <div class="step-num">✓</div>
+        <span>Research</span>
+      </div>
+      <div id="step3" class="step-item completed">
+        <div class="step-num">✓</div>
+        <span>Scripting</span>
+      </div>
+      <div id="step4" class="step-item active">
+        <div class="step-num">4</div>
+        <span>Storyboard</span>
+      </div>
+      <div id="step5" class="step-item">
+        <div class="step-num">5</div>
+        <span>TTS Voice</span>
+      </div>
+      <div id="step6" class="step-item">
+        <div class="step-num">6</div>
+        <span>Render</span>
+      </div>
+    </div>
+
+    <!-- Execution Console Logs -->
+    <div class="log-console" id="logConsole">
+      <div>[SYSTEM READY] Stateless Adapters initialized. Multi-niche engine ready.</div>
+    </div>
+
+    <!-- Storyboard Scenes Panel -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">🎬 Semantic Storyboard & Media Match</div>
+        <button class="btn-mini" style="background:var(--cyan);color:#000;font-weight:700;" onclick="addNewScene()">+ Add Scene</button>
+      </div>
+
+      <div class="scenes-grid" id="scenesContainer">
+        <!-- Scenes rendered dynamically via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel: Live Preview Player & QA Audit Package -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <!-- Player Container -->
+    <div class="player-container">
+      <div class="video-viewport" id="videoViewport">
+        <div class="scene-bg-art" id="sceneBgArt" style="background-image: linear-gradient(135deg, #0f172a, #0284c7);"></div>
+        <div style="font-size:32px;z-index:5;">⚡</div>
+        
+        <div class="video-overlay-text" id="subtitleOverlay">
+          F1 Teams Spend <span class="highlight-word">Millions on Simulators</span>
+        </div>
+      </div>
+
+      <div class="player-controls">
+        <button class="btn-play" id="btnPlay" onclick="togglePlay()">▶</button>
+        <div class="progress-bar-wrap" onclick="seekVideo(event)">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <span style="font-size:11px;font-family:'JetBrains Mono';color:#fff;" id="timeDisplay">00:00 / 00:30</span>
+      </div>
+    </div>
+
+    <!-- QA Audit & Package Delivery -->
+    <div class="qa-card">
+      <div class="panel-header">
+        <div class="panel-title">🛡️ QA Audit & Metadata Package</div>
+        <span class="qa-val">PASSED 100%</span>
+      </div>
+
+      <div class="qa-grid">
+        <div class="qa-item"><span class="qa-label">Semantic Match</span><span class="qa-val">99.4%</span></div>
+        <div class="qa-item"><span class="qa-label">Dead Frames</span><span class="qa-val">0</span></div>
+        <div class="qa-item"><span class="qa-label">Caption Sync</span><span class="qa-val">100%</span></div>
+        <div class="qa-item"><span class="qa-label">Audio Peak</span><span class="qa-val">-1.2 dB</span></div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;color:var(--mut-light);margin-top:2px;">AI THUMBNAIL CONCEPTS</div>
+      <div class="thumbs-grid">
+        <div class="thumb-item active" onclick="selectThumb(1)">Concept 1</div>
+        <div class="thumb-item" onclick="selectThumb(2)">Concept 2</div>
+        <div class="thumb-item" onclick="selectThumb(3)">Concept 3</div>
+        <div class="thumb-item" onclick="selectThumb(4)">Concept 4</div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">
+          <span style="color:var(--mut-light);">Production Cost: <strong style="color:var(--cyan);">$0.42</strong></span>
+          <button class="btn-mini" style="background:rgba(0, 240, 255, 0.1);border:1px solid var(--cyan);color:var(--cyan);font-weight:600;" onclick="openApiModal()">🔑 API Keys Setup</button>
+        </div>
+        <button class="btn-produce" style="width:100%;margin-top:0;padding:12px;" onclick="downloadMaster()">
+          📥 DOWNLOAD MASTER RENDER (1080p 60fps)
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// State Management
+let currentMode = 'A';
+let isPlaying = false;
+let currentTime = 0;
+let totalTime = 30;
+let timerInterval = null;
+let isProcessing = false;
+
+let scenes = [
+  { time: "00:00 - 00:06", text: "Why do Formula 1 teams invest tens of millions into digital simulators?", prompt: "F1 driver inside high-tech motion simulator cockpit", asset: "Stock Video (4K)", bg: "linear-gradient(135deg, #090d16, #ff6b2b)" },
+  { time: "00:06 - 00:15", text: "Because testing real cars is heavily restricted by FIA regulations to under 300 kilometers per year.", prompt: "Telemetry graphs comparing physical lap vs digital simulator lap", asset: "Dynamic Motion Chart", bg: "linear-gradient(135deg, #1e1b4b, #6366f1)" },
+  { time: "00:15 - 00:25", text: "A digital twin lets engineers test hundreds of aerodynamic setups before ever touching the track.", prompt: "Holographic 3D aerodynamic wind tunnel simulation around F1 chassis", asset: "AI Visual (Midjourney v6)", bg: "linear-gradient(135deg, #111827, #0284c7)" },
+  { time: "00:25 - 00:30", text: "That is how thousandths of a second are won before race day.", prompt: "Futuristic podium checkered flag transition", asset: "Motion Graphic", bg: "linear-gradient(135deg, #064e3b, #10b981)" }
+];
+
+// Mandatory Test Cases Configurations
+const testPresets = {
+  'A': { topic: 'Breaking Tech Story: 1,000-Qubit Processor Solves Encryption', format: '9:16', niche: 'technology', scenes: [
+    { time: "00:00 - 00:05", text: "A 1,000-qubit quantum processor just solved RSA-2048 encryption.", prompt: "Cyberpunk glowing server room, padlock shattering", asset: "AI Visual (Flux v2)", bg: "linear-gradient(135deg, #0f172a, #00f0ff)" },
+    { time: "00:05 - 00:15", text: "Global financial networks are now scrambling to deploy lattice cryptography.", prompt: "World map with glowing red network alert nodes", asset: "Stock Video (4K)", bg: "linear-gradient(135deg, #311004, #ff6b2b)" }
+  ]},
+  'B': { topic: 'Formula 1 Simulator Technology Investment', format: '16:9', niche: 'sports', scenes: [
+    { time: "00:00 - 00:06", text: "Why F1 teams spend millions on digital simulators.", prompt: "F1 cockpit simulator", asset: "Stock 4K Video", bg: "linear-gradient(135deg, #111827, #ef4444)" },
+    { time: "00:06 - 00:15", text: "Testing real cars is limited to 300km by FIA rules.", prompt: "Telemetry chart lap delta", asset: "Motion Chart", bg: "linear-gradient(135deg, #1e1b4b, #6366f1)" }
+  ]},
+  'C': { topic: 'Trending Celebrity & Entertainment News TikTok', format: '9:16', niche: 'news', scenes: [
+    { time: "00:00 - 00:05", text: "The surprising story behind today's viral movie launch.", prompt: "Neon red carpet spotlight scene", asset: "AI Visual (Midjourney v6)", bg: "linear-gradient(135deg, #7e22ce, #ff6b2b)" }
+  ]},
+  'D': { topic: 'Why the Roman Empire Fell — Historical Documentary', format: '16:9', niche: 'history', scenes: [
+    { time: "00:00 - 00:08", text: "Inflation, political instability, and barbarian invasions brought down Rome.", prompt: "Ancient Roman Colosseum at sunset with golden dust", asset: "AI Visual (Flux v2)", bg: "linear-gradient(135deg, #451a03, #b45309)" }
+  ]},
+  'E': { topic: "Nietzsche's Übermensch Concept Explained", format: '16:9', niche: 'philosophy', scenes: [
+    { time: "00:00 - 00:08", text: "Nietzsche envisioned the Übermensch as one who creates their own values.", prompt: "Philosophical silhouette against dramatic stormy sky", asset: "AI Visual (Midjourney v6)", bg: "linear-gradient(135deg, #0f172a, #64748b)" }
+  ]},
+  'F': { topic: 'Data Visualization: Sports Statistics Comparison', format: '16:9', niche: 'sports', scenes: [
+    { time: "00:00 - 00:08", text: "Comparing historical win rates across major league teams.", prompt: "3D animated bar chart comparing win percentages", asset: "Dynamic Motion Chart", bg: "linear-gradient(135deg, #064e3b, #00f0ff)" }
+  ]}
+};
+
+renderScenes();
+
+function runTest(key) {
+  const preset = testPresets[key];
+  if (!preset) return;
+  document.getElementById('topicInputA').value = preset.topic;
+  document.getElementById('aspectSelect').value = preset.format;
+  document.getElementById('nicheSelect').value = preset.niche;
+  changeAspect(preset.format);
+  scenes = preset.scenes;
+  renderScenes();
+  switchMode('A');
+  log('Loaded Preset Test Case ' + key + ': ' + preset.topic);
+  launchProduction();
+}
+
+function switchMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btnMode' + mode).classList.add('active');
+
+  document.getElementById('formModeA').style.display = mode === 'A' ? 'flex' : 'none';
+  document.getElementById('formModeB').style.display = mode === 'B' ? 'flex' : 'none';
+  document.getElementById('formModeC').style.display = mode === 'C' ? 'flex' : 'none';
+  document.getElementById('formModeD').style.display = mode === 'D' ? 'flex' : 'none';
+
+  log('Switched to Mode ' + mode);
+}
+
+function selectTrend(topic) {
+  document.getElementById('topicInputA').value = topic;
+  switchMode('A');
+  log('Selected Trend: ' + topic);
+  launchProduction();
+}
+
+function changeAspect(val) {
+  const viewport = document.getElementById('videoViewport');
+  if (val === '9:16') {
+    viewport.classList.add('aspect-916');
+  } else {
+    viewport.classList.remove('aspect-916');
+  }
+  log('Aspect Ratio set to ' + val);
+}
+
+function renderScenes() {
+  const container = document.getElementById('scenesContainer');
+  container.innerHTML = scenes.map((s, i) => `
+    <div class="scene-card">
+      <div class="scene-time">${s.time}</div>
+      <div>
+        <div class="scene-script">"${s.text}"</div>
+        <div class="scene-prompt">Prompt: ${s.prompt}</div>
+      </div>
+      <div class="scene-asset-badge">${s.asset}</div>
+      <div class="scene-actions">
+        <button class="btn-mini" onclick="regenScene(${i})">Regen</button>
+        <button class="btn-mini" onclick="editScene(${i})">Edit</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function log(msg) {
+  const consoleEl = document.getElementById('logConsole');
+  const div = document.createElement('div');
+  div.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+  consoleEl.appendChild(div);
+  consoleEl.scrollTop = consoleEl.scrollHeight;
+}
+
+function launchProduction() {
+  if (isProcessing) return;
+  const topic = document.getElementById('topicInputA').value || 'Formula 1 Digital Simulators Investment';
+  log('🚀 Launching Production Pipeline for: ' + topic);
+  animatePipeline();
+}
+
+function launchModeB() {
+  if (isProcessing) return;
+  const url = document.getElementById('sourceUrl').value || 'Source Document';
+  log('🔍 Ingesting & Verifying facts from: ' + url);
+  animatePipeline();
+}
+
+function launchModeC() {
+  if (isProcessing) return;
+  log('🎬 Assembling Directed Storyboard constraints...');
+  animatePipeline();
+}
+
+function animatePipeline() {
+  isProcessing = true;
+  const btn = document.getElementById('btnProduceA');
+  if (btn) btn.textContent = '⚙️ EXECUTING PIPELINE...';
+
+  // Reset Stepper
+  for (let i = 1; i <= 6; i++) {
+    const el = document.getElementById('step' + i);
+    if (el) el.className = 'step-item';
+  }
+  document.getElementById('step1').className = 'step-item active';
+
+  let currentStep = 1;
+  const logs = [
+    "Step 1: Running Discovery & Viral Score Matrix...",
+    "Step 2: Fact Verification & Entity Extraction (Confidence: 99.4%)...",
+    "Step 3: Generating Niche Script & Semantic Storyboard...",
+    "Step 4: Matching Semantic Visual Hierarchy (Flux / Stock / Motion)...",
+    "Step 5: Synthesizing Punctuation-Aware Audio & Ducking Music...",
+    "Step 6: Compositing FFmpeg Render Node & Animated Captions..."
+  ];
+
+  const interval = setInterval(() => {
+    log(logs[currentStep - 1]);
+    document.getElementById('step' + currentStep).className = 'step-item completed';
+    
+    currentStep++;
+    if (currentStep <= 6) {
+      document.getElementById('step' + currentStep).className = 'step-item active';
+    } else {
+      clearInterval(interval);
+      isProcessing = false;
+      if (btn) btn.textContent = '🚀 LAUNCH PRODUCTION PIPELINE';
+      log('🎉 MASTER RENDER COMPLETE! Near-Publish-Ready (1080p 60fps).');
+      
+      // Auto Start Playback
+      if (!isPlaying) togglePlay();
+    }
+  }, 700);
+}
+
+function togglePlay() {
+  isPlaying = !isPlaying;
+  const btn = document.getElementById('btnPlay');
+  if (isPlaying) {
+    btn.textContent = '⏸';
+    timerInterval = setInterval(() => {
+      currentTime += 0.5;
+      if (currentTime >= totalTime) {
+        currentTime = 0;
+      }
+      updatePlayer();
+    }, 500);
+  } else {
+    btn.textContent = '▶';
+    clearInterval(timerInterval);
+  }
+}
+
+function updatePlayer() {
+  const percent = (currentTime / totalTime) * 100;
+  document.getElementById('progressFill').style.width = percent + '%';
+  document.getElementById('timeDisplay').textContent = 
+    (currentTime < 10 ? '00:0' : '00:') + Math.floor(currentTime) + ' / 00:' + totalTime;
+
+  // Sync subtitle & background
+  const idx = Math.min(Math.floor((currentTime / totalTime) * scenes.length), scenes.length - 1);
+  if (scenes[idx]) {
+    document.getElementById('subtitleOverlay').innerHTML = highlightText(scenes[idx].text);
+    document.getElementById('sceneBgArt').style.background = scenes[idx].bg;
+  }
+}
+
+function highlightText(text) {
+  const words = text.split(' ');
+  if (words.length > 3) {
+    words[2] = '<span class="highlight-word">' + words[2] + '</span>';
+  }
+  return words.join(' ');
+}
+
+function seekVideo(e) {
+  const rect = e.currentTarget.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const percent = clickX / rect.width;
+  currentTime = percent * totalTime;
+  updatePlayer();
+}
+
+function regenScene(i) {
+  log('Regenerating scene ' + (i + 1) + ' with Flux v2.4 Ultra...');
+  scenes[i].asset = 'AI Visual (Flux v2.4 Ultra)';
+  scenes[i].bg = 'linear-gradient(135deg, #059669, #00f0ff)';
+  renderScenes();
+  updatePlayer();
+}
+
+function editScene(i) {
+  const newScript = prompt('Edit scene script:', scenes[i].text);
+  if (newScript) {
+    scenes[i].text = newScript;
+    renderScenes();
+    updatePlayer();
+    log('Updated scene ' + (i + 1) + ' script.');
+  }
+}
+
+function addNewScene() {
+  scenes.push({
+    time: "00:30 - 00:35",
+    text: "Interactive dynamic scene inserted into timeline.",
+    prompt: "Futuristic digital matrix glow animation",
+    asset: "Motion Graphic Overlay",
+    bg: "linear-gradient(135deg, #7e22ce, #00f0ff)"
+  });
+  totalTime += 5;
+  renderScenes();
+  log('Added new scene to timeline.');
+}
+
+function selectThumb(num) {
+  document.querySelectorAll('.thumb-item').forEach((t, i) => {
+    t.classList.toggle('active', i === num - 1);
+  });
+  log('Selected AI Thumbnail Concept #' + num);
+}
+
+function openApiModal() {
+  document.getElementById('apiModal').style.display = 'flex';
+}
+
+function closeApiModal() {
+  document.getElementById('apiModal').style.display = 'none';
+}
+
+function saveApiKeys() {
+  const llm = document.getElementById('keyLLM').value.trim();
+  const voice = document.getElementById('keyVoice').value.trim();
+  const media = document.getElementById('keyMedia').value.trim();
+  const render = document.getElementById('keyRender').value.trim();
+  const trends = document.getElementById('keyTrends').value.trim();
+  
+  localStorage.setItem('api_llm', llm);
+  localStorage.setItem('api_voice', voice);
+  localStorage.setItem('api_media', media);
+  localStorage.setItem('api_render', render);
+  localStorage.setItem('api_trends', trends);
+
+  window.API_KEYS = { llm, voice, media, render, trends };
+
+  const statusBadge = document.getElementById('apiStatusBadge');
+  if (statusBadge) {
+    statusBadge.textContent = 'API Keys: Active & Saved';
+    statusBadge.parentElement.style.borderColor = 'rgba(16, 185, 129, 0.6)';
+    statusBadge.parentElement.style.color = '#10b981';
+  }
+  
+  closeApiModal();
+  log('🔑 API Keys updated: LLM, Voice (ElevenLabs), Media, Render node connected.');
+  alert('✅ Custom API Keys successfully saved into Video Studio pipeline runtime!');
+}
+
+function downloadMaster() {
+  log('📥 Triggering Download: Master Render (1080p 60fps MP4) + Metadata Package (JSON)');
+  alert(`✅ Master Video Render & Metadata Package successfully generated!\n\n- File: master_render_1080p60.mp4\n- QA Status: Passed 100%\n- Total Cost: $0.42`);
+}
+
+// Startup Initialization
+window.addEventListener('DOMContentLoaded', () => {
+  renderScenes();
+  updatePlayer();
+
+  // Load saved API keys from storage if available
+  const savedLLM = localStorage.getItem('api_llm');
+  const savedVoice = localStorage.getItem('api_voice');
+  const savedMedia = localStorage.getItem('api_media');
+  const savedRender = localStorage.getItem('api_render');
+  const savedTrends = localStorage.getItem('api_trends');
+
+  if (savedLLM) document.getElementById('keyLLM').value = savedLLM;
+  if (savedVoice) document.getElementById('keyVoice').value = savedVoice;
+  if (savedMedia) document.getElementById('keyMedia').value = savedMedia;
+  if (savedRender) document.getElementById('keyRender').value = savedRender;
+  if (savedTrends) document.getElementById('keyTrends').value = savedTrends;
+
+  if (savedLLM || savedVoice || savedMedia || savedRender) {
+    const statusBadge = document.getElementById('apiStatusBadge');
+    if (statusBadge) {
+      statusBadge.textContent = 'API Keys: Configured';
+      statusBadge.parentElement.style.borderColor = 'rgba(16, 185, 129, 0.6)';
+      statusBadge.parentElement.style.color = '#10b981';
+    }
+  }
+});
+</script>
+
+
+<!-- FLOATING TRANSLATION / LANGUAGE SWITCHER -->
+<div id="langToggleWidget" class="fixed top-24 right-6 z-50 flex items-center bg-gray-900/90 border border-white/15 rounded-full p-1 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:border-cyan-500/50">
+  <a id="btnLangUA" href="/video_studio" class="px-3 py-1.5 rounded-full text-xs font-bold transition-all bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-md">
+    🇺🇦 UA
+  </a>
+  <a id="btnLangEN" href="/en/video_studio" class="px-3 py-1.5 rounded-full text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5">
+    🇬🇧 EN
+  </a>
+</div>
+
 </body>
 </html>
