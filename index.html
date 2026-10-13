@@ -1281,15 +1281,103 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
-<!-- FLOATING TRANSLATION / LANGUAGE SWITCHER -->
-<div id="langToggleWidget" class="fixed top-24 right-6 z-50 flex items-center bg-gray-900/90 border border-white/15 rounded-full p-1 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:border-cyan-500/50">
-  <a id="btnLangUA" href="/video_studio" class="px-3 py-1.5 rounded-full text-xs font-bold transition-all bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-md">
+<!-- FLOATING LANGUAGE SWITCHER -->
+<div id="langToggleWidget" style="position:fixed;top:80px;right:20px;z-index:999;display:flex;align-items:center;gap:4px;background:rgba(13,18,31,0.95);border:1px solid rgba(255,255,255,0.15);border-radius:30px;padding:4px;box-shadow:0 8px 32px rgba(0,0,0,0.6);backdrop-filter:blur(16px);">
+  <button id="btnLangUA" onclick="setLang('ua')" style="padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all 0.2s;background:linear-gradient(135deg,#7c3aed,#00f0ff);color:#fff;box-shadow:0 0 12px rgba(0,240,255,0.3);">
     🇺🇦 UA
-  </a>
-  <a id="btnLangEN" href="/en/video_studio" class="px-3 py-1.5 rounded-full text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5">
+  </button>
+  <button id="btnLangEN" onclick="setLang('en')" style="padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all 0.2s;background:none;color:rgba(148,163,184,0.8);">
     🇬🇧 EN
-  </a>
+  </button>
 </div>
+
+<script>
+const TRANSLATIONS = {
+  ua: {
+    brand: 'АВТОНОМНИЙ ⟨ВІДЕО РУШІЙ⟩',
+    modeA: '⚡ Режим A: Тема',
+    modeB: '📄 Режим B: Джерела',
+    modeC: '🎯 Режим C: Сценарій',
+    modeD: '📡 Режим D: Відкриття',
+    apiBtn: '🔑 API КЛЮЧІ',
+    testCases: '🧪 Тестові Сценарії',
+    launchBtn: '🚀 ЗАПУСТИТИ ВИРОБНИЦТВО',
+    topicLabel: 'Тема / Інструкція',
+    topicPlaceholder: 'напр. Чому команди Формули 1 інвестують мільйони в симулятори',
+    formatLabel: 'Формат',
+    nicheLabel: 'Ніша / Категорія',
+    voiceLabel: 'Голос Нарратора',
+    saveKeys: '💾 ЗБЕРЕГТИ І ПЕРЕВІРИТИ КЛЮЧІ',
+  },
+  en: {
+    brand: 'AUTONOMOUS ⟨AI VIDEO ENGINE⟩',
+    modeA: '⚡ Mode A: Topic',
+    modeB: '📄 Mode B: Sources',
+    modeC: '🎯 Mode C: Directed',
+    modeD: '📡 Mode D: Discovery',
+    apiBtn: '🔑 API KEYS & INTEGRATIONS',
+    testCases: '🧪 Mandatory Test Cases',
+    launchBtn: '🚀 LAUNCH PRODUCTION PIPELINE',
+    topicLabel: 'Topic / Instruction',
+    topicPlaceholder: 'e.g. Create a 6-minute video explaining why Formula 1 teams invest heavily in simulation',
+    formatLabel: 'Target Format',
+    nicheLabel: 'Niche / Category',
+    voiceLabel: 'Voice Narrator & Emotion',
+    saveKeys: '💾 SAVE & VERIFY KEYS',
+  }
+};
+
+function setLang(lang) {
+  localStorage.setItem('ui_lang', lang);
+  const t = TRANSLATIONS[lang];
+  const ua = document.getElementById('btnLangUA');
+  const en = document.getElementById('btnLangEN');
+
+  if (lang === 'ua') {
+    ua.style.background = 'linear-gradient(135deg,#7c3aed,#00f0ff)';
+    ua.style.color = '#fff';
+    ua.style.boxShadow = '0 0 12px rgba(0,240,255,0.3)';
+    en.style.background = 'none';
+    en.style.color = 'rgba(148,163,184,0.8)';
+    en.style.boxShadow = 'none';
+  } else {
+    en.style.background = 'linear-gradient(135deg,#1d4ed8,#00f0ff)';
+    en.style.color = '#fff';
+    en.style.boxShadow = '0 0 12px rgba(0,240,255,0.3)';
+    ua.style.background = 'none';
+    ua.style.color = 'rgba(148,163,184,0.8)';
+    ua.style.boxShadow = 'none';
+  }
+
+  // Apply translations
+  const brandEl = document.querySelector('.brand div:last-child');
+  if (brandEl) brandEl.innerHTML = t.brand.replace('⟨', '<span style="color:var(--cyan)">').replace('⟩', '</span>');
+
+  const modeButtons = document.querySelectorAll('.mode-btn');
+  if (modeButtons[0]) modeButtons[0].textContent = t.modeA;
+  if (modeButtons[1]) modeButtons[1].textContent = t.modeB;
+  if (modeButtons[2]) modeButtons[2].textContent = t.modeC;
+  if (modeButtons[3]) modeButtons[3].textContent = t.modeD;
+
+  const apiBtn = document.querySelector('button[onclick="openApiModal()"]');
+  if (apiBtn) apiBtn.textContent = t.apiBtn;
+
+  const launchBtn = document.getElementById('btnProduceA');
+  if (launchBtn) launchBtn.textContent = t.launchBtn;
+
+  const topicInput = document.getElementById('topicInputA');
+  if (topicInput) topicInput.placeholder = t.topicPlaceholder;
+
+  const saveBtn = document.querySelector('button[onclick="saveApiKeys()"]');
+  if (saveBtn) saveBtn.textContent = t.saveKeys;
+}
+
+// Init on load
+(function() {
+  const saved = localStorage.getItem('ui_lang') || 'en';
+  setLang(saved);
+})();
+</script>
 
 </body>
 </html>
