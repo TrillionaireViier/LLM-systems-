@@ -974,7 +974,16 @@ textarea.input-control {
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title">🎬 Semantic Storyboard & Media Match</div>
-        <button class="btn-mini" style="background:var(--cyan);color:#000;font-weight:700;" onclick="addNewScene()">+ Add Scene</button>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <select id="visualModelSelect" onchange="changeVisualModel(this.value)" style="background:rgba(0,0,0,0.5);border:1px solid rgba(0,240,255,0.25);color:var(--cyan);font-size:10px;font-weight:700;padding:4px 8px;border-radius:6px;cursor:pointer;font-family:'JetBrains Mono',monospace;">
+            <option value="flux">⚡ Flux v2.4 Ultra</option>
+            <option value="pexels">📷 Pexels Stock</option>
+            <option value="runway">🎬 Runway ML Gen-3</option>
+            <option value="sora">🤖 OpenAI Sora</option>
+            <option value="gemini">🔷 Gemini Imagen 3</option>
+          </select>
+          <button class="btn-mini" style="background:var(--cyan);color:#000;font-weight:700;" onclick="addNewScene()">+ Add Scene</button>
+        </div>
       </div>
 
       <div class="scenes-grid" id="scenesContainer">
@@ -1130,7 +1139,7 @@ function changeAspect(val) {
 function renderScenes() {
   const container = document.getElementById('scenesContainer');
   container.innerHTML = scenes.map((s, i) => `
-    <div class="scene-card">
+    <div class="scene-card" id="scene-card-${i}">
       <div class="scene-time">${s.time}</div>
       <div>
         <div class="scene-script">"${s.text}"</div>
@@ -1140,6 +1149,7 @@ function renderScenes() {
       <div class="scene-actions">
         <button class="btn-mini" onclick="regenScene(${i})">Regen</button>
         <button class="btn-mini" onclick="editScene(${i})">Edit</button>
+        <button class="btn-mini" onclick="deleteScene(${i})" style="color:#ef4444;border-color:rgba(239,68,68,0.3);" title="Delete scene">🗑</button>
       </div>
     </div>
   `).join('');
@@ -1270,11 +1280,38 @@ function seekVideo(e) {
 }
 
 function regenScene(i) {
-  log('Regenerating scene ' + (i + 1) + ' with Flux v2.4 Ultra...');
-  scenes[i].asset = 'AI Visual (Flux v2.4 Ultra)';
+  const model = document.getElementById('visualModelSelect')?.value || 'flux';
+  const labels = { flux:'Flux v2.4 Ultra', pexels:'Pexels Stock', runway:'Runway Gen-3', sora:'Sora v1', gemini:'Gemini Imagen 3' };
+  log('Regenerating scene ' + (i + 1) + ' with ' + (labels[model] || 'Flux v2.4 Ultra') + '...');
+  scenes[i].asset = labels[model] || 'AI Visual';
   scenes[i].bg = 'linear-gradient(135deg, #059669, #00f0ff)';
   renderScenes();
   updatePlayer();
+  toast('Scene Regen', 'Scene ' + (i+1) + ' regenerated via ' + (labels[model]||'Flux'), 'info');
+}
+
+function deleteScene(i) {
+  if (scenes.length <= 1) { toast('Cannot Delete', 'At least one scene required.', 'warning'); return; }
+  const removed = scenes.splice(i, 1)[0];
+  totalTime = scenes.reduce((acc, s) => {
+    const parts = s.time.split(' - ');
+    if (parts.length === 2) {
+      const toSec = t => { const [m,sec] = t.split(':').map(Number); return m*60+sec; };
+      return acc + Math.abs(toSec(parts[1]) - toSec(parts[0]));
+    }
+    return acc + 5;
+  }, 0);
+  renderScenes();
+  updatePlayer();
+  log('Deleted scene ' + (i+1) + ': "' + removed.text.slice(0,40) + '..."');
+  toast('Scene Deleted', 'Scene ' + (i+1) + ' removed from timeline.', 'warning');
+}
+
+function changeVisualModel(model) {
+  const labels = { flux:'Flux v2.4 Ultra', pexels:'Pexels Stock', runway:'Runway Gen-3', sora:'Sora v1', gemini:'Gemini Imagen 3' };
+  localStorage.setItem('visual_model', model);
+  log('🎨 Visual model switched to: ' + (labels[model] || model));
+  toast('Model Changed', 'Now using ' + (labels[model]||model) + ' for all scene visuals.', 'info');
 }
 
 function editScene(i) {
