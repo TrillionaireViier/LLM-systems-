@@ -644,25 +644,40 @@ textarea.input-control {
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div class="input-group">
         <label>OpenAI / Anthropic API Key</label>
-        <input type="password" id="keyLLM" class="input-control" placeholder="sk-..." value="sk-proj-demo-live-key-99841">
+        <div style="position:relative;">
+          <input type="password" id="keyLLM" class="input-control" placeholder="sk-..." style="padding-right:38px;">
+          <button type="button" onclick="toggleKey('keyLLM',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--mut-light);cursor:pointer;font-size:14px;padding:0;line-height:1;">👁</button>
+        </div>
       </div>
       <div class="input-group">
         <label>ElevenLabs Voice Key</label>
-        <input type="password" id="keyVoice" class="input-control" placeholder="el_..." value="el_voice_prod_88321">
+        <div style="position:relative;">
+          <input type="password" id="keyVoice" class="input-control" placeholder="el_..." style="padding-right:38px;">
+          <button type="button" onclick="toggleKey('keyVoice',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--mut-light);cursor:pointer;font-size:14px;padding:0;line-height:1;">👁</button>
+        </div>
       </div>
       <div class="input-group">
         <label>Pexels / Getty Stock Media API</label>
-        <input type="password" id="keyMedia" class="input-control" placeholder="px-..." value="px_stock_api_key_44129">
+        <div style="position:relative;">
+          <input type="password" id="keyMedia" class="input-control" placeholder="px-..." style="padding-right:38px;">
+          <button type="button" onclick="toggleKey('keyMedia',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--mut-light);cursor:pointer;font-size:14px;padding:0;line-height:1;">👁</button>
+        </div>
       </div>
       <div class="input-group">
         <label>Shotstack / Remotion Render Token</label>
-        <input type="password" id="keyRender" class="input-control" placeholder="v1_..." value="st_render_token_77102">
+        <div style="position:relative;">
+          <input type="password" id="keyRender" class="input-control" placeholder="v1_..." style="padding-right:38px;">
+          <button type="button" onclick="toggleKey('keyRender',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--mut-light);cursor:pointer;font-size:14px;padding:0;line-height:1;">👁</button>
+        </div>
       </div>
     </div>
 
     <div class="input-group">
       <label>Google Trends / YouTube API Key (Mode D Radar)</label>
-      <input type="password" id="keyTrends" class="input-control" placeholder="AIzaSy..." value="AIzaSy_yt_trends_key_33104">
+      <div style="position:relative;">
+        <input type="password" id="keyTrends" class="input-control" placeholder="AIzaSy..." style="padding-right:38px;">
+        <button type="button" onclick="toggleKey('keyTrends',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--mut-light);cursor:pointer;font-size:14px;padding:0;line-height:1;">👁</button>
+      </div>
     </div>
 
     <div style="display:flex;gap:10px;margin-top:8px;">
@@ -1178,11 +1193,30 @@ function selectThumb(num) {
 }
 
 function openApiModal() {
+  // Load saved keys from localStorage
+  const fields = { keyLLM:'api_llm', keyVoice:'api_voice', keyMedia:'api_media', keyRender:'api_render', keyTrends:'api_trends' };
+  Object.entries(fields).forEach(([id, key]) => {
+    const saved = localStorage.getItem(key);
+    if (saved) document.getElementById(id).value = saved;
+  });
   document.getElementById('apiModal').style.display = 'flex';
 }
 
 function closeApiModal() {
   document.getElementById('apiModal').style.display = 'none';
+}
+
+function toggleKey(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+    btn.style.color = 'var(--cyan)';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+    btn.style.color = 'var(--mut-light)';
+  }
 }
 
 function saveApiKeys() {
