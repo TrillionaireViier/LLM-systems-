@@ -1278,13 +1278,28 @@ function regenScene(i) {
 }
 
 function editScene(i) {
-  const newScript = prompt('Edit scene script:', scenes[i].text);
-  if (newScript) {
-    scenes[i].text = newScript;
+  const modal = document.getElementById('editSceneModal');
+  const textarea = document.getElementById('editSceneText');
+  const title = document.getElementById('editSceneTitle');
+  title.textContent = 'Scene ' + (i + 1) + ' — Edit Script';
+  textarea.value = scenes[i].text;
+  modal.style.display = 'flex';
+  textarea.focus();
+  modal._sceneIndex = i;
+}
+
+function saveEditScene() {
+  const modal = document.getElementById('editSceneModal');
+  const i = modal._sceneIndex;
+  const val = document.getElementById('editSceneText').value.trim();
+  if (val) {
+    scenes[i].text = val;
     renderScenes();
     updatePlayer();
-    log('Updated scene ' + (i + 1) + ' script.');
+    log('Scene ' + (i + 1) + ' script updated.');
+    toast('Scene Updated', 'Scene ' + (i + 1) + ' script saved — timeline refreshed.', 'success');
   }
+  modal.style.display = 'none';
 }
 
 function addNewScene() {
@@ -1518,6 +1533,29 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+
+<!-- EDIT SCENE MODAL -->
+<div id="editSceneModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:1000;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--panel);border:1px solid var(--cyan);border-radius:16px;max-width:560px;width:100%;padding:24px;box-shadow:0 0 40px rgba(0,240,255,0.2);display:flex;flex-direction:column;gap:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:12px;">
+      <div id="editSceneTitle" style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--cyan);">Scene — Edit Script</div>
+      <button onclick="document.getElementById('editSceneModal').style.display='none'" style="background:none;border:none;color:var(--mut-light);font-size:20px;cursor:pointer;line-height:1;">✕</button>
+    </div>
+    <div class="input-group">
+      <label>Scene Script / Narration</label>
+      <textarea id="editSceneText" class="input-control" rows="5" style="resize:vertical;min-height:120px;line-height:1.6;" oninput="document.getElementById('editSceneCharCount').textContent=this.value.length+' chars'" onkeydown="if((event.ctrlKey||event.metaKey)&&event.key==='Enter')saveEditScene()"></textarea>
+      <div style="font-size:10px;color:var(--mut);text-align:right;"><span id="editSceneCharCount">0</span> chars &nbsp;·&nbsp; Ctrl+Enter to save</div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="saveEditScene()" class="btn-produce" style="flex:1;background:linear-gradient(135deg,var(--cyan),#0088cc);color:#000;">
+        💾 Save Scene Script
+      </button>
+      <button onclick="document.getElementById('editSceneModal').style.display='none'" class="btn-mini" style="padding:0 20px;">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- FLOATING LANGUAGE SWITCHER -->
 <div id="langToggleWidget" style="position:fixed;top:80px;right:20px;z-index:999;display:flex;align-items:center;gap:4px;background:rgba(13,18,31,0.95);border:1px solid rgba(255,255,255,0.15);border-radius:30px;padding:4px;box-shadow:0 8px 32px rgba(0,0,0,0.6);backdrop-filter:blur(16px);">
