@@ -670,9 +670,124 @@ body.role-user .studio-container { grid-template-columns: 1fr 1fr !important; }
   color: #000;
   box-shadow: 0 0 10px rgba(168,85,247,0.3);
 }
+
+/* Login Screen */
+#loginScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--bg);
+  background-image:
+    radial-gradient(circle at 30% 20%, rgba(168,85,247,0.12) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(0,240,255,0.1) 0%, transparent 50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.login-card {
+  background: rgba(13,18,31,0.95);
+  border: 1px solid rgba(0,240,255,0.2);
+  border-radius: 20px;
+  padding: 36px 32px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 0 60px rgba(0,240,255,0.08), 0 20px 60px rgba(0,0,0,0.5);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: loginAppear 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes loginAppear { from { opacity:0; transform: translateY(20px) scale(0.95); } to { opacity:1; transform: translateY(0) scale(1); } }
+.login-logo {
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.login-logo .orb {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 0 30px var(--cyan-glow);
+  margin-bottom: 12px;
+}
+.login-logo h1 { font-size: 20px; color: #fff; margin-top: 4px; font-weight: 700; }
+.login-logo p { font-size: 12px; color: var(--mut-light); margin-top: 4px; }
+.login-role-tabs {
+  display: flex; gap: 4px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 4px;
+}
+.login-role-tab {
+  flex: 1; padding: 10px; border: none; border-radius: 10px;
+  background: none; color: var(--mut-light); font-weight: 700;
+  font-size: 13px; cursor: pointer; transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+.login-role-tab.active {
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  color: #000; box-shadow: 0 0 12px rgba(168,85,247,0.4);
+}
+.login-error {
+  color: #ef4444; font-size: 12px; text-align: center;
+  min-height: 16px; font-weight: 600;
+}
+.btn-login {
+  width: 100%; padding: 14px; border: none; border-radius: 12px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: all 0.2s; font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.5px;
+}
+.btn-login:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,240,255,0.3); }
+.btn-logout {
+  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
+  color: #ef4444; font-family: 'JetBrains Mono',monospace; font-size: 11px;
+  font-weight: 700; padding: 4px 10px; border-radius: 16px; cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-logout:hover { background: rgba(239,68,68,0.2); border-color: rgba(239,68,68,0.5); }
+#appMain { display: none; }
+body.authenticated #appMain { display: block; }
+body.authenticated #loginScreen { display: none; }
 </style>
 </head>
 <body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="orb">🎬</div>
+      <h1>AI VIDEO ENGINE</h1>
+      <p>Autonomous Production System</p>
+    </div>
+
+    <div class="login-role-tabs">
+      <button id="loginTabAdmin" class="login-role-tab active" onclick="selectLoginRole('admin')">🛡 Admin</button>
+      <button id="loginTabUser" class="login-role-tab" onclick="selectLoginRole('user')">👤 User</button>
+    </div>
+
+    <div class="input-group" style="gap:6px;">
+      <label id="loginRoleLabel" style="font-size:12px;color:var(--cyan);font-weight:700;">🛡 Admin Login</label>
+      <input type="password" id="loginPassword" class="input-control" placeholder="Enter password…" onkeydown="if(event.key==='Enter')doLogin()" autofocus>
+    </div>
+
+    <div class="login-error" id="loginError"></div>
+
+    <button class="btn-login" id="btnLogin" style="background:linear-gradient(135deg, var(--purple), var(--cyan)); color:#000;" onclick="doLogin()">
+      🔓 SIGN IN
+    </button>
+
+    <div style="text-align:center;font-size:10px;color:var(--mut);">
+      Session stored locally · No server auth
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP (hidden until auth) -->
+<div id="appMain">
 
 <!-- Header -->
 <header>
@@ -685,6 +800,7 @@ body.role-user .studio-container { grid-template-columns: 1fr 1fr !important; }
       <button id="roleAdminBtn" class="role-btn active" onclick="switchRole('admin')">🛡 Admin</button>
       <button id="roleUserBtn" class="role-btn" onclick="switchRole('user')">👤 User</button>
     </div>
+    <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
   </div>
 
   <div class="modes-bar">
@@ -1599,16 +1715,56 @@ function switchRole(role) {
     'info', 2500);
 }
 
-// Startup Initialization
-window.addEventListener('DOMContentLoaded', () => {
-  // Restore saved role
-  const savedRole = localStorage.getItem('app_role') || 'admin';
-  switchRole(savedRole);
+// ---- AUTH SYSTEM ----
+const AUTH_KEYS = {
+  admin: 'admin2025',
+  user:  'user2025'
+};
+let _loginRole = 'admin';
 
+function selectLoginRole(role) {
+  _loginRole = role;
+  document.getElementById('loginTabAdmin').classList.toggle('active', role === 'admin');
+  document.getElementById('loginTabUser').classList.toggle('active', role === 'user');
+  document.getElementById('loginRoleLabel').innerHTML = role === 'admin' ? '🛡 Admin Login' : '👤 User Login';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').textContent = '';
+  document.getElementById('loginPassword').focus();
+  document.getElementById('btnLogin').style.background = role === 'admin'
+    ? 'linear-gradient(135deg, var(--purple), var(--cyan))'
+    : 'linear-gradient(135deg, var(--green), var(--cyan))';
+}
+
+function doLogin() {
+  const pw = document.getElementById('loginPassword').value;
+  if (pw === AUTH_KEYS[_loginRole]) {
+    document.body.classList.add('authenticated');
+    localStorage.setItem('auth_session', _loginRole);
+    localStorage.setItem('app_role', _loginRole);
+    switchRole(_loginRole);
+    document.getElementById('loginError').textContent = '';
+    initApp();
+    toast('🔓 Signed In', 'Welcome, ' + (_loginRole === 'admin' ? 'Administrator' : 'User') + '!', 'success');
+  } else {
+    document.getElementById('loginError').textContent = '❌ Incorrect password. Try again.';
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('loginPassword').focus();
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem('auth_session');
+  document.body.classList.remove('authenticated');
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').textContent = '';
+  toast('🚪 Signed Out', 'Session cleared.', 'info');
+}
+
+function initApp() {
   renderScenes();
   updatePlayer();
 
-  // Load saved API keys from storage if available
+  // Load saved API keys
   const savedLLM = localStorage.getItem('api_llm');
   const savedVoice = localStorage.getItem('api_voice');
   const savedMedia = localStorage.getItem('api_media');
@@ -1628,6 +1784,17 @@ window.addEventListener('DOMContentLoaded', () => {
       statusBadge.parentElement.style.borderColor = 'rgba(16, 185, 129, 0.6)';
       statusBadge.parentElement.style.color = '#10b981';
     }
+  }
+}
+
+// Startup Initialization
+window.addEventListener('DOMContentLoaded', () => {
+  // Check existing session
+  const savedSession = localStorage.getItem('auth_session');
+  if (savedSession && (savedSession === 'admin' || savedSession === 'user')) {
+    document.body.classList.add('authenticated');
+    switchRole(savedSession);
+    initApp();
   }
 });
 </script>
@@ -1753,6 +1920,8 @@ function setLang(lang) {
   setLang(saved);
 })();
 </script>
+
+</div><!-- /appMain -->
 
 </body>
 </html>
