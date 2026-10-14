@@ -641,16 +641,51 @@ textarea.input-control {
 .toast-out { animation: toastOut 0.3s ease-in forwards; }
 @keyframes toastIn  { from { opacity:0; transform:translateX(40px) scale(0.9); } to { opacity:1; transform:translateX(0) scale(1); } }
 @keyframes toastOut { from { opacity:1; transform:translateX(0); }             to { opacity:0; transform:translateX(40px); } }
+/* Role-based visibility */
+body.role-user [data-role="admin"] { display: none !important; }
+body.role-user .modes-bar { display: none !important; }
+body.role-user .studio-container { grid-template-columns: 1fr 1fr !important; }
+.role-toggle {
+  display: flex;
+  gap: 2px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 2px;
+}
+.role-btn {
+  padding: 4px 12px;
+  border-radius: 16px;
+  border: none;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: none;
+  color: var(--mut-light);
+  font-family: 'JetBrains Mono', monospace;
+}
+.role-btn.active {
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  color: #000;
+  box-shadow: 0 0 10px rgba(168,85,247,0.3);
+}
 </style>
 </head>
 <body>
 
 <!-- Header -->
 <header>
-  <a href="#" class="brand">
-    <div class="brand-orb">🎬</div>
-    <div>AUTONOMOUS <span>AI VIDEO ENGINE</span></div>
-  </a>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <a href="#" class="brand">
+      <div class="brand-orb">🎬</div>
+      <div>AUTONOMOUS <span>AI VIDEO ENGINE</span></div>
+    </a>
+    <div class="role-toggle">
+      <button id="roleAdminBtn" class="role-btn active" onclick="switchRole('admin')">🛡 Admin</button>
+      <button id="roleUserBtn" class="role-btn" onclick="switchRole('user')">👤 User</button>
+    </div>
+  </div>
 
   <div class="modes-bar">
     <button id="btnModeA" class="mode-btn active" onclick="switchMode('A')">⚡ Mode A: Topic</button>
@@ -660,17 +695,17 @@ textarea.input-control {
   </div>
 
   <div class="system-status">
-    <button onclick="openApiModal()" style="background:rgba(0, 240, 255, 0.1);border:1px solid var(--cyan);color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;">
+    <button onclick="openApiModal()" data-role="admin" style="background:rgba(0, 240, 255, 0.1);border:1px solid var(--cyan);color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;">
       🔑 API KEYS &amp; INTEGRATIONS
     </button>
-    <div onclick="openApiModal()" title="Session cost — click for details" style="display:flex;align-items:center;gap:5px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);color:#10b981;padding:4px 10px;border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(16,185,129,0.6)'" onmouseout="this.style.borderColor='rgba(16,185,129,0.25)'">
+    <div onclick="openApiModal()" data-role="admin" title="Session cost — click for details" style="display:flex;align-items:center;gap:5px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);color:#10b981;padding:4px 10px;border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(16,185,129,0.6)'" onmouseout="this.style.borderColor='rgba(16,185,129,0.25)'">
       💰 <span id="usageBadgeCost">$0.0000</span>
     </div>
     <div class="badge-status">
       <div class="dot-live"></div>
       <span id="apiStatusBadge">API Keys: Ready</span>
     </div>
-    <div>Max Cap: €5.00</div>
+    <div data-role="admin">Max Cap: €5.00</div>
   </div>
 </header>
 
@@ -806,11 +841,11 @@ textarea.input-control {
   <div class="panel">
     
     <!-- Test Cases Suite -->
-    <div class="panel-header">
+    <div class="panel-header" data-role="admin">
       <div class="panel-title">🧪 Mandatory Test Cases</div>
       <span style="font-size:10px;color:var(--cyan);font-family:'JetBrains Mono';">PRESETS</span>
     </div>
-    <div class="test-cases-grid">
+    <div class="test-cases-grid" data-role="admin">
       <div class="test-btn" onclick="runTest('A')">A: News (60s)</div>
       <div class="test-btn" onclick="runTest('B')">B: Sports (F1)</div>
       <div class="test-btn" onclick="runTest('C')">C: Entertainment</div>
@@ -938,7 +973,7 @@ textarea.input-control {
   <!-- Center Stage: Pipeline Stepper, Console & Storyboard -->
   <div style="display:flex;flex-direction:column;gap:16px;">
     <!-- Stepper Bar -->
-    <div class="pipeline-stepper">
+    <div class="pipeline-stepper" data-role="admin">
       <div id="step1" class="step-item completed">
         <div class="step-num">✓</div>
         <span>Discovery</span>
@@ -966,7 +1001,7 @@ textarea.input-control {
     </div>
 
     <!-- Execution Console Logs -->
-    <div class="log-console" id="logConsole">
+    <div class="log-console" id="logConsole" data-role="admin">
       <div>[SYSTEM READY] Stateless Adapters initialized. Multi-niche engine ready.</div>
     </div>
 
@@ -974,7 +1009,7 @@ textarea.input-control {
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title">🎬 Semantic Storyboard & Media Match</div>
-        <div style="display:flex;gap:6px;align-items:center;">
+        <div style="display:flex;gap:6px;align-items:center;" data-role="admin">
           <select id="visualModelSelect" onchange="changeVisualModel(this.value)" style="background:rgba(0,0,0,0.5);border:1px solid rgba(0,240,255,0.25);color:var(--cyan);font-size:10px;font-weight:700;padding:4px 8px;border-radius:6px;cursor:pointer;font-family:'JetBrains Mono',monospace;">
             <option value="flux">⚡ Flux v2.4 Ultra</option>
             <option value="pexels">📷 Pexels Stock</option>
@@ -1021,15 +1056,15 @@ textarea.input-control {
         <span class="qa-val">PASSED 100%</span>
       </div>
 
-      <div class="qa-grid">
+      <div class="qa-grid" data-role="admin">
         <div class="qa-item"><span class="qa-label">Semantic Match</span><span class="qa-val">99.4%</span></div>
         <div class="qa-item"><span class="qa-label">Dead Frames</span><span class="qa-val">0</span></div>
         <div class="qa-item"><span class="qa-label">Caption Sync</span><span class="qa-val">100%</span></div>
         <div class="qa-item"><span class="qa-label">Audio Peak</span><span class="qa-val">-1.2 dB</span></div>
       </div>
 
-      <div style="font-size:11px;font-weight:700;color:var(--mut-light);margin-top:2px;">AI THUMBNAIL CONCEPTS</div>
-      <div class="thumbs-grid">
+      <div style="font-size:11px;font-weight:700;color:var(--mut-light);margin-top:2px;" data-role="admin">AI THUMBNAIL CONCEPTS</div>
+      <div class="thumbs-grid" data-role="admin">
         <div class="thumb-item active" onclick="selectThumb(1)">Concept 1</div>
         <div class="thumb-item" onclick="selectThumb(2)">Concept 2</div>
         <div class="thumb-item" onclick="selectThumb(3)">Concept 3</div>
@@ -1039,7 +1074,7 @@ textarea.input-control {
       <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;display:flex;flex-direction:column;gap:8px;">
         <div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;">
           <span style="color:var(--mut-light);">Production Cost: <strong style="color:var(--cyan);">$0.42</strong></span>
-          <button class="btn-mini" style="background:rgba(0, 240, 255, 0.1);border:1px solid var(--cyan);color:var(--cyan);font-weight:600;" onclick="openApiModal()">🔑 API Keys Setup</button>
+          <button class="btn-mini" data-role="admin" style="background:rgba(0, 240, 255, 0.1);border:1px solid var(--cyan);color:var(--cyan);font-weight:600;" onclick="openApiModal()">🔑 API Keys Setup</button>
         </div>
         <button class="btn-produce" style="width:100%;margin-top:0;padding:12px;" onclick="downloadMaster()">
           📥 DOWNLOAD MASTER RENDER (1080p 60fps)
@@ -1137,6 +1172,7 @@ function changeAspect(val) {
 }
 
 function renderScenes() {
+  const isAdmin = !document.body.classList.contains('role-user');
   const container = document.getElementById('scenesContainer');
   container.innerHTML = scenes.map((s, i) => `
     <div class="scene-card" id="scene-card-${i}">
@@ -1146,11 +1182,11 @@ function renderScenes() {
         <div class="scene-prompt">Prompt: ${s.prompt}</div>
       </div>
       <div class="scene-asset-badge">${s.asset}</div>
-      <div class="scene-actions">
+      ${isAdmin ? `<div class="scene-actions">
         <button class="btn-mini" onclick="regenScene(${i})">Regen</button>
         <button class="btn-mini" onclick="editScene(${i})">Edit</button>
         <button class="btn-mini" onclick="deleteScene(${i})" style="color:#ef4444;border-color:rgba(239,68,68,0.3);" title="Delete scene">🗑</button>
-      </div>
+      </div>` : ''}
     </div>
   `).join('');
 }
@@ -1541,8 +1577,34 @@ function downloadMaster() {
   toast('Render Complete', 'master_render_1080p60.mp4 · QA: 100% · Cost: $0.42', 'success');
 }
 
+// ---- ROLE SYSTEM ----
+function switchRole(role) {
+  if (role === 'user') {
+    document.body.classList.add('role-user');
+    document.body.classList.remove('role-admin');
+  } else {
+    document.body.classList.remove('role-user');
+    document.body.classList.add('role-admin');
+  }
+  localStorage.setItem('app_role', role);
+
+  // Update toggle buttons
+  document.getElementById('roleAdminBtn').classList.toggle('active', role === 'admin');
+  document.getElementById('roleUserBtn').classList.toggle('active', role === 'user');
+
+  // Re-render scenes to show/hide action buttons
+  renderScenes();
+  toast(role === 'admin' ? '🛡 Admin Mode' : '👤 User Mode',
+    role === 'admin' ? 'Full control plane enabled.' : 'Simplified view — create & download.',
+    'info', 2500);
+}
+
 // Startup Initialization
 window.addEventListener('DOMContentLoaded', () => {
+  // Restore saved role
+  const savedRole = localStorage.getItem('app_role') || 'admin';
+  switchRole(savedRole);
+
   renderScenes();
   updatePlayer();
 
