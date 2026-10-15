@@ -1293,6 +1293,7 @@ function renderScenes() {
   container.innerHTML = scenes.map((s, i) => `
     <div class="scene-card" id="scene-card-${i}">
       <div class="scene-time">${s.time}</div>
+      ${s.image || s.imageUrl ? `<div style="width:100%;height:80px;border-radius:8px;overflow:hidden;background:#111;"><img src="${s.image || s.imageUrl}" style="width:100%;height:100%;object-fit:cover;" alt="Scene ${i+1}"></div>` : ''}
       <div>
         <div class="scene-script">"${s.text}"</div>
         <div class="scene-prompt">Prompt: ${s.prompt}</div>
@@ -1301,6 +1302,7 @@ function renderScenes() {
       ${isAdmin ? `<div class="scene-actions">
         <button class="btn-mini" onclick="regenScene(${i})">Regen</button>
         <button class="btn-mini" onclick="editScene(${i})">Edit</button>
+        <button class="btn-mini" onclick="generateImageForScene(${i})" style="color:#a855f7;border-color:rgba(168,85,247,0.3);" title="Generate AI image">🎨</button>
         <button class="btn-mini" onclick="deleteScene(${i})" style="color:#ef4444;border-color:rgba(239,68,68,0.3);" title="Delete scene">🗑</button>
       </div>` : ''}
     </div>
@@ -1339,7 +1341,6 @@ async function callGemini(prompt, maxTokens = 512) {
     }
     const data = await res.json();
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    // Track usage
     const tokensIn = data?.usageMetadata?.promptTokenCount || 0;
     const tokensOut = data?.usageMetadata?.candidatesTokenCount || 0;
     if (typeof USAGE !== 'undefined') USAGE.add(tokensIn, tokensOut, 'google');
@@ -1349,6 +1350,96 @@ async function callGemini(prompt, maxTokens = 512) {
     toast('API Error', e.message, 'error');
     return null;
   }
+}
+
+// ---- IMAGE GENERATION via Gemini Imagen 3 ----
+async function generateImageForScene(sceneIdx) {
+  const apiKey = localStorage.getItem('api_gemini');
+  if (!apiKey) { toast('No API Key', 'Add Gemini key first.', 'warning'); return; }
+
+  const scene = scenes[sceneIdx];
+  const prompt = scene.prompt || scene.text;
+  log('🎨 Generating image for scene ' + (sceneIdx+1) + '...');
+  toast('🎨 Generating Image', 'Scene ' + (sceneIdx+1) + ' via Imagen...', 'info', 3000);
+
+  // Try Imagen 3 model
+  try {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        instances: [{ prompt: 'Cinematic 16:9 video frame, high quality, ' + prompt }],
+        parameters: { sampleCount: 1, aspectRatio: '16:9', personGeneration: 'dont_allow' }
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const b64 = data?.predictions?.[0]?.bytesBase64Encoded;
+      if (b64) {
+        scenes[sceneIdx].image = 'data:image/png;base64,' + b64;
+        scenes[sceneIdx].asset = 'Imagen 3 ✔';
+        renderScenes();
+        log('✅ Image generated for scene ' + (sceneIdx+1));
+        toast('Image Ready', 'Scene ' + (sceneIdx+1) + ' image generated!', 'success');
+        return true;
+      }
+    }
+  } catch(e) { /* Imagen might not be available, try fallback */ }
+
+  // Fallback: try gemini-2.0-flash with image generation
+  try {
+    const url2 = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`;
+    const res2 = await fetch(url2, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: 'Generate a cinematic 16:9 image for a video scene: ' + prompt }] }],
+        generationConfig: { responseModalities: ['TEXT', 'IMAGE'] }
+      })
+    });
+    if (res2.ok) {
+      const data2 = await res2.json();
+      const parts = data2?.candidates?.[0]?.content?.parts || [];
+      for (const p of parts) {
+        if (p.inlineData?.mimeType?.startsWith('image/')) {
+          scenes[sceneIdx].image = `data:${p.inlineData.mimeType};base64,${p.inlineData.data}`;
+          scenes[sceneIdx].asset = 'Gemini Image ✔';
+          renderScenes();
+          log('✅ Image generated for scene ' + (sceneIdx+1) + ' via Gemini');
+          toast('Image Ready', 'Scene ' + (sceneIdx+1) + ' image generated!', 'success');
+          return true;
+        }
+      }
+    }
+  } catch(e) { /* fallback failed */ }
+
+  // Fallback: Use Pexels if key available
+  const pexelsKey = localStorage.getItem('api_media');
+  if (pexelsKey) {
+    try {
+      const q = encodeURIComponent(prompt.split(' ').slice(0, 4).join(' '));
+      const res3 = await fetch(`https://api.pexels.com/v1/search?query=${q}&per_page=1&orientation=landscape`, {
+        headers: { Authorization: pexelsKey }
+      });
+      if (res3.ok) {
+        const data3 = await res3.json();
+        const photo = data3?.photos?.[0];
+        if (photo) {
+          scenes[sceneIdx].imageUrl = photo.src.large2x || photo.src.large;
+          scenes[sceneIdx].asset = 'Pexels Stock ✔';
+          renderScenes();
+          log('✅ Pexels image found for scene ' + (sceneIdx+1));
+          toast('Stock Image', 'Scene ' + (sceneIdx+1) + ' matched from Pexels', 'success');
+          return true;
+        }
+      }
+    } catch(e) {}
+  }
+
+  log('⚠️ No image generated for scene ' + (sceneIdx+1) + ' — will use gradient');
+  toast('No Image', 'Image gen not available for this key. Video will use gradient backgrounds.', 'warning');
+  return false;
 }
 
 function launchProduction() {
@@ -1369,10 +1460,10 @@ function launchProduction() {
 async function generateStoryboardFromGemini(topic) {
   isProcessing = true;
   const btn = document.getElementById('btnProduceA');
-  if (btn) btn.textContent = '⚙️ GENERATING WITH GEMINI...';
+  if (btn) btn.textContent = '⚙️ STEP 1/2: GENERATING SCRIPT...';
 
   log('🤖 Calling Gemini API to generate storyboard for: ' + topic);
-  toast('Gemini Pipeline', 'Generating real storyboard via AI...', 'info', 3000);
+  toast('Gemini Pipeline', 'Step 1: Generating scripts via AI...', 'info', 3000);
 
   const prompt = `You are an AI video production scriptwriter. Generate a 6-scene storyboard for a short-form video about: "${topic}"
 
@@ -1389,7 +1480,6 @@ Respond ONLY with valid JSON array, no markdown, no explanation:
 
   if (result) {
     try {
-      // Clean any markdown wrapping
       let cleaned = result.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       const newScenes = JSON.parse(cleaned);
       if (Array.isArray(newScenes) && newScenes.length > 0) {
@@ -1405,15 +1495,33 @@ Respond ONLY with valid JSON array, no markdown, no explanation:
           time: `00:${String(i * 5).padStart(2, '0')} - 00:${String((i + 1) * 5).padStart(2, '0')}`,
           text: s.text || 'Scene text',
           prompt: s.prompt || 'Cinematic visual',
-          asset: 'Gemini Generated',
-          bg: bgs[i % bgs.length]
+          asset: 'Gemini Script ✔',
+          bg: bgs[i % bgs.length],
+          image: null,
+          imageUrl: null
         }));
         totalTime = scenes.length * 5;
         currentTime = 0;
         renderScenes();
         updatePlayer();
-        log('✅ Gemini generated ' + scenes.length + ' scenes successfully!');
-        toast('🎬 Storyboard Ready!', scenes.length + ' scenes generated by Gemini AI', 'success');
+        log('✅ Gemini generated ' + scenes.length + ' scene scripts!');
+
+        // Step 2: Generate images for each scene
+        if (btn) btn.textContent = '⚙️ STEP 2/2: GENERATING IMAGES...';
+        toast('🎨 Generating Visuals', 'Creating AI images for each scene...', 'info', 5000);
+
+        let imagesGenerated = 0;
+        for (let i = 0; i < scenes.length; i++) {
+          log('🎨 Generating image ' + (i+1) + '/' + scenes.length + '...');
+          if (btn) btn.textContent = '🎨 IMAGE ' + (i+1) + '/' + scenes.length + '...';
+          const ok = await generateImageForScene(i);
+          if (ok) imagesGenerated++;
+          // Small delay to avoid rate limits
+          await new Promise(r => setTimeout(r, 500));
+        }
+
+        log('🎉 Pipeline complete! ' + scenes.length + ' scripts + ' + imagesGenerated + ' images');
+        toast('🎬 Full Pipeline Done!', scenes.length + ' scripts + ' + imagesGenerated + ' AI images generated', 'success');
         if (!isPlaying) togglePlay();
       } else {
         throw new Error('Invalid scene array');
@@ -1886,22 +1994,27 @@ async function renderVideoFromScenes() {
   function drawFrame(scene, sceneIdx, frameInScene, totalFrames, fadeAlpha) {
     const colors = parseGradient(scene.bg);
 
-    // Gradient background
-    const grd = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
-    grd.addColorStop(0, colors[0]);
-    grd.addColorStop(1, colors[1] || colors[0]);
-    ctx.fillStyle = grd;
-    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    // If scene has an AI-generated image, use it as background
+    if (scene._loadedImg) {
+      ctx.drawImage(scene._loadedImg, 0, 0, WIDTH, HEIGHT);
+    } else {
+      // Gradient background
+      const grd = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
+      grd.addColorStop(0, colors[0]);
+      grd.addColorStop(1, colors[1] || colors[0]);
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-    // Animated particle dots
-    const time = frameInScene / FPS;
-    for (let p = 0; p < 30; p++) {
-      const x = ((p * 137.5 + time * 40) % WIDTH);
-      const y = ((p * 97.3 + time * 20 + Math.sin(p + time) * 30) % HEIGHT);
-      ctx.fillStyle = `rgba(0, 240, 255, ${0.1 + Math.sin(p + time * 2) * 0.08})`;
-      ctx.beginPath();
-      ctx.arc(x, y, 2 + Math.sin(p) * 1.5, 0, Math.PI * 2);
-      ctx.fill();
+      // Animated particle dots
+      const time = frameInScene / FPS;
+      for (let p = 0; p < 30; p++) {
+        const x = ((p * 137.5 + time * 40) % WIDTH);
+        const y = ((p * 97.3 + time * 20 + Math.sin(p + time) * 30) % HEIGHT);
+        ctx.fillStyle = `rgba(0, 240, 255, ${0.1 + Math.sin(p + time * 2) * 0.08})`;
+        ctx.beginPath();
+        ctx.arc(x, y, 2 + Math.sin(p) * 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
     // Dark overlay for text readability
