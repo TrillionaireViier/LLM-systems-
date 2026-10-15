@@ -1829,8 +1829,198 @@ function toast(title, msg, type = 'info', duration = 4000) {
 }
 
 function downloadMaster() {
-  log('📥 Triggering Download: Master Render (1080p 60fps MP4) + Metadata Package (JSON)');
-  toast('Render Complete', 'master_render_1080p60.mp4 · QA: 100% · Cost: $0.42', 'success');
+  log('📥 Starting REAL video render via Canvas + MediaRecorder...');
+  toast('🎬 Rendering Video', 'Compositing all scenes into a real video file...', 'info', 5000);
+  renderVideoFromScenes();
+}
+
+async function renderVideoFromScenes() {
+  const WIDTH = 1920, HEIGHT = 1080;
+  const SCENE_DURATION = 4; // seconds per scene
+  const FPS = 30;
+  const FADE_FRAMES = Math.floor(FPS * 0.5); // 0.5s fade transition
+
+  const canvas = document.createElement('canvas');
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
+  const ctx = canvas.getContext('2d');
+
+  const stream = canvas.captureStream(FPS);
+  const recorder = new MediaRecorder(stream, {
+    mimeType: 'video/webm;codecs=vp9',
+    videoBitsPerSecond: 5000000
+  });
+  const chunks = [];
+  recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { type: 'video/webm' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ai_video_master_' + Date.now() + '.webm';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    log('✅ Video rendered and downloaded! (' + (blob.size / 1024 / 1024).toFixed(2) + ' MB)');
+    toast('🎉 Video Ready!', 'Downloaded ' + (blob.size / 1024 / 1024).toFixed(2) + ' MB .webm file', 'success', 6000);
+
+    // Reset button
+    const btn = document.querySelector('[onclick="downloadMaster()"]');
+    if (btn) btn.textContent = '📥 DOWNLOAD MASTER RENDER (1080p 60fps)';
+  };
+
+  recorder.start();
+
+  // Update button to show progress
+  const btn = document.querySelector('[onclick="downloadMaster()"]');
+
+  // Parse gradient colors from scene bg
+  function parseGradient(bg) {
+    const match = bg?.match(/#[0-9a-fA-F]{6}/g);
+    return match || ['#0f172a', '#0284c7'];
+  }
+
+  // Draw a scene frame
+  function drawFrame(scene, sceneIdx, frameInScene, totalFrames, fadeAlpha) {
+    const colors = parseGradient(scene.bg);
+
+    // Gradient background
+    const grd = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
+    grd.addColorStop(0, colors[0]);
+    grd.addColorStop(1, colors[1] || colors[0]);
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    // Animated particle dots
+    const time = frameInScene / FPS;
+    for (let p = 0; p < 30; p++) {
+      const x = ((p * 137.5 + time * 40) % WIDTH);
+      const y = ((p * 97.3 + time * 20 + Math.sin(p + time) * 30) % HEIGHT);
+      ctx.fillStyle = `rgba(0, 240, 255, ${0.1 + Math.sin(p + time * 2) * 0.08})`;
+      ctx.beginPath();
+      ctx.arc(x, y, 2 + Math.sin(p) * 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Dark overlay for text readability
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    // Scene counter badge
+    ctx.fillStyle = 'rgba(0, 240, 255, 0.15)';
+    ctx.beginPath();
+    ctx.roundRect(60, 50, 180, 40, 20);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = '#00f0ff';
+    ctx.font = '600 16px "Inter", sans-serif';
+    ctx.fillText('SCENE ' + (sceneIdx + 1) + ' / ' + scenes.length, 85, 76);
+
+    // Animate text entrance
+    const textProgress = Math.min(frameInScene / (FPS * 0.6), 1);
+    const eased = 1 - Math.pow(1 - textProgress, 3); // easeOutCubic
+    const textY = 440 + (1 - eased) * 60;
+    const textAlpha = eased;
+
+    // Main narration text
+    ctx.globalAlpha = textAlpha * fadeAlpha;
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '700 48px "Inter", sans-serif';
+    ctx.textAlign = 'center';
+
+    // Word wrap
+    const words = scene.text.split(' ');
+    let lines = [];
+    let line = '';
+    for (const w of words) {
+      const test = line + (line ? ' ' : '') + w;
+      if (ctx.measureText(test).width > WIDTH - 200) {
+        lines.push(line);
+        line = w;
+      } else {
+        line = test;
+      }
+    }
+    lines.push(line);
+
+    lines.forEach((l, li) => {
+      ctx.fillText(l, WIDTH / 2, textY + li * 64);
+    });
+
+    // Visual prompt subtitle
+    ctx.font = '400 22px "Inter", sans-serif';
+    ctx.fillStyle = 'rgba(148, 163, 184, 0.8)';
+    ctx.fillText('🎨 ' + (scene.prompt || '').slice(0, 80), WIDTH / 2, textY + lines.length * 64 + 40);
+
+    // Bottom progress bar
+    const progress = (sceneIdx * SCENE_DURATION * FPS + frameInScene) / (scenes.length * SCENE_DURATION * FPS);
+    ctx.globalAlpha = fadeAlpha;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.fillRect(0, HEIGHT - 6, WIDTH, 6);
+    const barGrd = ctx.createLinearGradient(0, 0, WIDTH * progress, 0);
+    barGrd.addColorStop(0, '#a855f7');
+    barGrd.addColorStop(1, '#00f0ff');
+    ctx.fillStyle = barGrd;
+    ctx.fillRect(0, HEIGHT - 6, WIDTH * progress, 6);
+
+    // Watermark
+    ctx.font = '600 14px "JetBrains Mono", monospace';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.textAlign = 'right';
+    ctx.fillText('AI VIDEO ENGINE · LLM-SYSTEMS', WIDTH - 40, HEIGHT - 20);
+    ctx.textAlign = 'center';
+
+    ctx.globalAlpha = 1;
+  }
+
+  // Render all scenes frame by frame
+  const framesPerScene = SCENE_DURATION * FPS;
+  const totalFrames = scenes.length * framesPerScene;
+  let frame = 0;
+
+  function renderFrame() {
+    if (frame >= totalFrames) {
+      recorder.stop();
+      return;
+    }
+
+    const sceneIdx = Math.floor(frame / framesPerScene);
+    const frameInScene = frame % framesPerScene;
+
+    // Fade in/out
+    let fadeAlpha = 1;
+    if (frameInScene < FADE_FRAMES) {
+      fadeAlpha = frameInScene / FADE_FRAMES;
+    } else if (frameInScene > framesPerScene - FADE_FRAMES) {
+      fadeAlpha = (framesPerScene - frameInScene) / FADE_FRAMES;
+    }
+
+    drawFrame(scenes[sceneIdx], sceneIdx, frameInScene, framesPerScene, fadeAlpha);
+
+    // Update progress
+    const pct = Math.floor((frame / totalFrames) * 100);
+    if (btn && pct % 5 === 0) btn.textContent = '⚙️ RENDERING... ' + pct + '%';
+    log_silent('Rendering frame ' + frame + '/' + totalFrames + ' (' + pct + '%)');
+
+    frame++;
+    requestAnimationFrame(renderFrame);
+  }
+
+  // Silent log (don't flood console)
+  let _lastLogPct = -1;
+  function log_silent(msg) {
+    const pct = Math.floor((frame / totalFrames) * 100);
+    if (pct !== _lastLogPct && pct % 20 === 0) {
+      _lastLogPct = pct;
+      log('🎬 ' + msg);
+    }
+  }
+
+  renderFrame();
 }
 
 // ---- ROLE SYSTEM ----
