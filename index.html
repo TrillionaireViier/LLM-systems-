@@ -73,7 +73,7 @@ header {
   color: #fff;
   text-decoration: none;
 }
-.brand-orb { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--cyan), var(--purple)); display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 0 20px var(--cyan-glow); }
+.brand-orb { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--cyan), var(--purple)); display: flex; align-items: center; justify-content: center; font-size[...] }
 .brand span { color: var(--cyan); }
 
 /* ensure role-toggle + logout stick to right */
@@ -86,12 +86,12 @@ header {
 .mobile-menu-btn:focus { outline: 2px solid var(--cyan); }
 
 .modes-bar { display: flex; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 4px; border-radius: 30px; gap: 4px; }
-.mode-btn { background: none; border: none; color: var(--mut-light); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+.mode-btn { background: none; border: none; color: var(--mut-light); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex[...] }
 .mode-btn:hover { color: #fff; }
 .mode-btn.active { background: var(--cyan); color: #000; font-weight: 700; box-shadow: 0 0 15px var(--cyan-glow); }
 
 .system-status { display: flex; align-items: center; gap: 16px; font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--mut-light); }
-.badge-status { display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--green); padding: 4px 10px; border-radius: 20px; }
+.badge-status { display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--green); padding: 4px 10px; border-radius:[...] }
 .dot-live { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
@@ -101,50 +101,49 @@ header {
 /* Panels */
 .panel { background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 12px; position: relative; }
 .panel-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; }
-.panel-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--cyan); display: flex; align-items: center; gap: 8px; }
+.panel-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--cyan); display: flex; align-items: center;[...] }
 
 .input-group { display: flex; flex-direction: column; gap: 6px; }
 .input-group label { font-size: 11px; font-weight: 700; color: var(--mut-light); text-transform: uppercase; letter-spacing: 0.5px; }
-.input-control { background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; padding: 10px 12px; color: #fff; font-size: 13px; font-family: inherit; transition: all 0.2s; width: 100%; }
+.input-control { background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; padding: 10px 12px; color: #fff; font-size: 13px; font-family: inherit; transiti[...] }
 .input-control:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 12px var(--cyan-glow); }
 textarea.input-control { resize: vertical; min-height: 70px; }
 
 .select-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.btn-produce { background: linear-gradient(135deg, var(--orange), #e04800); border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; padding: 12px; border-radius: 10px; cursor: pointer; box-shadow: 0 0 25px var(--orange-glow); transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-produce { background: linear-gradient(135deg, var(--orange), #e04800); border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; letter-spacing:[...] }
 .btn-produce:hover { transform: translateY(-2px); box-shadow: 0 0 35px var(--orange-glow); }
 
 /* Scenes */
 .scenes-grid { display: flex; flex-direction: column; gap: 12px; max-height: 460px; overflow-y: auto; padding-right: 4px; }
-.scene-card { background: rgba(0,0,0,0.35); border: 1px solid var(--panel-border); border-radius: 10px; padding: 12px; display: grid; grid-template-columns: 72px 1fr auto; gap: 12px; align-items: center; transition: all 0.2s; }
+.scene-card { background: rgba(0,0,0,0.35); border: 1px solid var(--panel-border); border-radius: 10px; padding: 12px; display: grid; grid-template-columns: 72px 1fr auto; gap: 12px; align-items:[...] }
 .scene-card:hover { border-color: rgba(0, 240, 255, 0.4); background: var(--panel-hover); }
 .scene-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--orange); background: rgba(255, 107, 43, 0.1); padding: 4px 6px; border-radius: 6px; text-align: center; }
 .scene-script { font-size: 13px; color: var(--text); font-weight: 500; }
 .scene-prompt { font-size: 11px; color: var(--mut-light); font-style: italic; margin-top: 2px; }
-.scene-asset-badge { font-size: 10px; background: rgba(0, 240, 255, 0.1); color: var(--cyan); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0, 240, 255, 0.2); text-align: center; font-weight: 600; }
+.scene-asset-badge { font-size: 10px; background: rgba(0, 240, 255, 0.1); color: var(--cyan); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0, 240, 255, 0.2); text-align: center; f[...] }
 .scene-actions { display: flex; gap: 6px; }
-.btn-mini { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--mut-light); padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+.btn-mini { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--mut-light); padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; tran[...] }
 .btn-mini:hover { background: var(--cyan); color: #000; font-weight: 600; }
 
 /* Video */
-.player-container { background: #000; border: 1px solid var(--panel-border); border-radius: var(--r); position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; }
-.video-viewport { width: 100%; aspect-ratio: 16/9; background: radial-gradient(circle at center, #111827, #030712); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; transition: all 0.3s ease; }
+.player-container { background: #000; border: 1px solid var(--panel-border); border-radius: var(--r); position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8); display: flex;[...] }
+.video-viewport { width: 100%; aspect-ratio: 16/9; background: radial-gradient(circle at center, #111827, #030712); display: flex; align-items: center; justify-content: center; position: relative[...] }
 .video-viewport.aspect-916 { aspect-ratio: 9/16; max-height: 640px; }
-.scene-bg-art { position: absolute; inset: 0; background-size: cover; background-position: center; transition: all 0.5s ease; filter: brightness(0.65) contrast(1.1); }
-.video-overlay-text { position: absolute; bottom: 40px; left: 20px; right: 20px; background: rgba(0, 0, 0, 0.85); padding: 10px 16px; border-radius: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: #fff; text-align: center; border: 1px solid rgba(0, 240, 255, 0.3); box-shadow: 0 4px 20px rgba(0,0,0,0.9); z-index: 10; }
+.video-overlay-text { position: absolute; bottom: 40px; left: 20px; right: 20px; background: rgba(0, 0, 0, 0.85); padding: 10px 16px; border-radius: 10px; font-family: 'Space Grotesk', sans-serif[...] }
 .player-controls { padding: 12px 16px; background: rgba(10, 14, 22, 0.95); border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 12px; }
-.btn-play { background: var(--cyan); border: none; width: 40px; height: 40px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; box-shadow: 0 0 12px var(--cyan-glow); }
+.btn-play { background: var(--cyan); border: none; width: 40px; height: 40px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-s[...] }
 .progress-bar-wrap { flex: 1; height: 8px; background: rgba(255,255,255,0.15); border-radius: 3px; position: relative; cursor: pointer; overflow: hidden; }
 .progress-bar-fill { width: 0%; height: 100%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan-glow); transition: width 0.1s linear; }
 
 /* Thumbs / QA */
 .qa-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .thumbs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.thumb-item { aspect-ratio: 16/9; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--mut-light); cursor: pointer; transition: all 0.2s; text-align: center; }
+.thumb-item { aspect-ratio: 16/9; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; fon[...] }
 .thumb-item.active, .thumb-item:hover { border-color: var(--cyan); color: #fff; background: rgba(0, 240, 255, 0.1); }
 
 /* Toast */
 #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-.toast { display: flex; align-items: flex-start; gap: 10px; background: rgba(13, 18, 31, 0.97); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 14px 18px; min-width: 280px; max-width: 380px; box-shadow: 0 8px 32px rgba(0,0,0,0.7); backdrop-filter: blur(16px); font-family: 'Inter', sans-serif; font-size: 13px; color: #f8fafc; pointer-events: all; }
+.toast { display: flex; align-items: flex-start; gap: 10px; background: rgba(13, 18, 31, 0.97); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 14px 18px; min-width: 280px[...] }
 
 /* Role-based visibility */
 body.role-user [data-role="admin"] { display: none !important; }
@@ -286,10 +285,10 @@ button:focus { outline: 2px solid rgba(0,240,255,0.18); outline-offset: 2px; }
     </div>
 
     <div class="system-status" aria-hidden="false">
-      <button onclick="openApiModal()" data-role="admin" style="background:rgba(0, 240, 255, 0.1);border:1px solid var(--cyan);color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 10px;border-radius:8px;" aria-label="API keys and integrations">
+      <button onclick="openApiModal()" data-role="admin" style="background:rgba(0, 240, 255, 0.1);border:1px solid var(--cyan);color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:1[...]">
         🔑 API KEYS &amp; INTEGRATIONS
       </button>
-      <div onclick="openApiModal()" data-role="admin" title="Session cost — click for details" style="display:flex;align-items:center;gap:5px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.08);padding:6px 10px;border-radius:8px;" aria-hidden="true">
+      <div onclick="openApiModal()" data-role="admin" title="Session cost — click for details" style="display:flex;align-items:center;gap:5px;background:rgba(16,185,129,0.08);border:1px solid r[...]">
         💰 <span id="usageBadgeCost">$0.0000</span>
       </div>
       <div class="badge-status"><div class="dot-live"></div><span id="apiStatusBadge">API Keys: Ready</span></div>
@@ -302,7 +301,7 @@ button:focus { outline: 2px solid rgba(0,240,255,0.18); outline-offset: 2px; }
 <div id="toast-container"></div>
 
 <!-- API Modal (now with editable content) -->
-<div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:999;align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
+<div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:999;align-items:center;justify-content:center;padding:20px;overflow-y:[...]">
   <div style="width:100%;max-width:720px;">
     <div class="panel">
       <div class="panel-header"><div class="panel-title">🔑 API Keys &amp; Integrations</div></div>
@@ -416,7 +415,7 @@ button:focus { outline: 2px solid rgba(0,240,255,0.18); outline-offset: 2px; }
   <div class="panel">
     <div class="panel-header"><div class="panel-title">🔎 QA & Assets</div></div>
     <div style="display:grid;gap:8px;">
-      <div class="qa-grid"><div class="qa-item"><div class="qa-label">Check</div><div class="qa-val">OK</div></div><div class="qa-item"><div class="qa-label">Audio</div><div class="qa-val">Ready</div></div></div>
+      <div class="qa-grid"><div class="qa-item"><div class="qa-label">Check</div><div class="qa-val">OK</div></div><div class="qa-item"><div class="qa-label">Audio</div><div class="qa-val">Ready<[...]"></div>
       <div class="thumbs-grid"><div class="thumb-item">Thumb 1</div><div class="thumb-item">Thumb 2</div><div class="thumb-item">Thumb 3</div><div class="thumb-item">Thumb 4</div></div>
     </div>
   </div>
@@ -553,6 +552,76 @@ function doLogin(){
   document.getElementById('appMain').style.display = 'block';
 }
 
+// --- New: button helpers to make UI interactive ---
+// Called by login role tabs on the login screen
+function selectLoginRole(role){
+  try{
+    const adminBtn = document.getElementById('loginTabAdmin');
+    const userBtn = document.getElementById('loginTabUser');
+    if(adminBtn) adminBtn.classList.toggle('active', role === 'admin');
+    if(userBtn) userBtn.classList.toggle('active', role === 'user');
+    if(adminBtn) adminBtn.setAttribute('aria-pressed', String(role === 'admin'));
+    if(userBtn) userBtn.setAttribute('aria-pressed', String(role === 'user'));
+
+    const label = document.getElementById('loginRoleLabel');
+    if(label) label.textContent = role === 'admin' ? '🛡 Admin Login' : '👤 User Login';
+
+    const pwd = document.getElementById('loginPassword');
+    if(pwd){
+      // keep input type password for simplicity but update placeholder
+      pwd.placeholder = role === 'admin' ? 'Enter password…' : 'Enter display name…';
+      try{ pwd.focus(); }catch(e){}
+    }
+
+    try{ localStorage.setItem('llm_role', role); }catch(e){}
+  }catch(e){ console.error('selectLoginRole error', e); }
+}
+
+// Change video aspect/format
+function changeAspect(value){
+  try{
+    const vp = document.getElementById('videoViewport');
+    if(!vp) return;
+    vp.classList.toggle('aspect-916', value === '9:16');
+    vp.classList.toggle('aspect-11', value === '1:1');
+    // 16:9 is the default and removes special classes
+    if(value === '16:9'){
+      vp.classList.remove('aspect-916'); vp.classList.remove('aspect-11');
+    }
+    showToast('Aspect set to ' + value);
+  }catch(e){ console.error('changeAspect error', e); }
+}
+
+// Run a simple preset/test — populates the topic input and switches to Mode A
+function runTest(key){
+  try{
+    const presets = {
+      'A': 'Create a 60s news-style video summarizing a recent breakthrough in AI.',
+      'B': 'Produce a 90s fast-paced sports highlight about Formula 1: key moments and analysis.',
+      'C': 'Short entertainment piece: movie recap with energetic voiceover and cuts.',
+      'D': 'Historical explainer (2 min): Rise and fall of the Roman Republic.',
+      'E': 'Philosophy explainer: What is utilitarianism? (90s).',
+      'F': 'Data chart short: explain a chart showing climate trends in 60s.'
+    };
+    const txt = presets[key] || ('Preset ' + key);
+    const topic = document.getElementById('topicInputA');
+    if(topic) topic.value = txt;
+    switchMode('A');
+    showToast('Loaded preset ' + key);
+  }catch(e){ console.error('runTest error', e); }
+}
+
+// Small helper: show toast
+function showToast(msg, duration=3000){
+  const container = document.getElementById('toast-container');
+  if(!container) return;
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  container.appendChild(t);
+  setTimeout(()=>{ t.style.transition='opacity 0.4s'; t.style.opacity = '0'; setTimeout(()=>t.remove(),420); }, duration);
+}
+
 // API modal helpers
 function openApiModal(){
   const modal = document.getElementById('apiModal');
@@ -578,15 +647,37 @@ function saveApiSettings(){
   closeApiModal();
 }
 
-// Small helper: show toast
-function showToast(msg, duration=3000){
-  const container = document.getElementById('toast-container');
-  if(!container) return;
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
-  container.appendChild(t);
-  setTimeout(()=>{ t.style.transition='opacity 0.4s'; t.style.opacity = '0'; setTimeout(()=>t.remove(),420); }, duration);
+// Wire play button with a simple simulated progress (preview-only)
+function _wirePlayButton(){
+  try{
+    const play = document.getElementById('btnPlay');
+    const fill = document.getElementById('progressFill');
+    if(!play || !fill) return;
+    let iv = null;
+    play.addEventListener('click', ()=>{
+      if(play.dataset.playing === '1'){
+        // stop
+        play.dataset.playing = '0';
+        play.textContent = '▶';
+        if(iv) clearInterval(iv);
+      } else {
+        // start
+        play.dataset.playing = '1';
+        play.textContent = '▌▌';
+        let progress = parseInt(fill.style.width) || 0;
+        iv = setInterval(()=>{
+          progress = Math.min(100, progress + 2);
+          fill.style.width = progress + '%';
+          if(progress >= 100){
+            clearInterval(iv);
+            play.dataset.playing = '0';
+            play.textContent = '▶';
+            setTimeout(()=> fill.style.width = '0%', 400);
+          }
+        }, 60);
+      }
+    });
+  }catch(e){ console.error('_wirePlayButton error', e); }
 }
 
 // Mode listeners and input wiring are attached on load
@@ -641,6 +732,19 @@ document.addEventListener('DOMContentLoaded', function(){
     if(storedUsage){ const badge = document.getElementById('usageBadgeCost'); if(badge) badge.textContent = storedUsage; }
     const storedKey = localStorage.getItem('llm_api_key');
     const status = document.getElementById('apiStatusBadge'); if(status) status.textContent = storedKey ? 'API Keys: Ready' : 'API Keys: None';
+  }catch(e){}
+
+  // wire play button simulation
+  _wirePlayButton();
+
+  // ensure login role tabs reflect saved or default state
+  try{
+    const loginSaved = localStorage.getItem('llm_role') || 'admin';
+    selectLoginRole(loginSaved);
+    const loginAdmin = document.getElementById('loginTabAdmin');
+    const loginUser = document.getElementById('loginTabUser');
+    if(loginAdmin) loginAdmin.addEventListener('click', ()=> selectLoginRole('admin'));
+    if(loginUser) loginUser.addEventListener('click', ()=> selectLoginRole('user'));
   }catch(e){}
 
 });
