@@ -301,9 +301,26 @@ button:focus { outline: 2px solid rgba(0,240,255,0.18); outline-offset: 2px; }
 <!-- Toast Notification Container -->
 <div id="toast-container"></div>
 
-<!-- API Modal (omitted long inner content for brevity in this commit but unchanged) -->
+<!-- API Modal (now with editable content) -->
 <div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:999;align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
-  <!-- modal content unchanged -->
+  <div style="width:100%;max-width:720px;">
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">🔑 API Keys &amp; Integrations</div></div>
+      <div class="input-group">
+        <label>OpenAI / LLM API Key</label>
+        <input id="apiKeyInput" class="input-control" placeholder="sk-... (stored locally)" autocomplete="off">
+      </div>
+      <div class="input-group">
+        <label>Estimated Usage Cost</label>
+        <input id="usageInput" class="input-control" placeholder="$0.0000">
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+        <button class="btn-mini" onclick="closeApiModal()">Close</button>
+        <button class="btn-produce" onclick="saveApiSettings()" style="padding:8px 12px;font-size:13px;">Save</button>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--mut-light);">Keys are stored only in your browser/localStorage for this demo.</div>
+    </div>
+  </div>
 </div>
 
 <!-- Main Studio Container -->
@@ -371,7 +388,7 @@ button:focus { outline: 2px solid rgba(0,240,255,0.18); outline-offset: 2px; }
     <div id="formModeD" class="input-group" style="display:none;margin-top:10px;">
       <div class="panel-header"><div class="panel-title">📡 Mode D: Discovery</div></div>
       <label>Discovery Seed</label>
-      <input id="discoveryInput" class="input-control" placeholder="Enter seed keywords or topics...">
+      <input id="discoveryInput" class="input-control" placeholder="Enter seed keywords or topics..."></input>
     </div>
 
   </div>
@@ -513,6 +530,9 @@ function switchRole(role) {
     const modes = document.querySelector('.modes-bar');
     if(modes) modes.style.display = isUser ? 'none' : 'flex';
 
+    // persist role
+    try{ localStorage.setItem('llm_role', role); }catch(e){}
+
     console.log('Switched role to', role);
   } catch(err) {
     console.error('switchRole error', err);
@@ -533,7 +553,44 @@ function doLogin(){
   document.getElementById('appMain').style.display = 'block';
 }
 
-// Ensure default active mode on load
+// API modal helpers
+function openApiModal(){
+  const modal = document.getElementById('apiModal');
+  if(!modal) return;
+  try{
+    const key = localStorage.getItem('llm_api_key') || '';
+    const usage = localStorage.getItem('llm_usage_cost') || document.getElementById('usageBadgeCost').textContent || '$0.0000';
+    const keyInput = document.getElementById('apiKeyInput');
+    const usageInput = document.getElementById('usageInput');
+    if(keyInput) keyInput.value = key;
+    if(usageInput) usageInput.value = usage;
+  }catch(e){}
+  modal.style.display = 'flex';
+}
+function closeApiModal(){ const m = document.getElementById('apiModal'); if(m) m.style.display='none'; }
+function saveApiSettings(){
+  const key = (document.getElementById('apiKeyInput') || {value:''}).value.trim();
+  const usage = (document.getElementById('usageInput') || {value:''}).value.trim() || '$0.0000';
+  try{ localStorage.setItem('llm_api_key', key); localStorage.setItem('llm_usage_cost', usage); }catch(e){}
+  const badge = document.getElementById('usageBadgeCost'); if(badge) badge.textContent = usage;
+  const status = document.getElementById('apiStatusBadge'); if(status) status.textContent = key ? 'API Keys: Ready' : 'API Keys: None';
+  showToast('API settings saved');
+  closeApiModal();
+}
+
+// Small helper: show toast
+function showToast(msg, duration=3000){
+  const container = document.getElementById('toast-container');
+  if(!container) return;
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  container.appendChild(t);
+  setTimeout(()=>{ t.style.transition='opacity 0.4s'; t.style.opacity = '0'; setTimeout(()=>t.remove(),420); }, duration);
+}
+
+// Mode listeners and input wiring are attached on load
+
 document.addEventListener('DOMContentLoaded', function(){
   // if no forms are visible, set Mode A
   const anyVisible = ['A','B','C','D'].some(m => {
@@ -559,6 +616,33 @@ document.addEventListener('DOMContentLoaded', function(){
     const saved = localStorage.getItem('llm_role');
     if(saved) switchRole(saved);
   }catch(e){}
+
+  // wire directives/discovery inputs so they have visible effects for users
+  const directives = document.getElementById('directivesInput');
+  if(directives){
+    directives.addEventListener('input', ()=>{
+      const txt = directives.value || 'Your preview text here';
+      const overlay = document.getElementById('videoOverlay');
+      if(overlay) overlay.textContent = txt;
+    });
+  }
+  const discovery = document.getElementById('discoveryInput');
+  if(discovery){
+    discovery.addEventListener('input', ()=>{
+      const txt = discovery.value || 'Your preview text here';
+      const overlay = document.getElementById('videoOverlay');
+      if(overlay) overlay.textContent = txt;
+    });
+  }
+
+  // show stored API usage if available
+  try{
+    const storedUsage = localStorage.getItem('llm_usage_cost');
+    if(storedUsage){ const badge = document.getElementById('usageBadgeCost'); if(badge) badge.textContent = storedUsage; }
+    const storedKey = localStorage.getItem('llm_api_key');
+    const status = document.getElementById('apiStatusBadge'); if(status) status.textContent = storedKey ? 'API Keys: Ready' : 'API Keys: None';
+  }catch(e){}
+
 });
 </script>
 
