@@ -29,6 +29,18 @@
   --gap: 20px;
 }
 
+/* Background glow layer */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(0,240,255,0.10), transparent 22%),
+    radial-gradient(circle at 80% 70%, rgba(168,85,247,0.08), transparent 28%);
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* Reset + base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
@@ -38,23 +50,20 @@ body {
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
   line-height: 1.5;
-  background-image: 
-    radial-gradient(circle at 10% 10%, rgba(0, 240, 255, 0.07) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(255, 107, 43, 0.07) 0%, transparent 40%);
-  background-attachment: fixed;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
+  position: relative;
 }
 
 /* Header */
 header {
   height: 68px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(10, 14, 22, 0.9);
-  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(7, 10, 14, 0.8);
+  backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 20;
   padding: 0 24px;
   display: flex;
   align-items: center;
@@ -64,100 +73,120 @@ header {
 
 .brand-orb { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--cyan), var(--purple)); display: flex; align-items: center; justify-content: center; font-size: 18px; }
 
-/* (styles truncated for brevity in storage) */
+/* Floating Gemini-ready status */
+.floating-status {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(12,18,28,0.85);
+  border: 1px solid rgba(0,240,255,0.18);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 999px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+  z-index: 30;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.floating-status .live-dot { width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 12px rgba(16,185,129,0.9); }
+.floating-status .provider-tag { padding:4px 8px; border-radius:999px; background:rgba(0,240,255,0.10); color:var(--cyan); font-weight:700; border:1px solid rgba(0,240,255,0.12); }
+
+/* Main Layout */
+.studio-container { max-width: var(--site-max); margin: 0 auto; padding: 16px; display: grid; grid-template-columns: 1fr; gap: var(--gap); min-height: calc(100vh - 68px); z-index: 10; position: relative; }
+.panel { background: linear-gradient(180deg, rgba(13,18,31,0.96), rgba(9,13,21,0.92)); border: 1px solid rgba(0,240,255,0.06); border-radius: var(--r); padding: 16px; display:flex; flex-direction:column; gap:12px; box-shadow: 0 18px 36px rgba(0,0,0,0.24); }
+.panel-header { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.03); padding-bottom:10px; }
+
+.input-control { background: rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px; color:#fff; }
+.input-control:focus { outline:none; border-color:var(--cyan); box-shadow:0 0 12px rgba(0,240,255,0.08); }
+.btn-produce { background: linear-gradient(135deg, var(--orange), #e04800); border:none; color:#fff; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow: 0 18px 30px rgba(255,107,43,0.12); }
+
+/* Video viewport tweaks */
+.video-viewport { width:100%; aspect-ratio:16/9; background: radial-gradient(circle at center, #111827, #030712); display:flex; align-items:center; justify-content:center; position:relative; border-radius:10px; overflow:hidden; }
+
+/* Toasts */
+#toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 60; display:flex; flex-direction:column; gap:10px; pointer-events:none; }
+.toast { background: rgba(13,18,31,0.98); border:1px solid rgba(0,240,255,0.06); padding:12px 14px; border-radius:10px; box-shadow: 0 8px 20px rgba(0,0,0,0.35); pointer-events:auto; }
+
+/* Responsive */
+@media (min-width:1100px) { .studio-container { grid-template-columns: 320px 1fr 420px; } }
+
+/* Accessibility focus */
+:focus { outline: none; }
+button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
 </style>
 </head>
 <body>
 
+<!-- Floating status -->
+<div class="floating-status" aria-live="polite">
+  <span class="live-dot" aria-hidden="true"></span>
+  <span>Gemini-ready video pipeline</span>
+  <span class="provider-tag">Gemini</span>
+</div>
+
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
-  <div class="login-card">
-    <div class="login-logo">
-      <div class="orb">🎬</div>
-      <h1>AI VIDEO ENGINE</h1>
-      <p>Autonomous Production System</p>
+  <div class="login-card panel" style="max-width:420px;margin:60px auto;">
+    <div class="login-logo" style="text-align:center;margin-bottom:8px;">
+      <div class="brand-orb">🎬</div>
+      <h1 style="margin-top:10px;">AI VIDEO ENGINE</h1>
+      <p style="color:var(--mut-light);">Autonomous Production System</p>
     </div>
 
-    <div class="login-role-tabs">
+    <div class="login-role-tabs" style="display:flex;gap:8px;justify-content:center;margin-bottom:8px;">
       <button id="loginTabAdmin" class="login-role-tab active" onclick="selectLoginRole('admin')" aria-pressed="true">🛡 Admin</button>
       <button id="loginTabUser" class="login-role-tab" onclick="selectLoginRole('user')" aria-pressed="false">👤 User</button>
     </div>
 
-    <div class="input-group" style="gap:6px;">
+    <div class="input-group" style="gap:6px;margin-bottom:10px;">
       <label id="loginRoleLabel" style="font-size:12px;color:var(--cyan);font-weight:700;">🛡 Admin Login</label>
       <input type="password" id="loginPassword" class="input-control" placeholder="Enter password…" onkeydown="if(event.key==='Enter')doLogin()" autofocus>
     </div>
 
-    <div class="login-error" id="loginError"></div>
+    <div class="login-error" id="loginError" style="min-height:18px;color:var(--red);"></div>
 
-    <button class="btn-login" id="btnLogin" style="background:linear-gradient(135deg, var(--purple), var(--cyan)); color:#000;" onclick="doLogin()" aria-label="Sign in">
-      🔓 SIGN IN
-    </button>
+    <button class="btn-login btn-produce" id="btnLogin" onclick="doLogin()" aria-label="Sign in">🔓 SIGN IN</button>
 
-    <div style="text-align:center;font-size:10px;color:var(--mut);">
-      Session stored locally · No server auth
-    </div>
+    <div style="text-align:center;font-size:11px;color:var(--mut);margin-top:10px;">Session stored locally · No server auth</div>
   </div>
 </div>
 
 <!-- MAIN APP (hidden until auth) -->
-<div id="appMain">
+<div id="appMain" style="display:none;">
 
 <!-- Header -->
 <header>
-  <div class="header-left">
-    <a href="#" class="brand">
+  <div class="header-left" style="display:flex;align-items:center;gap:12px;">
+    <a href="#" class="brand" style="display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none;">
       <div class="brand-orb">🎬</div>
-      <div>AUTONOMOUS <span>AI VIDEO ENGINE</span></div>
+      <div>AUTONOMOUS <span style="color:var(--cyan);">AI VIDEO ENGINE</span></div>
     </a>
-    <button id="mobileMenuBtn" class="mobile-menu-btn" aria-expanded="false" aria-controls="headerNav" aria-label="Open menu">☰</button>
-
-    <div class="role-toggle" role="tablist" aria-label="Select role">
-      <button id="roleAdminBtn" class="role-btn active" onclick="switchRole('admin')" aria-pressed="true" aria-label="Switch to admin">🛡 Admin</button>
-      <button id="roleUserBtn" class="role-btn" onclick="switchRole('user')" aria-pressed="false" aria-label="Switch to user">👤 User</button>
-    </div>
-
-    <button class="btn-logout" onclick="doLogout()" aria-label="Logout">🚪 Logout</button>
   </div>
-
-  <div id="headerNav" style="display:flex;align-items:center;gap:12px;">
-    <div class="modes-bar" role="tablist" aria-label="Modes">
-      <button id="btnModeA" class="mode-btn active" onclick="switchMode('A')">⚡ Mode A: Topic</button>
-      <button id="btnModeB" class="mode-btn" onclick="switchMode('B')">📄 Mode B: Sources</button>
-      <button id="btnModeC" class="mode-btn" onclick="switchMode('C')">🎯 Mode C: Directed</button>
-      <button id="btnModeD" class="mode-btn" onclick="switchMode('D')">📡 Mode D: Discovery</button>
-    </div>
-
-    <div class="system-status" aria-hidden="false">
-      <button onclick="openApiModal()" data-role="admin" style="background:rgba(0, 240, 255, 0.1);border:1px solid var(--cyan);color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:12px;">
-        🔑 API KEYS &amp; INTEGRATIONS
-      </button>
-      <div onclick="openApiModal()" data-role="admin" title="Session cost — click for details" style="display:flex;align-items:center;gap:5px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.12);padding:4px 8px;border-radius:8px;">
-        💰 <span id="usageBadgeCost">$0.0000</span>
-      </div>
-      <div class="badge-status"><div class="dot-live"></div><span id="apiStatusBadge">API Keys: Ready</span></div>
-      <div data-role="admin">Max Cap: €5.00</div>
-    </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <button onclick="openApiModal()" style="background:transparent;border:1px solid rgba(0,240,255,0.06);padding:8px 10px;border-radius:8px;color:var(--cyan);">🔑 API KEYS & INTEGRATIONS</button>
+    <div style="color:var(--mut-light);">💰 <span id="usageBadgeCost">$0.0000</span></div>
   </div>
 </header>
 
 <!-- Toast Notification Container -->
 <div id="toast-container"></div>
 
-<!-- API Modal (now with editable content + video model selector) -->
-<div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:999;align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
+<!-- API Modal -->
+<div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:40;align-items:center;justify-content:center;padding:20px;">
   <div style="width:100%;max-width:720px;">
     <div class="panel">
-      <div class="panel-header"><div class="panel-title">🔑 API Keys &amp; Integrations</div></div>
+      <div class="panel-header"><div class="panel-title">🔑 API Keys & Integrations</div></div>
 
       <div class="input-group">
         <label>Video Model Provider</label>
         <select id="videoProviderSelect" class="input-control"></select>
       </div>
 
-      <div id="videoProviderFields" class="input-group">
-        <!-- populated by JS with provider-specific key fields -->
-      </div>
+      <div id="videoProviderFields" class="input-group"></div>
 
       <div class="input-group">
         <label>OpenAI / LLM API Key (for prompts)</label>
@@ -175,7 +204,7 @@ header {
         <button class="btn-produce" onclick="saveVideoSettingsAndGenerate()" style="padding:8px 12px;font-size:13px;">Generate Video</button>
       </div>
 
-      <div style="margin-top:10px;font-size:12px;color:var(--mut-light);">Keys are stored only in your browser/localStorage for this demo. For production, move secrets to a server or serverless function and store API keys in environment variables.</div>
+      <div style="margin-top:10px;font-size:12px;color:var(--mut-light);">Keys should be stored server-side for production. For this demo, provider endpoints (server proxies) may be stored in localStorage.</div>
     </div>
   </div>
 </div>
@@ -183,350 +212,187 @@ header {
 <!-- Main Studio Container -->
 <div class="studio-container">
 
-  <!-- Left Sidebar: Production Control & Mandatory Test Cases -->
+  <!-- Left Sidebar -->
   <div class="panel">
-    <div class="panel-header" data-role="admin">
-      <div class="panel-title">🧪 Mandatory Test Cases</div>
-      <span style="font-size:10px;color:var(--cyan);font-family:'JetBrains Mono';">PRESETS</span>
-    </div>
-    <div class="test-cases-grid" data-role="admin">
-      <div class="test-btn" onclick="runTest('A')">A: News (60s)</div>
-      <div class="test-btn" onclick="runTest('B')">B: Sports (F1)</div>
-      <div class="test-btn" onclick="runTest('C')">C: Entertainment</div>
-      <div class="test-btn" onclick="runTest('D')">D: History (Rome)</div>
-      <div class="test-btn" onclick="runTest('E')">E: Philosophy</div>
-      <div class="test-btn" onclick="runTest('F')">F: Data Chart</div>
-    </div>
-
-    <!-- Mode A Form -->
-    <div id="formModeA" class="input-group" style="margin-top:10px;">
-      <div class="panel-header">
-        <div class="panel-title">⚡ Mode A: Topic Input</div>
-        <span style="font-size:10px;color:var(--cyan);font-family:'JetBrains Mono';">AUTONOMOUS</span>
-      </div>
-      <label>Topic / Instruction</label>
-      <textarea id="topicInputA" class="input-control" placeholder="e.g. Create a 6-minute video explaining why Formula 1 teams invest heavily in simulation"></textarea>
-      
-      <div class="select-row">
-        <div class="input-group">
-          <label>Target Format</label>
-          <select id="aspectSelect" class="input-control" onchange="changeAspect(this.value)">
-            <option value="16:9">16:9 YouTube Long-Form</option>
-            <option value="9:16">9:16 Shorts / TikTok / Reels</option>
-            <option value="1:1">1:1 Square Post</option>
-          </select>
-        </div>
-        <div class="input-group">
-          <label>Niche / Category</label>
-          <select id="nicheSelect" class="input-control">
-            <option value="technology">Technology & Science</option>
-            <option value="sports">Sports & Racing</option>
-            <option value="history">History & Documentary</option>
-            <option value="philosophy">Philosophy & Explainers</option>
-            <option value="news">Breaking News</option>
-          </select>
-        </div>
-      </div>
-
-      <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end;">
-        <button class="btn-produce" onclick="generateVideoFromUI()">Produce (Generate Video)</button>
-      </div>
-    </div>
-
-    <!-- Mode B/C/D placeholder containers (created so switchMode can show/hide them) -->
-    <div id="formModeB" class="input-group" style="display:none;margin-top:10px;">
-      <div class="panel-header"><div class="panel-title">📄 Mode B: Sources</div></div>
-      <label>Source URLs / Documents</label>
-      <input id="sourcesInput" class="input-control" placeholder="Paste article URLs or upload docs...">
-    </div>
-
-    <div id="formModeC" class="input-group" style="display:none;margin-top:10px;">
-      <div class="panel-header"><div class="panel-title">🎯 Mode C: Directed</div></div>
-      <label>Directives</label>
-      <textarea id="directivesInput" class="input-control" placeholder="Specify exact shots, tone, or timing..."></textarea>
-    </div>
-
-    <div id="formModeD" class="input-group" style="display:none;margin-top:10px;">
-      <div class="panel-header"><div class="panel-title">📡 Mode D: Discovery</div></div>
-      <label>Discovery Seed</label>
-      <input id="discoveryInput" class="input-control" placeholder="Enter seed keywords or topics..."></input>
-    </div>
-
-  </div>
-
-  <!-- Center: Player + Scenes -->
-  <div class="panel">
-    <div class="player-container">
-      <div id="videoViewport" class="video-viewport">
-        <div class="scene-bg-art" id="sceneBg" style="background-image:linear-gradient(45deg, rgba(0,0,0,0.6), rgba(0,0,0,0.6));"></div>
-        <div class="video-overlay-text" id="videoOverlay">Your preview text here <span class="highlight-word">highlight</span></div>
-      </div>
-      <div class="player-controls">
-        <button class="btn-play" id="btnPlay">▶</button>
-        <div class="progress-bar-wrap" id="progressWrap"><div class="progress-bar-fill" id="progressFill"></div></div>
-      </div>
+    <div class="panel-header" data-role="admin"><div class="panel-title">🧪 Presets</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <button class="btn-mini" onclick="runTest('A')">A: News</button>
+      <button class="btn-mini" onclick="runTest('B')">B: Sports</button>
+      <button class="btn-mini" onclick="runTest('C')">C: Entertainment</button>
+      <button class="btn-mini" onclick="runTest('D')">D: History</button>
     </div>
 
     <div style="margin-top:12px;">
-      <div class="panel-header"><div class="panel-title">Scenes</div></div>
-      <div id="scenesContainer" class="scenes-grid"></div>
+      <div class="panel-header"><div class="panel-title">⚡ Mode A: Topic</div></div>
+      <label>Topic / Instruction</label>
+      <textarea id="topicInputA" class="input-control" placeholder="Enter topic or instruction..."></textarea>
+
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <select id="aspectSelect" class="input-control">
+          <option value="16:9">16:9</option>
+          <option value="9:16">9:16</option>
+          <option value="1:1">1:1</option>
+        </select>
+        <select id="nicheSelect" class="input-control">
+          <option value="technology">Technology</option>
+          <option value="sports">Sports</option>
+          <option value="history">History</option>
+          <option value="philosophy">Philosophy</option>
+          <option value="news">News</option>
+        </select>
+      </div>
+
+      <div style="margin-top:8px;display:flex;justify-content:flex-end;"><button class="btn-produce" onclick="generateVideoFromUI()">Produce</button></div>
     </div>
   </div>
 
-  <!-- Right Sidebar: Assets / QA -->
+  <!-- Center: Player -->
+  <div class="panel">
+    <div class="player-container">
+      <div id="videoViewport" class="video-viewport"><div id="videoOverlay" style="color:var(--mut-light);padding:12px;">Your preview text here</div></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:12px;"><button id="btnPlay" class="btn-mini">▶</button><div style="flex:1;background:rgba(255,255,255,0.06);height:8px;border-radius:6px;overflow:hidden;"><div id="progressFill" style="width:0%;height:100%;background:var(--cyan);"></div></div></div>
+    </div>
+
+    <div style="margin-top:12px;"><div class="panel-header"><div class="panel-title">Scenes</div></div><div id="scenesContainer" style="display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto;"></div></div>
+  </div>
+
+  <!-- Right Sidebar -->
   <div class="panel">
     <div class="panel-header"><div class="panel-title">🔎 QA & Assets</div></div>
-    <div style="display:grid;gap:8px;">
-      <div class="qa-grid"><div class="qa-item"><div class="qa-label">Check</div><div class="qa-val">OK</div></div><div class="qa-item"><div class="qa-label">Audio</div><div class="qa-val">Ready</div></div></div>
-      <div class="thumbs-grid" id="thumbsGrid"><div class="thumb-item">Thumb 1</div><div class="thumb-item">Thumb 2</div><div class="thumb-item">Thumb 3</div><div class="thumb-item">Thumb 4</div></div>
-    </div>
+    <div id="thumbsGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;"><div class="thumb-item">Thumb 1</div><div class="thumb-item">Thumb 2</div></div>
   </div>
 
 </div>
 
-<!-- lightweight scripts to improve mobile UX -->
+<!-- Scripts -->
 <script>
-// --- Helpers & existing UI wiring (kept) ---
-(function(){
-  const btn = document.getElementById('mobileMenuBtn');
-  const header = document.querySelector('header');
-  const nav = document.getElementById('headerNav');
-  if(!btn) return;
-  btn.addEventListener('click', ()=>{
-    const expanded = btn.getAttribute('aria-expanded') === 'true';
-    btn.setAttribute('aria-expanded', String(!expanded));
-    header.classList.toggle('show-mobile-nav');
-    const modes = nav.querySelector('.modes-bar');
-    const sys = nav.querySelector('.system-status');
-    if(modes) modes.style.display = expanded ? 'none' : 'flex';
-    if(sys) sys.style.display = expanded ? 'none' : 'flex';
-    const roleToggle = document.querySelector('.role-toggle');
-    if(roleToggle && window.innerWidth <= 768) roleToggle.style.display = expanded ? 'none' : 'flex';
-  });
-  document.addEventListener('click', (e)=>{
-    if(window.innerWidth > 768) return;
-    if(!header.classList.contains('show-mobile-nav')) return;
-    if(header.contains(e.target)) return;
-    header.classList.remove('show-mobile-nav');
-    btn.setAttribute('aria-expanded', 'false');
-    const modes = nav.querySelector('.modes-bar');
-    const sys = nav.querySelector('.system-status');
-    if(modes) modes.style.display = 'none';
-    if(sys) sys.style.display = 'none';
-    const roleToggle = document.querySelector('.role-toggle');
-    if(roleToggle) roleToggle.style.display = 'flex';
-  });
-})();
+// --- Helpers ---
+function showToast(msg, duration=4000){ const c=document.getElementById('toast-container'); if(!c) return; const t=document.createElement('div'); t.className='toast'; t.textContent=msg; c.appendChild(t); setTimeout(()=>{ t.style.opacity='0'; setTimeout(()=>t.remove(),300); }, duration); }
 
-(function(){ document.addEventListener('click', function(e){ if(window.innerWidth < 480 && e.target && e.target.classList && e.target.classList.contains('btn-mini')){ e.target.style.padding = '10px'; setTimeout(()=>{ e.target.style.padding = '' },120); } }); })();
-(function(){ function fitViewport(){ const vp = document.getElementById('videoViewport'); if(!vp) return; vp.style.maxWidth = '100%'; const roleToggle = document.querySelector('.role-toggle'); if(roleToggle && window.innerWidth <= 768) roleToggle.style.display = 'none'; } window.addEventListener('resize', fitViewport); fitViewport(); })();
+function doLogin(){ document.getElementById('loginScreen').style.display='none'; document.getElementById('appMain').style.display='block'; showToast('Welcome — Gemini-enabled UI'); }
+function doLogout(){ document.getElementById('appMain').style.display='none'; document.getElementById('loginScreen').style.display='block'; }
+function selectLoginRole(role){ try{ localStorage.setItem('llm_role',role); }catch(e){} }
 
-function switchMode(mode) {
-  try {
-    const modes = ['A','B','C','D'];
-    modes.forEach(m => { const btn = document.getElementById('btnMode' + m); if(btn) btn.classList.toggle('active', m === mode); });
-    modes.forEach(m => { const el = document.getElementById('formMode' + m); if(!el) return; el.style.display = (m === mode) ? 'flex' : 'none'; });
-    console.log('Switched to mode', mode);
-  } catch (err) { console.error('switchMode error', err); }
-}
-
-function switchRole(role) {
-  try {
-    const isUser = role === 'user';
-    document.body.classList.toggle('role-user', isUser);
-    const adminBtn = document.getElementById('roleAdminBtn');
-    const userBtn = document.getElementById('roleUserBtn');
-    if(adminBtn) adminBtn.setAttribute('aria-pressed', String(!isUser));
-    if(userBtn) userBtn.setAttribute('aria-pressed', String(isUser));
-    document.querySelectorAll('[data-role="admin"]').forEach(el => { el.style.display = isUser ? 'none' : ''; });
-    const modes = document.querySelector('.modes-bar'); if(modes) modes.style.display = isUser ? 'none' : 'flex';
-    try{ localStorage.setItem('llm_role', role); }catch(e){}
-    console.log('Switched role to', role);
-  } catch(err) { console.error('switchRole error', err); }
-}
-
-function doLogout(){ try { localStorage.removeItem('llm_role'); } catch(e){} document.getElementById('appMain').style.display = 'none'; document.getElementById('loginScreen').style.display = 'block'; }
-function doLogin(){ document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appMain').style.display = 'block'; }
-
-function selectLoginRole(role){
-  try{
-    const adminBtn = document.getElementById('loginTabAdmin');
-    const userBtn = document.getElementById('loginTabUser');
-    if(adminBtn) adminBtn.classList.toggle('active', role === 'admin');
-    if(userBtn) userBtn.classList.toggle('active', role === 'user');
-    if(adminBtn) adminBtn.setAttribute('aria-pressed', String(role === 'admin'));
-    if(userBtn) userBtn.setAttribute('aria-pressed', String(role === 'user'));
-    const label = document.getElementById('loginRoleLabel'); if(label) label.textContent = role === 'admin' ? '🛡 Admin Login' : '👤 User Login';
-    const pwd = document.getElementById('loginPassword'); if(pwd){ pwd.placeholder = role === 'admin' ? 'Enter password…' : 'Enter display name…'; try{ pwd.focus(); }catch(e){} }
-    try{ localStorage.setItem('llm_role', role); }catch(e){}
-  }catch(e){ console.error('selectLoginRole error', e); }
-}
-
-function changeAspect(value){ try{ const vp = document.getElementById('videoViewport'); if(!vp) return; vp.classList.toggle('aspect-916', value === '9:16'); vp.classList.toggle('aspect-11', value === '1:1'); }catch(e){console.error('changeAspect error', e);} }
-
-function runTest(key){ try{ const presets = { 'A': 'Create a 60s news-style video summarizing a recent breakthrough in AI.', 'B': 'Produce a 90s fast-paced sports highlight about Formula 1: key moments and commentary.', 'C': 'Short entertainment montage with upbeat music and captions.', 'D': 'Documentary-style 3-minute piece about ancient Rome focusing on daily life.', 'E': 'A reflective 2-minute piece on Stoic philosophy.', 'F': 'A 45s explainer with animated charts about renewable energy adoption.' };
-  const t = presets[key] || 'Create a short video about AI trends.'; document.getElementById('topicInputA').value = t; showToast('Preset loaded: ' + key); }catch(e){console.error('runTest error', e);} }
-
-function showToast(msg, duration=3000){ const container = document.getElementById('toast-container'); if(!container) return; const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; container.appendChild(t); setTimeout(()=>{ t.style.opacity = '0'; setTimeout(()=> t.remove(), 300); }, duration); }
-
-function openApiModal(){
-  const modal = document.getElementById('apiModal'); if(!modal) return;
-  try{
-    loadVideoSettings();
-    const key = localStorage.getItem('llm_api_key') || '';
-    const usage = localStorage.getItem('llm_usage_cost') || document.getElementById('usageBadgeCost').textContent || '$0.0000';
-    const keyInput = document.getElementById('apiKeyInput'); const usageInput = document.getElementById('usageInput');
-    if(keyInput) keyInput.value = key; if(usageInput) usageInput.value = usage;
-  }catch(e){}
-  modal.style.display = 'flex';
-}
-function closeApiModal(){ const m = document.getElementById('apiModal'); if(m) m.style.display='none'; }
-
-function saveApiSettings(){ const key = (document.getElementById('apiKeyInput') || {value:''}).value.trim(); const usage = (document.getElementById('usageInput') || {value:''}).value.trim() || '$0.0000'; try{ localStorage.setItem('llm_api_key', key); localStorage.setItem('llm_usage_cost', usage); showToast('LLM API settings saved'); }catch(e){ console.error('saveApiSettings error', e); showToast('Failed to save settings'); } }
-
-// --- Video model selection + wiring ---
+// --- Provider wiring (improved) ---
 const VIDEO_PROVIDERS = [
   { id: 'demo', name: 'Demo (local simulated)', requiresServer: false },
+  { id: 'gemini', name: 'Gemini', requiresServer: true },
   { id: 'pika', name: 'Pika (example)', requiresServer: true },
   { id: 'runway', name: 'Runway (example)', requiresServer: true },
   { id: 'synthesia', name: 'Synthesia (example)', requiresServer: true },
-  { id: 'openai_video', name: 'OpenAI Video (placeholder)', requiresServer: true },
-  { id: 'gemini', name: 'Gemini (example)', requiresServer: true }
+  { id: 'openai_video', name: 'OpenAI Video (placeholder)', requiresServer: true }
 ];
 
-function loadVideoSettings(){
-  try{
-    const select = document.getElementById('videoProviderSelect');
-    select.innerHTML = '';
-    VIDEO_PROVIDERS.forEach(p => {
-      const opt = document.createElement('option'); opt.value = p.id; opt.textContent = p.name; select.appendChild(opt);
-    });
-    const saved = localStorage.getItem('llm_video_provider') || 'demo';
-    select.value = saved;
-    renderVideoProviderFields(saved);
-    select.addEventListener('change', (e)=> renderVideoProviderFields(e.target.value));
-  }catch(e){ console.error('loadVideoSettings', e); }
-}
+function loadVideoSettings(){ try{ const select=document.getElementById('videoProviderSelect'); select.innerHTML=''; VIDEO_PROVIDERS.forEach(p=>{ const o=document.createElement('option'); o.value=p.id; o.textContent=p.name; select.appendChild(o); }); const saved=localStorage.getItem('llm_video_provider')||'demo'; select.value=saved; renderVideoProviderFields(saved); select.addEventListener('change',e=>renderVideoProviderFields(e.target.value)); }catch(e){console.error('loadVideoSettings',e);} }
 
 function renderVideoProviderFields(providerId){
-  const container = document.getElementById('videoProviderFields');
-  container.innerHTML = '';
-  const keys = JSON.parse(localStorage.getItem('llm_video_keys') || '{}');
-  const provider = VIDEO_PROVIDERS.find(p => p.id === providerId) || VIDEO_PROVIDERS[0];
+  const container = document.getElementById('videoProviderFields'); container.innerHTML='';
+  const keys = JSON.parse(localStorage.getItem('llm_video_keys')||'{}');
+  const provider = VIDEO_PROVIDERS.find(p=>p.id===providerId) || VIDEO_PROVIDERS[0];
 
-  // simple single-key input per provider (extendable)
-  const label = document.createElement('label'); label.textContent = provider.name + ' API Key / Endpoint';
-  const input = document.createElement('input'); input.className = 'input-control'; input.id = 'videoProviderKey'; input.placeholder = provider.requiresServer ? 'Server endpoint or API key (recommended: server endpoint URL)' : 'Optional key or leave blank for demo';
+  const label = document.createElement('label'); label.textContent = provider.name + ' API Key / Endpoint'; label.style.color='var(--mut-light)'; label.style.fontWeight='700';
+  const input = document.createElement('input'); input.className='input-control'; input.id='videoProviderKey';
+  input.placeholder = provider.requiresServer ? 'https://your-site/api/video-proxy (recommended)' : 'Optional key or leave blank for demo';
   input.value = keys[providerId] || '';
-  container.appendChild(label); container.appendChild(input);
 
-  const hint = document.createElement('div'); hint.style.fontSize='12px'; hint.style.color='var(--mut-light)'; hint.style.marginTop='6px';
-  hint.textContent = provider.requiresServer ? 'Note: Most providers require server-side calls. Store secrets on a server and call via a serverless endpoint to avoid exposing keys in the browser.' : 'This provider runs locally for demo purposes.';
-  container.appendChild(hint);
-
-  // Add a small extra hint for Gemini to guide configuration
-  if(providerId === 'gemini'){
-    const g = document.createElement('div'); g.style.fontSize='12px'; g.style.color='var(--mut-light)'; g.style.marginTop='6px';
-    g.textContent = 'Gemini setup: set GEMINI_ENDPOINT and GEMINI_KEY on your server and save the server endpoint URL in this field (https://your-site/api/video-proxy). Keep the API key server-side.';
-    container.appendChild(g);
+  const hint = document.createElement('div'); hint.style.fontSize='12px'; hint.style.color='var(--mut-light)'; hint.style.marginTop='6px'; hint.style.lineHeight='1.5';
+  if(providerId==='gemini'){
+    hint.textContent = 'Gemini setup: configure GEMINI_KEY & GEMINI_MODEL on your server or Vercel, then save your server endpoint URL here (e.g. https://your-site/api/video-proxy). Do NOT store API keys in the browser.';
+  } else {
+    hint.textContent = provider.requiresServer ? 'Note: Most providers require server-side proxy endpoints. Store secrets server-side and call via endpoint URL here.' : 'Runs locally for demo.';
   }
+
+  container.appendChild(label); container.appendChild(input); container.appendChild(hint);
 }
 
-function saveVideoSettingsAndGenerate(){
-  try{
-    const provider = (document.getElementById('videoProviderSelect') || {}).value || 'demo';
-    const key = (document.getElementById('videoProviderKey') || {}).value || '';
-    const keys = JSON.parse(localStorage.getItem('llm_video_keys') || '{}');
-    keys[provider] = key;
-    localStorage.setItem('llm_video_keys', JSON.stringify(keys));
-    localStorage.setItem('llm_video_provider', provider);
-    showToast('Video provider settings saved');
-    // proceed to generate using current UI state
-    generateVideoFromUI();
-  }catch(e){ console.error('saveVideoSettingsAndGenerate', e); }
+function saveVideoSettingsAndGenerate(){ try{ const provider=document.getElementById('videoProviderSelect').value; const key=(document.getElementById('videoProviderKey')||{}).value||''; const keys=JSON.parse(localStorage.getItem('llm_video_keys')||'{}'); keys[provider]=key; localStorage.setItem('llm_video_keys', JSON.stringify(keys)); localStorage.setItem('llm_video_provider', provider); showToast('Saved provider settings'); generateVideoFromUI(); }catch(e){console.error(e);} }
+
+// --- Gemini polling helper (frontend) ---
+async function pollOperation(endpointUrl, operationId, timeoutMs=120000, intervalMs=2000){
+  const start = Date.now();
+  while(Date.now()-start < timeoutMs){
+    try{
+      const resp = await fetch(endpointUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ provider:'gemini_poll', payload:{ operation: operationId } }) });
+      if(!resp.ok){ const text = await resp.text(); throw new Error('Poll failed: '+text); }
+      const j = await resp.json();
+      if(j.status === 'done') return j;
+      if(j.status === 'error') throw new Error(JSON.stringify(j.error || j));
+      // queued -> wait
+    }catch(err){ console.error('pollOperation error', err); }
+    await new Promise(r=>setTimeout(r, intervalMs));
+  }
+  throw new Error('Polling timed out after ' + (timeoutMs/1000) + 's');
 }
 
+// --- sendToVideoModel: improved with Gemini auto-polling ---
+async function sendToVideoModel(providerId, payload){
+  const keys = JSON.parse(localStorage.getItem('llm_video_keys')||'{}');
+  const key = keys[providerId] || '';
+
+  if(providerId === 'demo'){
+    await new Promise(r=>setTimeout(r,2500));
+    return { status:'done', url:'https://cdn.example.com/demo-video.mp4' };
+  }
+
+  if(!key || !(key.startsWith('http://') || key.startsWith('https://'))){
+    throw new Error('Provider requires a server endpoint URL in the provider key field. See API modal.');
+  }
+
+  // POST job
+  const resp = await fetch(key, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ provider: providerId, payload }) });
+  if(!resp.ok){ const t = await resp.text(); throw new Error('Server returned ' + resp.status + ': ' + t); }
+  const j = await resp.json();
+
+  // If immediate done
+  if(j.status === 'done') return j;
+
+  // If queued with operation id, and provider is gemini, auto-poll via gemini_poll
+  if(j.status === 'queued' && j.id){
+    if(providerId === 'gemini'){
+      try{
+        showToast('Gemini job queued, polling for completion…');
+        const done = await pollOperation(key, j.id, 2*60*1000, 2500); // 2 min timeout
+        return done;
+      }catch(err){ console.error('Auto-poll failed', err); return { status:'queued', id:j.id, raw:j } }
+    }
+    return j; // non-gemini queued
+  }
+
+  // Unknown shape -> return raw
+  return j;
+}
+
+// --- UI generation flow ---
 async function generateVideoFromUI(){
   try{
     const provider = localStorage.getItem('llm_video_provider') || document.getElementById('videoProviderSelect').value || 'demo';
-    const topic = (document.getElementById('topicInputA') || {}).value || '';
-    const directives = (document.getElementById('directivesInput') || {}).value || '';
-    const format = (document.getElementById('aspectSelect') || {}).value || '16:9';
-    const niche = (document.getElementById('nicheSelect') || {}).value || '';
-    const payload = { topic, directives, format, niche };
+    const topic = (document.getElementById('topicInputA')||{}).value || '';
+    const format = (document.getElementById('aspectSelect')||{}).value || '16:9';
+    const niche = (document.getElementById('nicheSelect')||{}).value || '';
+    const payload = { prompt: topic, format, niche, duration: 8 };
     showToast('Sending job to ' + provider);
     const result = await sendToVideoModel(provider, payload);
     if(result && result.status === 'done'){
-      showToast('Video ready: ' + (result.url || 'preview available'));
-      // add thumbnail to thumbs grid if present
-      const thumbs = document.getElementById('thumbsGrid');
-      if(thumbs){ const el = document.createElement('div'); el.className='thumb-item'; el.textContent = 'Video'; el.onclick = ()=> window.open(result.url || '#'); if(result.url) el.title = result.url; thumbs.prepend(el); }
+      showToast('Video ready');
+      const thumbs = document.getElementById('thumbsGrid'); if(thumbs){ const el=document.createElement('div'); el.className='thumb-item'; el.textContent='Video'; el.onclick=()=> window.open(result.url||'#'); if(result.url) el.title = result.url; thumbs.prepend(el); }
+    } else if(result && result.status === 'queued'){
+      showToast('Job queued: ' + (result.id||'id not provided'));
     } else {
-      showToast('Generation started (async). Check your provider dashboard or server for updates.');
+      showToast('Job submitted — check server logs or dashboard');
+      console.log('Result', result);
     }
-  }catch(e){ console.error('generateVideoFromUI', e); showToast('Error: ' + (e.message || e)); }
+  }catch(err){ console.error('generateVideoFromUI error', err); showToast('Error: ' + (err.message||err)); }
 }
 
-// sendToVideoModel: unified client-side wrapper. For real providers, you should call a server-side endpoint to hide keys.
-async function sendToVideoModel(providerId, payload){
-  // demo implementation + placeholders for real providers
-  const keys = JSON.parse(localStorage.getItem('llm_video_keys') || '{}');
-  const key = keys[providerId] || '';
-  if(providerId === 'demo'){
-    // simulate a job: returns after 2.5s with a fake URL
-    await new Promise(r => setTimeout(r, 2500));
-    return { status: 'done', url: 'https://cdn.example.com/demo-video.mp4' };
-  }
+// --- small utilities & bootstrapping ---
+function runTest(k){ const presets={A:'Create a 60s news-style video summarizing a recent breakthrough in AI.',B:'Produce a 90s sports highlight reel about Formula 1.',C:'Short entertainment montage with upbeat music.',D:'3-minute doc piece about ancient Rome.'}; document.getElementById('topicInputA').value = presets[k]||'Create a short video about AI trends.'; showToast('Preset loaded: '+k); }
 
-  // For other providers, we attempt a POST to a configured server endpoint (if the key field contains a URL),
-  // otherwise we return a helpful error message. Real provider integration should be done server-side.
-  if(key && (key.startsWith('http://') || key.startsWith('https://'))){
-    try{
-      const resp = await fetch(key, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ provider: providerId, payload }) });
-      if(!resp.ok) throw new Error('Server returned ' + resp.status);
-      const json = await resp.json();
-      // Expect {status:'queued'|'done', url:'...'} from server
-      return json;
-    }catch(e){ console.error('sendToVideoModel fetch error', e); throw e; }
-  }
+function _wirePlayButton(){ try{ const play=document.getElementById('btnPlay'); const fill=document.getElementById('progressFill'); if(!play||!fill) return; let iv=null; play.addEventListener('click',()=>{ if(play.dataset.playing==='1'){ play.dataset.playing='0'; play.textContent='▶'; if(iv) clearInterval(iv); } else { play.dataset.playing='1'; play.textContent='▌▌'; let progress=parseInt(fill.style.width)||0; iv=setInterval(()=>{ progress=Math.min(100, progress+3); fill.style.width=progress+'%'; if(progress>=100){ clearInterval(iv); play.dataset.playing='0'; play.textContent='▶'; } }, 120); } }); }catch(e){console.error(e);} }
 
-  // If key is present but not a URL, assume it's an API key — warn user to use a server.
-  throw new Error('Provider ' + providerId + ' requires a server-side proxy or an endpoint URL in the provider key field. See the API modal hint.');
-}
-
-// Wire play button with a simple simulated progress (preview-only)
-function _wirePlayButton(){
-  try{
-    const play = document.getElementById('btnPlay');
-    const fill = document.getElementById('progressFill');
-    if(!play || !fill) return;
-    let iv = null;
-    play.addEventListener('click', ()=>{
-      if(play.dataset.playing === '1'){
-        play.dataset.playing = '0'; play.textContent = '▶'; if(iv) clearInterval(iv);
-      } else {
-        play.dataset.playing = '1'; play.textContent = '▌▌'; let progress = parseInt(fill.style.width) || 0;
-        iv = setInterval(()=>{ progress = Math.min(100, progress + 2); fill.style.width = progress + '%'; if(progress >= 100){ clearInterval(iv); play.dataset.playing = '0'; play.textContent = '▶'; } }, 120);
-      }
-    });
-  }catch(e){ console.error('_wirePlayButton error', e); }
-}
-
-// bootstrap on load
-document.addEventListener('DOMContentLoaded', function(){
-  const anyVisible = ['A','B','C','D'].some(m => { const el = document.getElementById('formMode' + m); return el && el.style.display !== 'none'; });
-  if(!anyVisible) switchMode('A');
-  ['A','B','C','D'].forEach(m => { const btn = document.getElementById('btnMode' + m); if(btn) btn.addEventListener('click', () => switchMode(m)); });
-  const adminBtn = document.getElementById('roleAdminBtn'); const userBtn = document.getElementById('roleUserBtn'); if(adminBtn) adminBtn.addEventListener('click', ()=>switchRole('admin')); if(userBtn) userBtn.addEventListener('click', ()=>switchRole('user'));
-  try{ const saved = localStorage.getItem('llm_role'); if(saved) switchRole(saved); }catch(e){}
-  const directives = document.getElementById('directivesInput'); if(directives){ directives.addEventListener('input', ()=>{ const txt = directives.value || 'Your preview text here'; const overlay = document.getElementById('videoOverlay'); if(overlay) overlay.textContent = txt; }); }
-  const discovery = document.getElementById('discoveryInput'); if(discovery){ discovery.addEventListener('input', ()=>{ const txt = discovery.value || 'Your preview text here'; const overlay = document.getElementById('videoOverlay'); if(overlay) overlay.textContent = txt; }); }
-  try{ const storedUsage = localStorage.getItem('llm_usage_cost'); if(storedUsage){ const badge = document.getElementById('usageBadgeCost'); if(badge) badge.textContent = storedUsage; } const storedProv = localStorage.getItem('llm_video_provider'); if(storedProv){ const select = document.getElementById('videoProviderSelect'); if(select) select.value = storedProv; }
-  }catch(e){}
-  _wirePlayButton();
-  try{ const loginSaved = localStorage.getItem('llm_role') || 'admin'; selectLoginRole(loginSaved); const loginAdmin = document.getElementById('loginTabAdmin'); const loginUser = document.getElementById('loginTabUser'); if(loginAdmin) loginAdmin.addEventListener('click', ()=>selectLoginRole('admin')); if(loginUser) loginUser.addEventListener('click', ()=>selectLoginRole('user')); }catch(e){}
-  // populate video provider selector
-  loadVideoSettings();
+// DOMContent loaded
+document.addEventListener('DOMContentLoaded', ()=>{
+  try{ const saved=localStorage.getItem('llm_role'); if(!saved) localStorage.setItem('llm_role','admin'); }catch(e){}
+  loadVideoSettings(); _wirePlayButton(); try{ const loginSaved = localStorage.getItem('llm_role')||'admin'; if(loginSaved) { document.getElementById('loginScreen').style.display='none'; document.getElementById('appMain').style.display='block'; } }catch(e){}
 });
 </script>
 
