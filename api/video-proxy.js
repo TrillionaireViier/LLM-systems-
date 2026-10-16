@@ -1,12 +1,25 @@
 // api/video-proxy.js
 // Vercel serverless function: generic proxy to multiple video model providers.
-// Template handlers are intentionally minimal. Configure PROVIDER_KEY and/or
-// PROVIDER_ENDPOINT environment variables on Vercel for each provider you use.
+// Added: GET health endpoint and enhanced logging to help debug provider calls.
 
 export default async function handler(req, res) {
+  // Simple health/debug endpoint on GET (safe: does not leak API keys)
+  if (req.method === 'GET') {
+    const providers = ['runway','pika','synthesia','openai_video'];
+    const env = {};
+    providers.forEach(p => {
+      const prefix = p.toUpperCase();
+      env[p] = {
+        endpointConfigured: !!process.env[`${prefix}_ENDPOINT`],
+        keyConfigured: !!process.env[`${prefix}_KEY`]
+      };
+    });
+    return res.status(200).json({ status: 'ok', env });
+  }
+
   if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).json({ error: 'Method not allowed, use POST' });
+    res.setHeader('Allow', 'POST, GET');
+    return res.status(405).json({ error: 'Method not allowed, use POST or GET' });
   }
 
   let body;
@@ -18,6 +31,9 @@ export default async function handler(req, res) {
 
   const { provider, payload } = body || {};
   if (!provider) return res.status(400).json({ error: 'Missing provider in request body' });
+
+  // Log incoming request (payload may be large) - keep logs lightweight
+  console.info('[video-proxy] incoming', { provider, payloadSummary: summarize(payload) });
 
   try {
     switch (provider) {
@@ -33,7 +49,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Unsupported provider: ' + provider });
     }
   } catch (err) {
-    console.error('proxy handler error', err);
+    console.error('[video-proxy] handler error', err && err.stack ? err.stack : err);
     return res.status(500).json({ error: err.message || String(err) });
   }
 }
@@ -45,6 +61,7 @@ async function forwardToEndpoint(providerId, payload, res) {
   const apiKey = process.env[envPrefix + '_KEY'];
 
   if (!endpoint) {
+    console.warn(`[video-proxy] no endpoint configured for ${providerId}`);
     return res.status(501).json({ error: `No endpoint configured for ${providerId}. Set ${envPrefix}_ENDPOINT (and ${envPrefix}_KEY if needed) as env vars.` });
   }
 
@@ -52,37 +69,62 @@ async function forwardToEndpoint(providerId, payload, res) {
   try {
     const headers = { 'Content-Type': 'application/json' };
     if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
+
+    console.info('[video-proxy] forwarding', { providerId, endpoint, payloadSummary: summarize(payload) });
+
     const fetchRes = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(payload) });
-    const json = await fetchRes.json();
-    // Heuristic mapping: if provider returns a direct URL or job id, normalize it.
-    // We expect the endpoint to return { status: 'done'|'queued', url?: '...' }
-    return res.status(fetchRes.status).json(json);
+
+    // Read response text for richer debugging, then try JSON parse
+    const text = await fetchRes.text();
+    let json;
+    try { json = JSON.parse(text); } catch (e) { json = null; }
+
+    console.info('[video-proxy] provider response', { providerId, status: fetchRes.status, bodySummary: summarize(json ?? text) });
+
+    // Normalize common shapes: return status, url or id when present
+    const normalized = normalizeProviderResponse(json ?? text, fetchRes.status);
+    return res.status(fetchRes.status).json(normalized);
   } catch (err) {
-    console.error('forwardToEndpoint error', err);
-    return res.status(502).json({ error: 'Failed to reach configured endpoint', detail: err.message });
+    console.error('[video-proxy] forwardToEndpoint error', err && err.stack ? err.stack : err);
+    return res.status(502).json({ error: 'Failed to reach configured endpoint', detail: err.message || String(err) });
   }
 }
 
 // --- Provider handlers (templates) ---
 async function handleRunway(payload, res) {
-  // If you set RUNWAY_ENDPOINT / RUNWAY_KEY in env, we forward to it.
-  // Example: RUNWAY_ENDPOINT = 'https://api.runwayml.com/v1/video' (example only)
-  return forwardToEndpoint('runway', { payload }, res);
+  return forwardToEndpoint('runway', payload, res);
 }
 
 async function handlePika(payload, res) {
-  // Pika typically requires server-side calls. Configure PIKA_ENDPOINT and PIKA_KEY.
-  return forwardToEndpoint('pika', { payload }, res);
+  return forwardToEndpoint('pika', payload, res);
 }
 
 async function handleSynthesia(payload, res) {
-  // Synthesia example: configure SYNTHESIA_ENDPOINT and SYNTHESIA_KEY.
-  return forwardToEndpoint('synthesia', { payload }, res);
+  return forwardToEndpoint('synthesia', payload, res);
 }
 
 async function handleOpenAIVideo(payload, res) {
-  // OpenAI Video is a placeholder here. Configure OPENAI_VIDEO_ENDPOINT / OPENAI_VIDEO_KEY
-  // If you want to call OpenAI's APIs directly, implement the specific request shape below
-  // and read the key from process.env.OPENAI_VIDEO_KEY.
-  return forwardToEndpoint('openai_video', { payload }, res);
+  return forwardToEndpoint('openai_video', payload, res);
+}
+
+// Small helpers
+function summarize(obj) {
+  try {
+    if (obj === undefined) return 'undefined';
+    if (obj === null) return 'null';
+    if (typeof obj === 'string') return obj.length > 200 ? obj.slice(0,200) + '...('+obj.length+' chars)' : obj;
+    const s = JSON.stringify(obj);
+    return s.length > 200 ? s.slice(0,200) + '...('+s.length+' chars)' : s;
+  } catch (e) { return '<<unserializable>>'; }
+}
+
+function normalizeProviderResponse(body, status) {
+  // If provider already returned status/url/id, pass through but keep small shape
+  if (!body) return { status: status >= 200 && status < 300 ? 'ok' : 'error', raw: null };
+  if (typeof body === 'object') {
+    const { status: s, url, id, job_id, jobId } = body;
+    return { status: s || (status >= 200 && status < 300 ? 'done' : 'error'), url, id: id || job_id || jobId, raw: body };
+  }
+  // otherwise return text
+  return { status: status >= 200 && status < 300 ? 'done' : 'error', raw: String(body) };
 }
