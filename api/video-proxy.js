@@ -1,11 +1,11 @@
 // api/video-proxy.js
 // Vercel serverless function: generic proxy to multiple video model providers.
-// Added: GET health endpoint and enhanced logging to help debug provider calls.
+// Added: GET health endpoint, enhanced logging, and Gemini provider handler.
 
 export default async function handler(req, res) {
   // Simple health/debug endpoint on GET (safe: does not leak API keys)
   if (req.method === 'GET') {
-    const providers = ['runway','pika','synthesia','openai_video'];
+    const providers = ['runway','pika','synthesia','openai_video','gemini'];
     const env = {};
     providers.forEach(p => {
       const prefix = p.toUpperCase();
@@ -45,6 +45,8 @@ export default async function handler(req, res) {
         return await handleSynthesia(payload, res);
       case 'openai_video':
         return await handleOpenAIVideo(payload, res);
+      case 'gemini':
+        return await handleGemini(payload, res);
       default:
         return res.status(400).json({ error: 'Unsupported provider: ' + provider });
     }
@@ -55,7 +57,7 @@ export default async function handler(req, res) {
 }
 
 // Helper: forward to a configured endpoint if present (flexible pattern)
-async function forwardToEndpoint(providerId, payload, res) {
+async function forwardToEndpoint(providerId, payload, res, opts = {}) {
   const envPrefix = providerId.toUpperCase();
   const endpoint = process.env[envPrefix + '_ENDPOINT'];
   const apiKey = process.env[envPrefix + '_KEY'];
@@ -105,6 +107,13 @@ async function handleSynthesia(payload, res) {
 
 async function handleOpenAIVideo(payload, res) {
   return forwardToEndpoint('openai_video', payload, res);
+}
+
+async function handleGemini(payload, res) {
+  // Gemini may expect a different shape depending on your Gemini endpoint implementation.
+  // Default behavior: forward payload to GEMINI_ENDPOINT with GEMINI_KEY if provided.
+  // If you're using Google Cloud functions or a custom proxy for Gemini, configure GEMINI_ENDPOINT accordingly.
+  return forwardToEndpoint('gemini', payload, res);
 }
 
 // Small helpers

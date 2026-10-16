@@ -22,6 +22,8 @@ Environment variables (set these in Vercel or your hosting provider)
 - SYNTHESIA_KEY
 - OPENAI_VIDEO_ENDPOINT
 - OPENAI_VIDEO_KEY
+- GEMINI_ENDPOINT
+- GEMINI_KEY
 
 Example usage (client -> proxy)
 POST /api/video-proxy
