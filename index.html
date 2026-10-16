@@ -122,7 +122,7 @@ textarea.input-control { resize: vertical; min-height: 70px; }
 .scene-prompt { font-size: 11px; color: var(--mut-light); font-style: italic; margin-top: 2px; }
 .scene-asset-badge { font-size: 10px; background: rgba(0, 240, 255, 0.1); color: var(--cyan); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0, 240, 255, 0.2); text-align: center; font-weight: 600; }
 .scene-actions { display: flex; gap: 6px; }
-.btn-mini { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: var(--mut-light); padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+.btn-mini { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--mut-light); padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
 .btn-mini:hover { background: var(--cyan); color: #000; font-weight: 600; }
 
 /* Video */
@@ -494,6 +494,45 @@ function switchMode(mode) {
   }
 }
 
+// Role switching
+function switchRole(role) {
+  try {
+    const isUser = role === 'user';
+    document.body.classList.toggle('role-user', isUser);
+    const adminBtn = document.getElementById('roleAdminBtn');
+    const userBtn = document.getElementById('roleUserBtn');
+    if(adminBtn) adminBtn.setAttribute('aria-pressed', String(!isUser));
+    if(userBtn) userBtn.setAttribute('aria-pressed', String(isUser));
+
+    // hide/show admin-only elements
+    document.querySelectorAll('[data-role="admin"]').forEach(el => {
+      el.style.display = isUser ? 'none' : '';
+    });
+
+    // ensure modes visibility follows role
+    const modes = document.querySelector('.modes-bar');
+    if(modes) modes.style.display = isUser ? 'none' : 'flex';
+
+    console.log('Switched role to', role);
+  } catch(err) {
+    console.error('switchRole error', err);
+  }
+}
+
+// Minimal doLogout/doLogin placeholders (to avoid errors if UI calls them)
+function doLogout(){
+  console.log('Logout called — clearing session');
+  // simple client-side logout: remove any stored session and show login screen
+  try { localStorage.removeItem('llm_role'); } catch(e){}
+  document.getElementById('appMain').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'block';
+}
+function doLogin(){
+  console.log('Login called — showing app');
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appMain').style.display = 'block';
+}
+
 // Ensure default active mode on load
 document.addEventListener('DOMContentLoaded', function(){
   // if no forms are visible, set Mode A
@@ -508,6 +547,18 @@ document.addEventListener('DOMContentLoaded', function(){
     const btn = document.getElementById('btnMode' + m);
     if(btn) btn.addEventListener('click', () => switchMode(m));
   });
+
+  // ensure role buttons wired
+  const adminBtn = document.getElementById('roleAdminBtn');
+  const userBtn = document.getElementById('roleUserBtn');
+  if(adminBtn) adminBtn.addEventListener('click', ()=>switchRole('admin'));
+  if(userBtn) userBtn.addEventListener('click', ()=>switchRole('user'));
+
+  // initial role from localStorage if present
+  try{
+    const saved = localStorage.getItem('llm_role');
+    if(saved) switchRole(saved);
+  }catch(e){}
 });
 </script>
 
