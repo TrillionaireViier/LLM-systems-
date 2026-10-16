@@ -27,6 +27,8 @@ export default async function handler(req, res) {
         return await handlePika(payload, res);
       case 'synthesia':
         return await handleSynthesia(payload, res);
+      case 'gemini':
+        return await handleGemini(payload, res);
       case 'openai_video':
         return await handleOpenAIVideo(payload, res);
       default:
@@ -78,6 +80,12 @@ async function handlePika(payload, res) {
 async function handleSynthesia(payload, res) {
   // Synthesia example: configure SYNTHESIA_ENDPOINT and SYNTHESIA_KEY.
   return forwardToEndpoint('synthesia', { payload }, res);
+}
+
+async function handleGemini(payload, res) {
+  // Gemini video endpoints are usually server-side only. Configure GEMINI_ENDPOINT and GEMINI_KEY.
+  // For example, if your server or gateway expects a model-specific URL, set GEMINI_ENDPOINT to it.
+  return forwardToEndpoint('gemini', payload, res);
 }
 
 async function handleOpenAIVideo(payload, res) {
