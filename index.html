@@ -354,6 +354,26 @@ button:focus { outline: 2px solid rgba(0,240,255,0.18); outline-offset: 2px; }
         </div>
       </div>
     </div>
+
+    <!-- Mode B/C/D placeholder containers (created so switchMode can show/hide them) -->
+    <div id="formModeB" class="input-group" style="display:none;margin-top:10px;">
+      <div class="panel-header"><div class="panel-title">📄 Mode B: Sources</div></div>
+      <label>Source URLs / Documents</label>
+      <input id="sourcesInput" class="input-control" placeholder="Paste article URLs or upload docs...">
+    </div>
+
+    <div id="formModeC" class="input-group" style="display:none;margin-top:10px;">
+      <div class="panel-header"><div class="panel-title">🎯 Mode C: Directed</div></div>
+      <label>Directives</label>
+      <textarea id="directivesInput" class="input-control" placeholder="Specify exact shots, tone, or timing..."></textarea>
+    </div>
+
+    <div id="formModeD" class="input-group" style="display:none;margin-top:10px;">
+      <div class="panel-header"><div class="panel-title">📡 Mode D: Discovery</div></div>
+      <label>Discovery Seed</label>
+      <input id="discoveryInput" class="input-control" placeholder="Enter seed keywords or topics...">
+    </div>
+
   </div>
 
   <!-- Center: Player + Scenes -->
@@ -449,6 +469,46 @@ button:focus { outline: 2px solid rgba(0,240,255,0.18); outline-offset: 2px; }
   window.addEventListener('resize', fitViewport);
   fitViewport();
 })();
+
+// Mode switching logic — restores behavior for Mode A/B/C/D buttons
+function switchMode(mode) {
+  try {
+    const modes = ['A','B','C','D'];
+    // update active button class
+    modes.forEach(m => {
+      const btn = document.getElementById('btnMode' + m);
+      if(btn) btn.classList.toggle('active', m === mode);
+    });
+
+    // show/hide corresponding forms if present
+    modes.forEach(m => {
+      const el = document.getElementById('formMode' + m);
+      if(!el) return;
+      el.style.display = (m === mode) ? 'flex' : 'none';
+    });
+
+    // If center panel needs to react (e.g., clear scenes), handle here
+    console.log('Switched to mode', mode);
+  } catch (err) {
+    console.error('switchMode error', err);
+  }
+}
+
+// Ensure default active mode on load
+document.addEventListener('DOMContentLoaded', function(){
+  // if no forms are visible, set Mode A
+  const anyVisible = ['A','B','C','D'].some(m => {
+    const el = document.getElementById('formMode' + m);
+    return el && el.style.display !== 'none';
+  });
+  if(!anyVisible) switchMode('A');
+
+  // attach click handlers to mode buttons to guard against missing onclick attributes
+  ['A','B','C','D'].forEach(m => {
+    const btn = document.getElementById('btnMode' + m);
+    if(btn) btn.addEventListener('click', () => switchMode(m));
+  });
+});
 </script>
 
 </body>
