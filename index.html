@@ -29,7 +29,6 @@
   --gap: 20px;
 }
 
-/* Reset + base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
 body {
@@ -38,195 +37,126 @@ body {
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
   line-height: 1.5;
-  background-image: 
+  background-image:
     radial-gradient(circle at 10% 10%, rgba(0, 240, 255, 0.07) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(255, 107, 43, 0.07) 0%, transparent 40%);
   background-attachment: fixed;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-
-/* Header */
 header {
-  height: 68px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(10, 14, 22, 0.9);
-  backdrop-filter: blur(16px);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  height: 68px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(10,14,22,0.9); backdrop-filter: blur(16px); position: sticky; top: 0; z-index: 100; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
 }
-
 .header-left { display:flex; align-items:center; gap:12px; width:100%; }
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 700;
-  font-size: clamp(15px, 2.2vw, 18px);
-  color: #fff;
-  text-decoration: none;
+  display: flex; align-items: center; gap: 12px; font-family: 'Space Grotesk', sans-serif; font-weight:700; font-size: clamp(15px, 2.2vw, 18px); color:#fff; text-decoration:none;
 }
-.brand-orb { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--cyan), var(--purple)); display: flex; align-items: center; justify-content: center; font-size:18px }
+.brand-orb { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--cyan), var(--purple)); display: flex; align-items: center; justify-content: center; font-size:18px; }
 .brand span { color: var(--cyan); }
-
-/* ensure role-toggle + logout stick to right */
-.role-toggle { margin-left: auto; display:flex; gap:6px; align-items:center; }
-.btn-logout { margin-left:8px; padding:8px 10px; border-radius:10px; border:none; background: rgba(239,68,68,0.08); color: #ef4444; cursor:pointer; }
+.role-toggle { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+.btn-logout { margin-left:8px; padding:8px 10px; border-radius:10px; border:none; background: rgba(239,68,68,0.08); color:#ef4444; cursor:pointer; }
 .btn-logout:hover { background: rgba(239,68,68,0.14); }
-
-/* Mobile menu button */
 .mobile-menu-btn { display: none; background: none; border: none; color: var(--mut-light); font-size: 22px; padding: 8px; border-radius: 8px; cursor: pointer; }
 .mobile-menu-btn:focus { outline: 2px solid var(--cyan); }
-
-.modes-bar { display: flex; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); padding: 4px; border-radius: 30px; gap: 4px; }
-.mode-btn { background: none; border: none; color: var(--mut-light); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items:center }
+.modes-bar { display: flex; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 4px; border-radius: 30px; gap: 4px; }
+.mode-btn { background: none; border: none; color: var(--mut-light); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; }
 .mode-btn:hover { color: #fff; }
 .mode-btn.active { background: var(--cyan); color: #000; font-weight: 700; box-shadow: 0 0 15px var(--cyan-glow); }
-
 .system-status { display: flex; align-items: center; gap: 16px; font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--mut-light); }
-.badge-status { display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--green); padding: 4px 10px; border-radius:8px }
+.badge-status { display: flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--green); padding: 4px 10px; border-radius:8px; }
 .dot-live { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-/* Main Layout - mobile-first */
 .studio-container { max-width: var(--site-max); margin: 0 auto; padding: 16px; display: grid; grid-template-columns: 1fr; gap: var(--gap); min-height: calc(100vh - 68px); }
-
-/* Panels */
 .panel { background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 12px; position: relative; }
 .panel-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px; }
-.panel-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--cyan); display: flex; align-items: center }
-
+.panel-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--cyan); display: flex; align-items: center; }
 .input-group { display: flex; flex-direction: column; gap: 6px; }
 .input-group label { font-size: 11px; font-weight: 700; color: var(--mut-light); text-transform: uppercase; letter-spacing: 0.5px; }
-.input-control { background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; padding: 10px 12px; color: #fff; font-size: 13px; font-family: inherit; transition: all 0.12s; }
+.input-control { background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 10px 12px; color:#fff; font-size:13px; font-family: inherit; transition: all 0.12s; }
 .input-control:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 12px var(--cyan-glow); }
 textarea.input-control { resize: vertical; min-height: 70px; }
-
 .select-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.btn-produce { background: linear-gradient(135deg, var(--orange), #e04800); border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; letter-spacing:0.6px; padding:8px 12px; border-radius:10px; cursor:pointer }
+.btn-produce { background: linear-gradient(135deg, var(--orange), #e04800); border: none; color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; letter-spacing:0.6px; padding:8px 12px; border-radius:10px; cursor:pointer; }
 .btn-produce:hover { transform: translateY(-2px); box-shadow: 0 0 35px var(--orange-glow); }
-
-/* Scenes */
 .scenes-grid { display: flex; flex-direction: column; gap: 12px; max-height: 460px; overflow-y: auto; padding-right: 4px; }
-.scene-card { background: rgba(0,0,0,0.35); border: 1px solid var(--panel-border); border-radius: 10px; padding: 12px; display: grid; grid-template-columns: 72px 1fr auto; gap: 12px; align-items:center }
+.scene-card { background: rgba(0,0,0,0.35); border: 1px solid var(--panel-border); border-radius: 10px; padding: 12px; display: grid; grid-template-columns: 72px 1fr auto; gap: 12px; align-items: center; }
 .scene-card:hover { border-color: rgba(0, 240, 255, 0.4); background: var(--panel-hover); }
-.scene-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--orange); background: rgba(255, 107, 43, 0.1); padding: 4px 6px; border-radius: 6px; text-align: center; }
+.scene-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--orange); background: rgba(255,107,43,0.1); padding: 4px 6px; border-radius: 6px; text-align: center; }
 .scene-script { font-size: 13px; color: var(--text); font-weight: 500; }
 .scene-prompt { font-size: 11px; color: var(--mut-light); font-style: italic; margin-top: 2px; }
-.scene-asset-badge { font-size: 10px; background: rgba(0, 240, 255, 0.1); color: var(--cyan); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0, 240, 255, 0.2); text-align: center; }
+.scene-asset-badge { font-size: 10px; background: rgba(0,240,255,0.1); color: var(--cyan); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(0,240,255,0.2); text-align: center; }
 .scene-actions { display: flex; gap: 6px; }
-.btn-mini { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--mut-light); padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: all 0.12s }
+.btn-mini { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--mut-light); padding: 6px 10px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: all 0.12s; }
 .btn-mini:hover { background: var(--cyan); color: #000; font-weight: 600; }
-
-/* Video */
-.player-container { background: #000; border: 1px solid var(--panel-border); border-radius: var(--r); position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8); display: flex; flex-direction: column }
-.video-viewport { width: 100%; aspect-ratio: 16/9; background: radial-gradient(circle at center, #111827, #030712); display: flex; align-items: center; justify-content: center; position: relative }
+.player-container { background: #000; border: 1px solid var(--panel-border); border-radius: var(--r); position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; }
+.video-viewport { width: 100%; aspect-ratio: 16/9; background: radial-gradient(circle at center, #111827, #030712); display: flex; align-items: center; justify-content: center; position: relative; }
 .video-viewport.aspect-916 { aspect-ratio: 9/16; max-height: 640px; }
-.video-viewport.aspect-11 { aspect-ratio: 1/1; max-width: 640px; margin: 0 auto }
-.video-overlay-text { position: absolute; bottom: 40px; left: 20px; right: 20px; background: rgba(0, 0, 0, 0.85); padding: 10px 16px; border-radius: 10px; font-family: 'Space Grotesk', sans-serif }
-.player-controls { padding: 12px 16px; background: rgba(10, 14, 22, 0.95); border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 12px; }
-.btn-play { background: var(--cyan); border: none; width: 40px; height: 40px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size:16px }
+.video-viewport.aspect-11 { aspect-ratio: 1/1; max-width: 640px; margin: 0 auto; }
+.video-overlay-text { position: absolute; bottom: 40px; left: 20px; right: 20px; background: rgba(0,0,0,0.85); padding: 10px 16px; border-radius: 10px; font-family: 'Space Grotesk', sans-serif; }
+.player-controls { padding: 12px 16px; background: rgba(10,14,22,0.95); border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 12px; }
+.btn-play { background: var(--cyan); border: none; width: 40px; height: 40px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size:16px; }
 .progress-bar-wrap { flex: 1; height: 8px; background: rgba(255,255,255,0.15); border-radius: 3px; position: relative; cursor: pointer; overflow: hidden; }
 .progress-bar-fill { width: 0%; height: 100%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan-glow); transition: width 0.1s linear; }
-
-/* Thumbs / QA */
 .qa-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
 .thumbs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.thumb-item { aspect-ratio: 16/9; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size:13px }
-.thumb-item.active, .thumb-item:hover { border-color: var(--cyan); color: #fff; background: rgba(0, 240, 255, 0.1); }
-
-/* Toast */
+.thumb-item { aspect-ratio: 16/9; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size:13px; }
+.thumb-item.active, .thumb-item:hover { border-color: var(--cyan); color: #fff; background: rgba(0,240,255,0.1); }
 #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-.toast { display: flex; align-items: flex-start; gap: 10px; background: rgba(13, 18, 31, 0.97); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 14px 18px; min-width: 280px }
-
-/* Role-based visibility */
+.toast { display: flex; align-items: flex-start; gap: 10px; background: rgba(13,18,31,0.97); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 14px 18px; min-width: 280px; }
+.job-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.job-item { background: rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.08); border-radius: 8px; padding:8px 10px; display:flex; flex-direction:column; gap:4px; }
+.job-status { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--cyan); }
+.job-meta { font-size: 11px; color: var(--mut-light); }
 body.role-user [data-role="admin"] { display: none !important; }
 body.role-user .modes-bar { display: none !important; }
-
-/* ----- MOBILE / SMALL SCREEN TWEAKS ----- */
-@media (max-width: 1024px) {
-  .studio-container { padding: 12px; }
-  .thumbs-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
+@media (max-width: 1024px) { .studio-container { padding: 12px; } .thumbs-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 768px) {
-  header { height: 56px; padding: 0 12px; }
-  .brand { font-size: 16px; gap: 8px; }
-  .modes-bar { display: none; }
-  .system-status { display: none; }
-  .mobile-menu-btn { display: inline-flex; }
-
-  .studio-container { padding: 12px; gap: 12px; min-height: auto; }
-  .panel { padding: 12px; border-radius: 12px; }
-
-  /* Scenes: stack / smaller card layout */
-  .scene-card { grid-template-columns: 64px 1fr; gap: 8px; padding: 10px; }
+  header { height:56px; padding:0 12px; }
+  .brand { font-size:16px; gap:8px; }
+  .modes-bar { display:none; }
+  .system-status { display:none; }
+  .mobile-menu-btn { display:inline-flex; }
+  .studio-container { padding:12px; gap:12px; min-height:auto; }
+  .panel { padding:12px; border-radius:12px; }
+  .scene-card { grid-template-columns:64px 1fr; gap:8px; padding:10px; }
   .scene-card img { width: 100%; height: 100%; object-fit: cover; }
-  .scene-actions { grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; }
+  .scene-actions { grid-column:1 / -1; display:flex; gap:6px; flex-wrap:wrap; }
   .scene-asset-badge { align-self: start; }
-
-  /* Video player adjustments */
-  .video-viewport { max-height: 360px; }
-  .video-viewport.aspect-916 { max-height: 640px; }
-  .video-overlay-text { bottom: 16px; left: 12px; right: 12px; padding: 8px 12px; font-size: 14px; }
-  .player-controls { flex-direction: column; align-items: stretch; gap: 10px; }
-  .btn-play { width: 44px; height: 44px; }
-  .progress-bar-wrap { height: 8px; }
-
-  /* Thumbs / QA */
+  .video-viewport { max-height:360px; }
+  .video-viewport.aspect-916 { max-height:640px; }
+  .video-overlay-text { bottom:16px; left:12px; right:12px; padding:8px 12px; font-size:14px; }
+  .player-controls { flex-direction:column; align-items:stretch; gap:10px; }
+  .btn-play { width:44px; height:44px; }
+  .progress-bar-wrap { height:8px; }
   .thumbs-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
-  .qa-grid { grid-template-columns: 1fr; }
-
-  /* Toasts become full-width-ish */
-  #toast-container { left: 12px; right: 12px; bottom: 12px; top: auto; align-items: center; }
-  .toast { min-width: 0; width: calc(100% - 24px); max-width: calc(100% - 24px); }
-
-  /* Forms / inputs */
+  .qa-grid { grid-template-columns:1fr; }
+  #toast-container { left:12px; right:12px; bottom:12px; top:auto; align-items:center; }
+  .toast { min-width:0; width: calc(100% - 24px); max-width: calc(100% - 24px); }
   .select-row { display: block; }
-  .input-control { font-size: 14px; padding: 10px; }
-  .btn-produce { width: 100%; padding: 12px; }
-
-  /* Login card fit */
-  .login-card { padding: 20px; max-width: 100%; margin: 0 6px; }
-
-  /* stop fixed bg on mobile for performance */
+  .input-control { font-size:14px; padding:10px; }
+  .btn-produce { width:100%; padding:12px; }
+  .login-card { padding:20px; max-width:100%; margin:0 6px; }
   body { background-attachment: scroll; }
 }
-
-/* very small phones */
 @media (max-width: 420px) {
-  .scene-card { grid-template-columns: 1fr; grid-template-rows: auto auto; }
-  .scene-time { justify-self: start; }
-  .video-overlay-text { font-size: 13px; }
-  .brand { font-size: 15px; }
+  .scene-card { grid-template-columns:1fr; grid-template-rows:auto auto; }
+  .scene-time { justify-self:start; }
+  .video-overlay-text { font-size:13px; }
+  .brand { font-size:15px; }
   header { padding: 0 8px; }
 }
-
-/* Desktop: multi-column layout restored at larger widths */
 @media (min-width: 1100px) {
-  .studio-container { grid-template-columns: 320px 1fr 420px; gap: 20px; padding: 20px; }
-  .scene-card { grid-template-columns: 80px 1fr 140px 90px; }
+  .studio-container { grid-template-columns: 320px 1fr 420px; gap:20px; padding:20px; }
+  .scene-card { grid-template-columns:80px 1fr 140px 90px; }
   .thumbs-grid { grid-template-columns: repeat(4, 1fr); }
   .modes-bar { display: flex; }
   .system-status { display: flex; }
 }
-
-/* Accessibility focus helpers */
-:focus { outline: none; }
+:focus { outline:none; }
 button:focus { outline: 2px solid rgba(0,240,255,0.18); outline-offset: 2px; }
-
 </style>
 </head>
 <body>
-
-<!-- LOGIN SCREEN -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo">
@@ -234,256 +164,443 @@ button:focus { outline: 2px solid rgba(0,240,255,0.18); outline-offset: 2px; }
       <h1>AI VIDEO ENGINE</h1>
       <p>Autonomous Production System</p>
     </div>
-
     <div class="login-role-tabs">
       <button id="loginTabAdmin" class="login-role-tab active" onclick="selectLoginRole('admin')" aria-pressed="true">🛡 Admin</button>
       <button id="loginTabUser" class="login-role-tab" onclick="selectLoginRole('user')" aria-pressed="false">👤 User</button>
     </div>
-
     <div class="input-group" style="gap:6px;">
       <label id="loginRoleLabel" style="font-size:12px;color:var(--cyan);font-weight:700;">🛡 Admin Login</label>
       <input type="password" id="loginPassword" class="input-control" placeholder="Enter password…" onkeydown="if(event.key==='Enter')doLogin()" autofocus>
     </div>
-
     <div class="login-error" id="loginError"></div>
-
-    <button class="btn-login" id="btnLogin" style="background:linear-gradient(135deg, var(--purple), var(--cyan)); color:#000;" onclick="doLogin()" aria-label="Sign in">
-      🔓 SIGN IN
-    </button>
-
-    <div style="text-align:center;font-size:10px;color:var(--mut);">
-      Session stored locally · No server auth
-    </div>
+    <button class="btn-login" id="btnLogin" style="background:linear-gradient(135deg, var(--purple), var(--cyan)); color:#000;" onclick="doLogin()" aria-label="Sign in">🔓 SIGN IN</button>
+    <div style="text-align:center;font-size:10px;color:var(--mut);">Session stored locally · No server auth</div>
   </div>
 </div>
 
-<!-- MAIN APP (hidden until auth) -->
 <div id="appMain">
-
-<!-- Header -->
-<header>
-  <div class="header-left">
-    <a href="#" class="brand">
-      <div class="brand-orb">🎬</div>
-      <div>AUTONOMOUS <span>AI VIDEO ENGINE</span></div>
-    </a>
-    <button id="mobileMenuBtn" class="mobile-menu-btn" aria-expanded="false" aria-controls="headerNav" aria-label="Open menu">☰</button>
-
-    <div class="role-toggle" role="tablist" aria-label="Select role">
-      <button id="roleAdminBtn" class="role-btn active" onclick="switchRole('admin')" aria-pressed="true" aria-label="Switch to admin">🛡 Admin</button>
-      <button id="roleUserBtn" class="role-btn" onclick="switchRole('user')" aria-pressed="false" aria-label="Switch to user">👤 User</button>
-    </div>
-
-    <button class="btn-logout" onclick="doLogout()" aria-label="Logout">🚪 Logout</button>
-  </div>
-
-  <div id="headerNav" style="display:flex;align-items:center;gap:12px;">
-    <div class="modes-bar" role="tablist" aria-label="Modes">
-      <button id="btnModeA" class="mode-btn active" onclick="switchMode('A')">⚡ Mode A: Topic</button>
-      <button id="btnModeB" class="mode-btn" onclick="switchMode('B')">📄 Mode B: Sources</button>
-      <button id="btnModeC" class="mode-btn" onclick="switchMode('C')">🎯 Mode C: Directed</button>
-      <button id="btnModeD" class="mode-btn" onclick="switchMode('D')">📡 Mode D: Discovery</button>
-    </div>
-
-    <div class="system-status" aria-hidden="false">
-      <button onclick="openApiModal()" data-role="admin" style="background:rgba(0, 240, 255, 0.1);border:1px solid var(--cyan);color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 10px;border-radius:8px;" aria-label="API keys and integrations">
-        🔑 API KEYS &amp; INTEGRATIONS
-      </button>
-      <div onclick="openApiModal()" data-role="admin" title="Session cost — click for details" style="display:flex;align-items:center;gap:5px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.12);padding:6px 10px;border-radius:8px;cursor:pointer;">
-        💰 <span id="usageBadgeCost">$0.0000</span>
+  <header>
+    <div class="header-left">
+      <a href="#" class="brand"><div class="brand-orb">🎬</div><div>AUTONOMOUS <span>AI VIDEO ENGINE</span></div></a>
+      <button id="mobileMenuBtn" class="mobile-menu-btn" aria-expanded="false" aria-controls="headerNav" aria-label="Open menu">☰</button>
+      <div class="role-toggle" role="tablist" aria-label="Select role">
+        <button id="roleAdminBtn" class="role-btn active" onclick="switchRole('admin')" aria-pressed="true" aria-label="Switch to admin">🛡 Admin</button>
+        <button id="roleUserBtn" class="role-btn" onclick="switchRole('user')" aria-pressed="false" aria-label="Switch to user">👤 User</button>
       </div>
-      <div class="badge-status"><div class="dot-live"></div><span id="apiStatusBadge">API Keys: Ready</span></div>
-      <div data-role="admin">Max Cap: €5.00</div>
+      <button class="btn-logout" onclick="doLogout()" aria-label="Logout">🚪 Logout</button>
+    </div>
+    <div id="headerNav" style="display:flex;align-items:center;gap:12px;">
+      <div class="modes-bar" role="tablist" aria-label="Modes">
+        <button id="btnModeA" class="mode-btn active" onclick="switchMode('A')">⚡ Mode A: Topic</button>
+        <button id="btnModeB" class="mode-btn" onclick="switchMode('B')">📄 Mode B: Sources</button>
+        <button id="btnModeC" class="mode-btn" onclick="switchMode('C')">🎯 Mode C: Directed</button>
+        <button id="btnModeD" class="mode-btn" onclick="switchMode('D')">📡 Mode D: Discovery</button>
+      </div>
+      <div class="system-status" aria-hidden="false">
+        <button onclick="openApiModal()" data-role="admin" style="background:rgba(0, 240, 255, 0.1);border:1px solid var(--cyan);color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:11px;padding:6px 10px;border-radius:8px;" aria-label="API keys and integrations">🔑 API KEYS &amp; INTEGRATIONS</button>
+        <div onclick="openApiModal()" data-role="admin" title="Session cost — click for details" style="display:flex;align-items:center;gap:5px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.12);padding:6px 10px;border-radius:8px;cursor:pointer;">💰 <span id="usageBadgeCost">$0.0000</span></div>
+        <div class="badge-status"><div class="dot-live"></div><span id="apiStatusBadge">API Keys: Ready</span></div>
+        <div data-role="admin">Max Cap: €5.00</div>
+      </div>
+    </div>
+  </header>
+
+  <div id="toast-container"></div>
+
+  <div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:999;align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
+    <div style="width:100%;max-width:720px;">
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">🔑 API Keys &amp; Integrations</div></div>
+
+        <div class="input-group">
+          <label>Video Model Provider</label>
+          <select id="videoProviderSelect" class="input-control"></select>
+        </div>
+
+        <div id="videoProviderFields" class="input-group"></div>
+
+        <div class="input-group">
+          <label>OpenAI / LLM API Key (for prompts)</label>
+          <input id="apiKeyInput" class="input-control" placeholder="sk-... (stored locally)" autocomplete="off">
+        </div>
+        <div class="input-group">
+          <label>Estimated Usage Cost</label>
+          <input id="usageInput" class="input-control" placeholder="$0.0000">
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
+          <button class="btn-mini" onclick="closeApiModal()">Close</button>
+          <button class="btn-mini" onclick="saveApiSettings()">Save LLM Keys</button>
+          <button class="btn-produce" onclick="saveVideoSettingsAndGenerate()" style="padding:8px 12px;font-size:13px;">Generate Video</button>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--mut-light);">Keys are stored only in your browser/localStorage for this demo. For production, move secrets to a server or serverless function.</div>
+      </div>
     </div>
   </div>
-</header>
 
-<!-- Toast Notification Container -->
-<div id="toast-container"></div>
-
-<!-- API Modal (now with editable content + video model selector) -->
-<div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:999;align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
-  <div style="width:100%;max-width:720px;">
+  <div class="studio-container">
     <div class="panel">
-      <div class="panel-header"><div class="panel-title">🔑 API Keys &amp; Integrations</div></div>
-
-      <div class="input-group">
-        <label>Video Model Provider</label>
-        <select id="videoProviderSelect" class="input-control"></select>
+      <div class="panel-header" data-role="admin">
+        <div class="panel-title">🧪 Mandatory Test Cases</div>
+        <span style="font-size:10px;color:var(--cyan);font-family:'JetBrains Mono';">PRESETS</span>
+      </div>
+      <div class="test-cases-grid" data-role="admin">
+        <div class="test-btn" onclick="runTest('A')">A: News (60s)</div>
+        <div class="test-btn" onclick="runTest('B')">B: Sports (F1)</div>
+        <div class="test-btn" onclick="runTest('C')">C: Entertainment</div>
+        <div class="test-btn" onclick="runTest('D')">D: History (Rome)</div>
+        <div class="test-btn" onclick="runTest('E')">E: Philosophy</div>
+        <div class="test-btn" onclick="runTest('F')">F: Data Chart</div>
       </div>
 
-      <div id="videoProviderFields" class="input-group">
-        <!-- populated by JS with provider-specific key fields -->
+      <div id="formModeA" class="input-group" style="margin-top:10px;">
+        <div class="panel-header">
+          <div class="panel-title">⚡ Mode A: Topic Input</div>
+          <span style="font-size:10px;color:var(--cyan);font-family:'JetBrains Mono';">AUTONOMOUS</span>
+        </div>
+        <label>Topic / Instruction</label>
+        <textarea id="topicInputA" class="input-control" placeholder="e.g. Create a 6-minute video explaining why Formula 1 teams invest heavily in simulation"></textarea>
+
+        <div class="select-row">
+          <div class="input-group">
+            <label>Target Format</label>
+            <select id="aspectSelect" class="input-control" onchange="changeAspect(this.value)">
+              <option value="16:9">16:9 YouTube Long-Form</option>
+              <option value="9:16">9:16 Shorts / TikTok / Reels</option>
+              <option value="1:1">1:1 Square Post</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Niche / Category</label>
+            <select id="nicheSelect" class="input-control">
+              <option value="technology">Technology &amp; Science</option>
+              <option value="sports">Sports &amp; Racing</option>
+              <option value="history">History &amp; Documentary</option>
+              <option value="philosophy">Philosophy &amp; Explainers</option>
+              <option value="news">Breaking News</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end;">
+          <button class="btn-produce" onclick="generateVideoFromUI()">Produce (Generate Video)</button>
+        </div>
       </div>
 
-      <div class="input-group">
-        <label>OpenAI / LLM API Key (for prompts)</label>
-        <input id="apiKeyInput" class="input-control" placeholder="sk-... (stored locally)" autocomplete="off">
+      <div id="formModeB" class="input-group" style="display:none;margin-top:10px;">
+        <div class="panel-header"><div class="panel-title">📄 Mode B: Sources</div></div>
+        <label>Source URLs / Documents</label>
+        <input id="sourcesInput" class="input-control" placeholder="Paste article URLs or upload docs...">
       </div>
 
-      <div class="input-group">
-        <label>Estimated Usage Cost</label>
-        <input id="usageInput" class="input-control" placeholder="$0.0000">
+      <div id="formModeC" class="input-group" style="display:none;margin-top:10px;">
+        <div class="panel-header"><div class="panel-title">🎯 Mode C: Directed</div></div>
+        <label>Directives</label>
+        <textarea id="directivesInput" class="input-control" placeholder="Specify exact shots, tone, or timing..."></textarea>
       </div>
 
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px;">
-        <button class="btn-mini" onclick="closeApiModal()">Close</button>
-        <button class="btn-mini" onclick="saveApiSettings()">Save LLM Keys</button>
-        <button class="btn-produce" onclick="saveVideoSettingsAndGenerate()" style="padding:8px 12px;font-size:13px;">Generate Video</button>
+      <div id="formModeD" class="input-group" style="display:none;margin-top:10px;">
+        <div class="panel-header"><div class="panel-title">📡 Mode D: Discovery</div></div>
+        <label>Discovery Seed</label>
+        <input id="discoveryInput" class="input-control" placeholder="Enter seed keywords or topics..."></input>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="player-container">
+        <div id="videoViewport" class="video-viewport">
+          <div class="scene-bg-art" id="sceneBg" style="background-image:linear-gradient(45deg, rgba(0,0,0,0.6), rgba(0,0,0,0.6));"></div>
+          <div class="video-overlay-text" id="videoOverlay">Your preview text here <span class="highlight-word">highlight</span></div>
+        </div>
+        <div class="player-controls">
+          <button class="btn-play" id="btnPlay">▶</button>
+          <div class="progress-bar-wrap" id="progressWrap"><div class="progress-bar-fill" id="progressFill"></div></div>
+        </div>
       </div>
 
-      <div style="margin-top:10px;font-size:12px;color:var(--mut-light);">Keys are stored only in your browser/localStorage for this demo. For production, move secrets to a server or serverless function.</div>
+      <div style="margin-top:12px;">
+        <div class="panel-header"><div class="panel-title">Scenes</div></div>
+        <div id="scenesContainer" class="scenes-grid"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">🔎 QA &amp; Assets</div></div>
+      <div style="display:grid;gap:8px;">
+        <div class="qa-grid"><div class="qa-item"><div class="qa-label">Check</div><div class="qa-val">OK</div></div><div class="qa-item"><div class="qa-label">Audio</div><div class="qa-val">Ready</div></div></div>
+        <div class="thumbs-grid" id="thumbsGrid"><div class="thumb-item">Thumb 1</div><div class="thumb-item">Thumb 2</div><div class="thumb-item">Thumb 3</div><div class="thumb-item">Thumb 4</div></div>
+        <div>
+          <div class="panel-header"><div class="panel-title">Jobs</div></div>
+          <div id="jobsList" class="job-list"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Main Studio Container -->
-<div class="studio-container">
-
-  <!-- Left Sidebar: Production Control & Mandatory Test Cases -->
-  <div class="panel">
-    <div class="panel-header" data-role="admin">
-      <div class="panel-title">🧪 Mandatory Test Cases</div>
-      <span style="font-size:10px;color:var(--cyan);font-family:'JetBrains Mono';">PRESETS</span>
-    </div>
-    <div class="test-cases-grid" data-role="admin">
-      <div class="test-btn" onclick="runTest('A')">A: News (60s)</div>
-      <div class="test-btn" onclick="runTest('B')">B: Sports (F1)</div>
-      <div class="test-btn" onclick="runTest('C')">C: Entertainment</div>
-      <div class="test-btn" onclick="runTest('D')">D: History (Rome)</div>
-      <div class="test-btn" onclick="runTest('E')">E: Philosophy</div>
-      <div class="test-btn" onclick="runTest('F')">F: Data Chart</div>
-    </div>
-
-    <!-- Mode A Form -->
-    <div id="formModeA" class="input-group" style="margin-top:10px;">
-      <div class="panel-header">
-        <div class="panel-title">⚡ Mode A: Topic Input</div>
-        <span style="font-size:10px;color:var(--cyan);font-family:'JetBrains Mono';">AUTONOMOUS</span>
-      </div>
-      <label>Topic / Instruction</label>
-      <textarea id="topicInputA" class="input-control" placeholder="e.g. Create a 6-minute video explaining why Formula 1 teams invest heavily in simulation"></textarea>
-      
-      <div class="select-row">
-        <div class="input-group">
-          <label>Target Format</label>
-          <select id="aspectSelect" class="input-control" onchange="changeAspect(this.value)">
-            <option value="16:9">16:9 YouTube Long-Form</option>
-            <option value="9:16">9:16 Shorts / TikTok / Reels</option>
-            <option value="1:1">1:1 Square Post</option>
-          </select>
-        </div>
-        <div class="input-group">
-          <label>Niche / Category</label>
-          <select id="nicheSelect" class="input-control">
-            <option value="technology">Technology & Science</option>
-            <option value="sports">Sports & Racing</option>
-            <option value="history">History & Documentary</option>
-            <option value="philosophy">Philosophy & Explainers</option>
-            <option value="news">Breaking News</option>
-          </select>
-        </div>
-      </div>
-
-      <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end;">
-        <button class="btn-produce" onclick="generateVideoFromUI()">Produce (Generate Video)</button>
-      </div>
-    </div>
-
-    <!-- Mode B/C/D placeholder containers (created so switchMode can show/hide them) -->
-    <div id="formModeB" class="input-group" style="display:none;margin-top:10px;">
-      <div class="panel-header"><div class="panel-title">📄 Mode B: Sources</div></div>
-      <label>Source URLs / Documents</label>
-      <input id="sourcesInput" class="input-control" placeholder="Paste article URLs or upload docs...">
-    </div>
-
-    <div id="formModeC" class="input-group" style="display:none;margin-top:10px;">
-      <div class="panel-header"><div class="panel-title">🎯 Mode C: Directed</div></div>
-      <label>Directives</label>
-      <textarea id="directivesInput" class="input-control" placeholder="Specify exact shots, tone, or timing..."></textarea>
-    </div>
-
-    <div id="formModeD" class="input-group" style="display:none;margin-top:10px;">
-      <div class="panel-header"><div class="panel-title">📡 Mode D: Discovery</div></div>
-      <label>Discovery Seed</label>
-      <input id="discoveryInput" class="input-control" placeholder="Enter seed keywords or topics..."></input>
-    </div>
-
-  </div>
-
-  <!-- Center: Player + Scenes -->
-  <div class="panel">
-    <div class="player-container">
-      <div id="videoViewport" class="video-viewport">
-        <div class="scene-bg-art" id="sceneBg" style="background-image:linear-gradient(45deg, rgba(0,0,0,0.6), rgba(0,0,0,0.6));"></div>
-        <div class="video-overlay-text" id="videoOverlay">Your preview text here <span class="highlight-word">highlight</span></div>
-      </div>
-      <div class="player-controls">
-        <button class="btn-play" id="btnPlay">▶</button>
-        <div class="progress-bar-wrap" id="progressWrap"><div class="progress-bar-fill" id="progressFill"></div></div>
-      </div>
-    </div>
-
-    <div style="margin-top:12px;">
-      <div class="panel-header"><div class="panel-title">Scenes</div></div>
-      <div id="scenesContainer" class="scenes-grid"></div>
-    </div>
-  </div>
-
-  <!-- Right Sidebar: Assets / QA -->
-  <div class="panel">
-    <div class="panel-header"><div class="panel-title">🔎 QA & Assets</div></div>
-    <div style="display:grid;gap:8px;">
-      <div class="qa-grid"><div class="qa-item"><div class="qa-label">Check</div><div class="qa-val">OK</div></div><div class="qa-item"><div class="qa-label">Audio</div><div class="qa-val">Ready</div></div></div>
-      <div class="thumbs-grid" id="thumbsGrid"><div class="thumb-item">Thumb 1</div><div class="thumb-item">Thumb 2</div><div class="thumb-item">Thumb 3</div><div class="thumb-item">Thumb 4</div></div>
-    </div>
-  </div>
-
-</div>
-
-<!-- lightweight scripts to improve mobile UX -->
 <script>
-// --- Helpers & existing UI wiring (kept) ---
-(function(){
-  const btn = document.getElementById('mobileMenuBtn');
-  const header = document.querySelector('header');
-  const nav = document.getElementById('headerNav');
-  if(!btn) return;
-  btn.addEventListener('click', ()=>{
-    const expanded = btn.getAttribute('aria-expanded') === 'true';
-    btn.setAttribute('aria-expanded', String(!expanded));
-    header.classList.toggle('show-mobile-nav');
-    const modes = nav.querySelector('.modes-bar');
-    const sys = nav.querySelector('.system-status');
-    if(modes) modes.style.display = expanded ? 'none' : 'flex';
-    if(sys) sys.style.display = expanded ? 'none' : 'flex';
-    const roleToggle = document.querySelector('.role-toggle');
-    if(roleToggle && window.innerWidth <= 768) roleToggle.style.display = expanded ? 'none' : 'flex';
-  });
-  document.addEventListener('click', (e)=>{
-    if(window.innerWidth > 768) return;
-    if(!header.classList.contains('show-mobile-nav')) return;
-    if(header.contains(e.target)) return;
-    header.classList.remove('show-mobile-nav');
-    btn.setAttribute('aria-expanded', 'false');
-    const modes = nav.querySelector('.modes-bar');
-    const sys = nav.querySelector('.system-status');
-    if(modes) modes.style.display = 'none';
-    if(sys) sys.style.display = 'none';
-    const roleToggle = document.querySelector('.role-toggle');
-    if(roleToggle) roleToggle.style.display = 'flex';
-  });
-})();
+const VIDEO_PROVIDERS = [
+  { id: 'demo', name: 'Demo (local simulated)', requiresServer: false },
+  { id: 'pika', name: 'Pika (example)', requiresServer: true },
+  { id: 'runway', name: 'Runway (example)', requiresServer: true },
+  { id: 'synthesia', name: 'Synthesia (example)', requiresServer: true },
+  { id: 'openai_video', name: 'OpenAI Video (placeholder)', requiresServer: true }
+];
 
-(function(){ document.addEventListener('click', function(e){ if(window.innerWidth < 480 && e.target && e.target.classList && e.target.classList.contains('btn-mini')){ e.target.style.padding = '10px 12px'; } }); })();
-(function(){ function fitViewport(){ const vp = document.getElementById('videoViewport'); if(!vp) return; vp.style.maxWidth = '100%'; const roleToggle = document.querySelector('.role-toggle'); if(roleToggle) roleToggle.style.display = window.innerWidth <= 768 ? 'flex' : 'flex'; } window.addEventListener('resize', fitViewport); fitViewport(); })();
+const PROVIDER_FIELDS = {
+  demo: [
+    { id: 'demoMode', label: 'Demo style', type: 'select', options: ['Default','Cinematic','Social Short'] }
+  ],
+  pika: [
+    { id: 'pikaDuration', label: 'Duration', type: 'select', options: ['8s','15s','30s'] },
+    { id: 'pikaStyle', label: 'Style', type: 'select', options: ['Cinematic','Product','Anime'] }
+  ],
+  runway: [
+    { id: 'runwayResolution', label: 'Resolution', type: 'select', options: ['720p','1080p','4K'] },
+    { id: 'runwayMotion', label: 'Motion', type: 'select', options: ['Smooth','Dynamic','Cinematic'] }
+  ],
+  synthesia: [
+    { id: 'synthesiaVoice', label: 'Voice', type: 'select', options: ['Default','Narrator','Energetic'] },
+    { id: 'synthesiaAspect', label: 'Aspect', type: 'select', options: ['16:9','9:16','1:1'] }
+  ],
+  openai_video: [
+    { id: 'openaiFormat', label: 'Format', type: 'select', options: ['Video','Storyboards','Shots'] },
+    { id: 'openaiQuality', label: 'Quality', type: 'select', options: ['Standard','HD','Pro'] }
+  ]
+};
+
+function getVideoSettings(){
+  try {
+    const raw = localStorage.getItem('llm_video_settings');
+    return raw ? JSON.parse(raw) : { provider: 'demo', options: {}, keys: {} };
+  } catch (e) { return { provider: 'demo', options: {}, keys: {} }; }
+}
+
+function saveVideoSettings(settings){
+  localStorage.setItem('llm_video_settings', JSON.stringify(settings));
+}
+
+function readVideoProviderOptions(providerId) {
+  const settings = getVideoSettings();
+  const fields = PROVIDER_FIELDS[providerId] || [];
+  const values = settings.options && settings.options[providerId] ? settings.options[providerId] : {};
+  const selected = {};
+  fields.forEach(field => selected[field.id] = values[field.id] || field.options[0]);
+  return selected;
+}
+
+function renderVideoProviderFields(providerId){
+  const container = document.getElementById('videoProviderFields');
+  if (!container) return;
+  container.innerHTML = '';
+  const provider = VIDEO_PROVIDERS.find(p => p.id === providerId) || VIDEO_PROVIDERS[0];
+  const settings = getVideoSettings();
+  const allFields = PROVIDER_FIELDS[providerId] || [];
+  const values = settings.options && settings.options[providerId] ? settings.options[providerId] : {};
+
+  allFields.forEach(field => {
+    const wrap = document.createElement('div'); wrap.className = 'input-group';
+    const label = document.createElement('label'); label.textContent = field.label; wrap.appendChild(label);
+    const input = document.createElement(field.type === 'select' ? 'select' : 'input');
+    input.className = 'input-control';
+    if (field.type === 'select') {
+      field.options.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt; option.textContent = opt;
+        if ((values[field.id] || field.options[0]) === opt) option.selected = true;
+        input.appendChild(option);
+      });
+    } else {
+      input.value = values[field.id] || '';
+      input.type = 'text';
+    }
+    input.id = 'providerOption_' + field.id;
+    wrap.appendChild(input);
+    container.appendChild(wrap);
+  });
+
+  const keyWrap = document.createElement('div'); keyWrap.className = 'input-group';
+  const keyLabel = document.createElement('label'); keyLabel.textContent = provider.name + ' key / endpoint'; keyWrap.appendChild(keyLabel);
+  const keyInput = document.createElement('input'); keyInput.className = 'input-control'; keyInput.id = 'providerKeyInput'; keyInput.placeholder = provider.requiresServer ? 'https://your-proxy.example.com/api/video-proxy or provider key' : 'No key needed in demo mode'; keyInput.value = (settings.keys && settings.keys[providerId]) || '';
+  keyWrap.appendChild(keyInput);
+  container.appendChild(keyWrap);
+
+  const note = document.createElement('div'); note.style.fontSize='12px'; note.style.color='var(--mut-light)'; note.style.marginTop='6px';
+  note.textContent = provider.requiresServer ? 'Recommended: use a secure server-side proxy endpoint instead of exposing raw provider keys in the browser.' : 'Demo mode simulates generation locally.';
+  container.appendChild(note);
+}
+
+function getProviderOptionsFromForm(providerId){
+  const values = {};
+  const fields = PROVIDER_FIELDS[providerId] || [];
+  fields.forEach(field => {
+    const elem = document.getElementById('providerOption_' + field.id);
+    values[field.id] = elem ? elem.value : (field.options[0] || '');
+  });
+  return values;
+}
+
+function saveVideoSettingsAndGenerate(){
+  const providerSelect = document.getElementById('videoProviderSelect');
+  const providerId = providerSelect ? providerSelect.value : 'demo';
+  const settings = getVideoSettings();
+  settings.provider = providerId;
+  settings.options[providerId] = getProviderOptionsFromForm(providerId);
+  settings.keys[providerId] = document.getElementById('providerKeyInput') ? document.getElementById('providerKeyInput').value.trim() : '';
+  saveVideoSettings(settings);
+  showToast('Video provider settings saved');
+  generateVideoFromUI();
+}
+
+function loadVideoSettings(){
+  const select = document.getElementById('videoProviderSelect');
+  if (!select) return;
+  select.innerHTML = '';
+  VIDEO_PROVIDERS.forEach(provider => {
+    const option = document.createElement('option');
+    option.value = provider.id; option.textContent = provider.name; option.selected = provider.id === (getVideoSettings().provider || 'demo');
+    select.appendChild(option);
+  });
+  select.addEventListener('change', function(){
+    const providerId = this.value;
+    renderVideoProviderFields(providerId);
+  });
+  renderVideoProviderFields(select.value || 'demo');
+}
+
+function addJob(status, text, provider){
+  const jobs = JSON.parse(localStorage.getItem('llm_jobs') || '[]');
+  const job = { id: Date.now() + '-' + Math.random().toString(16).slice(2), status, text, provider, createdAt: new Date().toISOString() };
+  jobs.unshift(job);
+  localStorage.setItem('llm_jobs', JSON.stringify(jobs.slice(0, 6)));
+  renderJobs();
+  return job;
+}
+
+function updateJob(id, updates){
+  const jobs = JSON.parse(localStorage.getItem('llm_jobs') || '[]');
+  const index = jobs.findIndex(j => j.id === id);
+  if (index >= 0) {
+    jobs[index] = { ...jobs[index], ...updates };
+    localStorage.setItem('llm_jobs', JSON.stringify(jobs));
+    renderJobs();
+  }
+}
+
+function renderJobs(){
+  const list = document.getElementById('jobsList');
+  if (!list) return;
+  const jobs = JSON.parse(localStorage.getItem('llm_jobs') || '[]');
+  if (!jobs.length) {
+    list.innerHTML = '<div class="job-item"><div class="job-status">idle</div><div class="job-meta">No generation jobs yet.</div></div>';
+    return;
+  }
+
+  list.innerHTML = jobs.map(job => {
+    const text = job.url ? 'URL ready' : job.text || 'Processing';
+    return '<div class="job-item"><div class="job-status">' + (job.status || 'queued') + '</div><div class="job-meta">' + job.provider + ' · ' + text + '</div></div>';
+  }).join('');
+}
+
+function showToast(msg, duration=3000){
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  container.appendChild(t);
+  setTimeout(()=>{ t.style.transition='opacity 0.4s'; t.style.opacity = '0'; setTimeout(()=>t.remove(),420); }, duration);
+}
+
+function setVideoPreviewUrl(url){
+  const overlay = document.getElementById('videoOverlay');
+  if (overlay) overlay.innerHTML = 'Generated preview <span class="highlight-word">ready</span>';
+  const sceneBg = document.getElementById('sceneBg');
+  if (sceneBg && url) sceneBg.style.backgroundImage = 'linear-gradient(45deg, rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url("' + url + '")';
+}
+
+async function generateVideoFromUI(){
+  try {
+    const settings = getVideoSettings();
+    const provider = settings.provider || 'demo';
+    const payload = {
+      topic: document.getElementById('topicInputA') ? document.getElementById('topicInputA').value : '',
+      directives: document.getElementById('directivesInput') ? document.getElementById('directivesInput').value : '',
+      format: document.getElementById('aspectSelect') ? document.getElementById('aspectSelect').value : '16:9',
+      niche: document.getElementById('nicheSelect') ? document.getElementById('nicheSelect').value : '',
+      options: settings.options[provider] || {}
+    };
+    const job = addJob('queued', payload.topic || 'Generating video', provider);
+    showToast('Sending job to ' + provider);
+    const result = await sendToVideoModel(provider, payload);
+    if (result && result.status === 'done') {
+      updateJob(job.id, { status: 'done', text: 'Completed', url: result.url || '' });
+      showToast('Video ready: ' + (result.url || 'preview available'));
+      setVideoPreviewUrl(result.url || '');
+      const thumbs = document.getElementById('thumbsGrid');
+      if (thumbs && result.url) {
+        const thumb = document.createElement('div');
+        thumb.className = 'thumb-item';
+        thumb.textContent = 'Video';
+        thumb.title = result.url;
+        thumb.onclick = () => window.open(result.url, '_blank');
+        thumbs.prepend(thumb);
+      }
+    } else {
+      updateJob(job.id, { status: result && result.status ? result.status : 'queued', text: result && result.id ? 'Queued (' + result.id + ')' : 'Queued' });
+      showToast('Generation started');
+    }
+  } catch (e) {
+    console.error('generateVideoFromUI', e);
+    showToast('Generation failed: ' + (e.message || e));
+  }
+}
+
+async function sendToVideoModel(providerId, payload){
+  const settings = getVideoSettings();
+  const key = settings.keys && settings.keys[providerId] ? settings.keys[providerId] : '';
+
+  if (providerId === 'demo') {
+    await new Promise(r => setTimeout(r, 2500));
+    return { status: 'done', url: 'https://cdn.example.com/demo-video.mp4' };
+  }
+
+  if (key && (key.startsWith('http://') || key.startsWith('https://'))) {
+    try {
+      const resp = await fetch(key, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider: providerId, payload: payload })
+      });
+      if (!resp.ok) {
+        const errBody = await resp.text();
+        throw new Error('Server returned ' + resp.status + ': ' + errBody);
+      }
+      const json = await resp.json();
+      return json;
+    } catch (e) {
+      console.error('sendToVideoModel fetch error', e);
+      throw e;
+    }
+  }
+
+  if (providerId === 'pika' || providerId === 'runway' || providerId === 'synthesia' || providerId === 'openai_video') {
+    throw new Error('Provider ' + providerId + ' requires a server endpoint. Put a URL in the provider key field (recommended: your secure /api/video-proxy URL).');
+  }
+
+  return { status: 'done', url: '' };
+}
 
 function switchMode(mode) {
   try {
     const modes = ['A','B','C','D'];
-    modes.forEach(m => { const btn = document.getElementById('btnMode' + m); if(btn) btn.classList.toggle('active', m === mode); });
-    modes.forEach(m => { const el = document.getElementById('formMode' + m); if(!el) return; el.style.display = (m === mode) ? 'flex' : 'none'; });
-    console.log('Switched to mode', mode);
+    modes.forEach(m => {
+      const btn = document.getElementById('btnMode' + m);
+      if (btn) btn.classList.toggle('active', m === mode);
+    });
+    modes.forEach(m => {
+      const el = document.getElementById('formMode' + m);
+      if (el) el.style.display = (m === mode) ? 'flex' : 'none';
+    });
   } catch (err) { console.error('switchMode error', err); }
 }
 
@@ -493,189 +610,175 @@ function switchRole(role) {
     document.body.classList.toggle('role-user', isUser);
     const adminBtn = document.getElementById('roleAdminBtn');
     const userBtn = document.getElementById('roleUserBtn');
-    if(adminBtn) adminBtn.setAttribute('aria-pressed', String(!isUser));
-    if(userBtn) userBtn.setAttribute('aria-pressed', String(isUser));
+    if (adminBtn) adminBtn.setAttribute('aria-pressed', String(!isUser));
+    if (userBtn) userBtn.setAttribute('aria-pressed', String(isUser));
     document.querySelectorAll('[data-role="admin"]').forEach(el => { el.style.display = isUser ? 'none' : ''; });
-    const modes = document.querySelector('.modes-bar'); if(modes) modes.style.display = isUser ? 'none' : 'flex';
-    try{ localStorage.setItem('llm_role', role); }catch(e){}
-    console.log('Switched role to', role);
-  } catch(err) { console.error('switchRole error', err); }
+    const modes = document.querySelector('.modes-bar'); if (modes) modes.style.display = isUser ? 'none' : 'flex';
+    localStorage.setItem('llm_role', role);
+  } catch (err) { console.error('switchRole error', err); }
 }
 
-function doLogout(){ try { localStorage.removeItem('llm_role'); } catch(e){} document.getElementById('appMain').style.display = 'none'; document.getElementById('loginScreen').style.display = 'block'; }
-function doLogin(){ document.getElementById('loginScreen').style.display = 'none'; document.getElementById('appMain').style.display = 'block'; }
+function doLogout(){
+  localStorage.removeItem('llm_role');
+  document.getElementById('appMain').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'block';
+}
+
+function doLogin(){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('appMain').style.display = 'block';
+}
 
 function selectLoginRole(role){
-  try{
-    const adminBtn = document.getElementById('loginTabAdmin');
-    const userBtn = document.getElementById('loginTabUser');
-    if(adminBtn) adminBtn.classList.toggle('active', role === 'admin');
-    if(userBtn) userBtn.classList.toggle('active', role === 'user');
-    if(adminBtn) adminBtn.setAttribute('aria-pressed', String(role === 'admin'));
-    if(userBtn) userBtn.setAttribute('aria-pressed', String(role === 'user'));
-    const label = document.getElementById('loginRoleLabel'); if(label) label.textContent = role === 'admin' ? '🛡 Admin Login' : '👤 User Login';
-    const pwd = document.getElementById('loginPassword'); if(pwd){ pwd.placeholder = role === 'admin' ? 'Enter password…' : 'Enter display name…'; try{ pwd.focus(); }catch(e){} }
-    try{ localStorage.setItem('llm_role', role); }catch(e){}
-  }catch(e){ console.error('selectLoginRole error', e); }
+  const adminBtn = document.getElementById('loginTabAdmin');
+  const userBtn = document.getElementById('loginTabUser');
+  if (adminBtn) { adminBtn.classList.toggle('active', role === 'admin'); adminBtn.setAttribute('aria-pressed', String(role === 'admin')); }
+  if (userBtn) { userBtn.classList.toggle('active', role === 'user'); userBtn.setAttribute('aria-pressed', String(role === 'user')); }
+  const label = document.getElementById('loginRoleLabel'); if (label) label.textContent = role === 'admin' ? '🛡 Admin Login' : '👤 User Login';
+  const pwd = document.getElementById('loginPassword'); if (pwd) { pwd.placeholder = role === 'admin' ? 'Enter password…' : 'Enter display name…'; }
+  localStorage.setItem('llm_role', role);
 }
 
-function changeAspect(value){ try{ const vp = document.getElementById('videoViewport'); if(!vp) return; vp.classList.toggle('aspect-916', value === '9:16'); vp.classList.toggle('aspect-11', value === '1:1'); if(value === '16:9'){ vp.classList.remove('aspect-916'); vp.classList.remove('aspect-11'); } showToast('Aspect set to ' + value); }catch(e){ console.error('changeAspect error', e); } }
+function changeAspect(value){
+  const vp = document.getElementById('videoViewport'); if (!vp) return;
+  vp.classList.toggle('aspect-916', value === '9:16');
+  vp.classList.toggle('aspect-11', value === '1:1');
+  if (value === '16:9') { vp.classList.remove('aspect-916'); vp.classList.remove('aspect-11'); }
+  showToast('Aspect set to ' + value);
+}
 
-function runTest(key){ try{ const presets = { 'A': 'Create a 60s news-style video summarizing a recent breakthrough in AI.', 'B': 'Produce a 90s fast-paced sports highlight about Formula 1: key moments and analysis.', 'C': 'Short entertainment piece: movie recap with energetic voiceover and cuts.', 'D': 'Historical explainer (2 min): Rise and fall of the Roman Republic.', 'E': 'Philosophy explainer: What is utilitarianism? (90s).', 'F': 'Data chart short: explain a chart showing climate trends in 60s.' }; const txt = presets[key] || ('Preset ' + key); const topic = document.getElementById('topicInputA'); if(topic) topic.value = txt; switchMode('A'); showToast('Loaded preset ' + key); }catch(e){ console.error('runTest error', e); } }
-
-function showToast(msg, duration=3000){ const container = document.getElementById('toast-container'); if(!container) return; const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; container.appendChild(t); setTimeout(()=>{ t.style.transition='opacity 0.4s'; t.style.opacity = '0'; setTimeout(()=>t.remove(),420); }, duration); }
+function runTest(key){
+  const presets = {
+    A: 'Create a 60s news-style video summarizing a recent breakthrough in AI.',
+    B: 'Produce a 90s fast-paced sports highlight about Formula 1: key moments and analysis.',
+    C: 'Short entertainment piece: movie recap with energetic voiceover and cuts.',
+    D: 'Historical explainer (2 min): Rise and fall of the Roman Republic.',
+    E: 'Philosophy explainer: What is utilitarianism? (90s).',
+    F: 'Data chart short: explain a chart showing climate trends in 60s.'
+  };
+  const topic = document.getElementById('topicInputA');
+  if (topic) topic.value = presets[key] || ('Preset ' + key);
+  switchMode('A');
+  showToast('Loaded preset ' + key);
+}
 
 function openApiModal(){
-  const modal = document.getElementById('apiModal'); if(!modal) return;
-  try{
-    loadVideoSettings();
-    const key = localStorage.getItem('llm_api_key') || '';
-    const usage = localStorage.getItem('llm_usage_cost') || document.getElementById('usageBadgeCost').textContent || '$0.0000';
-    const keyInput = document.getElementById('apiKeyInput'); const usageInput = document.getElementById('usageInput');
-    if(keyInput) keyInput.value = key; if(usageInput) usageInput.value = usage;
-  }catch(e){}
+  const modal = document.getElementById('apiModal'); if (!modal) return;
+  loadVideoSettings();
+  const key = localStorage.getItem('llm_api_key') || '';
+  const usage = localStorage.getItem('llm_usage_cost') || document.getElementById('usageBadgeCost').textContent || '$0.0000';
+  const keyInput = document.getElementById('apiKeyInput');
+  const usageInput = document.getElementById('usageInput');
+  if (keyInput) keyInput.value = key;
+  if (usageInput) usageInput.value = usage;
   modal.style.display = 'flex';
 }
-function closeApiModal(){ const m = document.getElementById('apiModal'); if(m) m.style.display='none'; }
 
-function saveApiSettings(){ const key = (document.getElementById('apiKeyInput') || {value:''}).value.trim(); const usage = (document.getElementById('usageInput') || {value:''}).value.trim() || '$0.0000'; try{ localStorage.setItem('llm_api_key', key); localStorage.setItem('llm_usage_cost', usage); }catch(e){} const badge = document.getElementById('usageBadgeCost'); if(badge) badge.textContent = usage; const status = document.getElementById('apiStatusBadge'); if(status) status.textContent = key ? 'API Keys: Ready' : 'API Keys: None'; showToast('LLM settings saved'); }
+function closeApiModal(){ const modal = document.getElementById('apiModal'); if (modal) modal.style.display = 'none'; }
 
-// --- Video model selection + wiring ---
-const VIDEO_PROVIDERS = [
-  { id: 'demo', name: 'Demo (local simulated)', requiresServer: false },
-  { id: 'pika', name: 'Pika (example)', requiresServer: true },
-  { id: 'runway', name: 'Runway (example)', requiresServer: true },
-  { id: 'synthesia', name: 'Synthesia (example)', requiresServer: true },
-  { id: 'openai_video', name: 'OpenAI Video (placeholder)', requiresServer: true }
-];
-
-function loadVideoSettings(){
-  try{
-    const select = document.getElementById('videoProviderSelect');
-    select.innerHTML = '';
-    VIDEO_PROVIDERS.forEach(p => {
-      const opt = document.createElement('option'); opt.value = p.id; opt.textContent = p.name; select.appendChild(opt);
-    });
-    const saved = localStorage.getItem('llm_video_provider') || 'demo';
-    select.value = saved;
-    renderVideoProviderFields(saved);
-    select.addEventListener('change', (e)=> renderVideoProviderFields(e.target.value));
-  }catch(e){ console.error('loadVideoSettings', e); }
+function saveApiSettings(){
+  const key = (document.getElementById('apiKeyInput') || { value: '' }).value.trim();
+  const usage = (document.getElementById('usageInput') || { value: '' }).value.trim() || '$0.0000';
+  localStorage.setItem('llm_api_key', key);
+  localStorage.setItem('llm_usage_cost', usage);
+  const badge = document.getElementById('usageBadgeCost'); if (badge) badge.textContent = usage;
+  const status = document.getElementById('apiStatusBadge'); if (status) status.textContent = key ? 'API Keys: Ready' : 'API Keys: None';
+  showToast('LLM settings saved');
 }
 
-function renderVideoProviderFields(providerId){
-  const container = document.getElementById('videoProviderFields');
-  container.innerHTML = '';
-  const keys = JSON.parse(localStorage.getItem('llm_video_keys') || '{}');
-  const provider = VIDEO_PROVIDERS.find(p => p.id === providerId) || VIDEO_PROVIDERS[0];
-
-  // simple single-key input per provider (extendable)
-  const label = document.createElement('label'); label.textContent = provider.name + ' API Key / Endpoint';
-  const input = document.createElement('input'); input.className = 'input-control'; input.id = 'videoProviderKey'; input.placeholder = provider.requiresServer ? 'Server endpoint or API key (recommended: server-side proxy)' : 'No key needed for demo';
-  input.value = keys[providerId] || '';
-  container.appendChild(label); container.appendChild(input);
-
-  const hint = document.createElement('div'); hint.style.fontSize='12px'; hint.style.color='var(--mut-light)'; hint.style.marginTop='6px';
-  hint.textContent = provider.requiresServer ? 'Note: Most providers require server-side calls. Store secrets on a server and call via a serverless endpoint to avoid exposing keys in the browser.' : 'Demo mode simulates generation in-browser.';
-  container.appendChild(hint);
-}
-
-function saveVideoSettingsAndGenerate(){
-  try{
-    const provider = (document.getElementById('videoProviderSelect') || {}).value || 'demo';
-    const key = (document.getElementById('videoProviderKey') || {}).value || '';
-    const keys = JSON.parse(localStorage.getItem('llm_video_keys') || '{}');
-    keys[provider] = key;
-    localStorage.setItem('llm_video_keys', JSON.stringify(keys));
-    localStorage.setItem('llm_video_provider', provider);
-    showToast('Video provider settings saved');
-    // proceed to generate using current UI state
-    generateVideoFromUI();
-  }catch(e){ console.error('saveVideoSettingsAndGenerate', e); }
-}
-
-async function generateVideoFromUI(){
-  try{
-    const provider = localStorage.getItem('llm_video_provider') || document.getElementById('videoProviderSelect').value || 'demo';
-    const topic = (document.getElementById('topicInputA') || {}).value || '';
-    const directives = (document.getElementById('directivesInput') || {}).value || '';
-    const format = (document.getElementById('aspectSelect') || {}).value || '16:9';
-    const niche = (document.getElementById('nicheSelect') || {}).value || '';
-    const payload = { topic, directives, format, niche };
-    showToast('Sending job to ' + provider);
-    const result = await sendToVideoModel(provider, payload);
-    if(result && result.status === 'done'){
-      showToast('Video ready: ' + (result.url || 'preview available'));
-      // add thumbnail to thumbs grid if present
-      const thumbs = document.getElementById('thumbsGrid');
-      if(thumbs){ const el = document.createElement('div'); el.className='thumb-item'; el.textContent = 'Video'; el.onclick = ()=> window.open(result.url || '#'); if(result.url) el.title = result.url; thumbs.prepend(el); }
-    } else {
-      showToast('Generation started (async). Check your provider dashboard or server for updates.');
-    }
-  }catch(e){ console.error('generateVideoFromUI', e); showToast('Error: ' + (e.message || e)); }
-}
-
-// sendToVideoModel: unified client-side wrapper. For real providers, you should call a server-side endpoint to hide keys.
-async function sendToVideoModel(providerId, payload){
-  // demo implementation + placeholders for real providers
-  const keys = JSON.parse(localStorage.getItem('llm_video_keys') || '{}');
-  const key = keys[providerId] || '';
-  if(providerId === 'demo'){
-    // simulate a job: returns after 2.5s with a fake URL
-    await new Promise(r => setTimeout(r, 2500));
-    return { status: 'done', url: 'https://cdn.example.com/demo-video.mp4' };
-  }
-
-  // For other providers, we attempt a POST to a configured server endpoint (if the key field contains a URL),
-  // otherwise we return a helpful error message. Real provider integration should be done server-side.
-  if(key && (key.startsWith('http://') || key.startsWith('https://'))){
-    try{
-      const resp = await fetch(key, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ provider: providerId, payload }) });
-      if(!resp.ok) throw new Error('Server returned ' + resp.status);
-      const json = await resp.json();
-      // Expect {status:'queued'|'done', url:'...'} from server
-      return json;
-    }catch(e){ console.error('sendToVideoModel fetch error', e); throw e; }
-  }
-
-  // If key is present but not a URL, assume it's an API key — warn user to use a server.
-  throw new Error('Provider ' + providerId + ' requires a server-side proxy or an endpoint URL in the provider key field. See the API modal hint.');
-}
-
-// Wire play button with a simple simulated progress (preview-only)
 function _wirePlayButton(){
-  try{
-    const play = document.getElementById('btnPlay');
-    const fill = document.getElementById('progressFill');
-    if(!play || !fill) return;
-    let iv = null;
-    play.addEventListener('click', ()=>{
-      if(play.dataset.playing === '1'){
-        play.dataset.playing = '0'; play.textContent = '▶'; if(iv) clearInterval(iv);
-      } else {
-        play.dataset.playing = '1'; play.textContent = '▌▌'; let progress = parseInt(fill.style.width) || 0;
-        iv = setInterval(()=>{ progress = Math.min(100, progress + 2); fill.style.width = progress + '%'; if(progress >= 100){ clearInterval(iv); play.dataset.playing = '0'; play.textContent = '▶'; setTimeout(()=> fill.style.width = '0%', 400); } }, 60);
-      }
-    });
-  }catch(e){ console.error('_wirePlayButton error', e); }
+  const play = document.getElementById('btnPlay');
+  const fill = document.getElementById('progressFill');
+  if (!play || !fill) return;
+  let iv = null;
+  play.addEventListener('click', ()=>{
+    if (play.dataset.playing === '1') {
+      play.dataset.playing = '0';
+      play.textContent = '▶';
+      if (iv) clearInterval(iv);
+    } else {
+      play.dataset.playing = '1';
+      play.textContent = '▌▌';
+      let progress = parseInt(fill.style.width) || 0;
+      iv = setInterval(() => {
+        progress = Math.min(100, progress + 2);
+        fill.style.width = progress + '%';
+        if (progress >= 100) {
+          clearInterval(iv);
+          play.dataset.playing = '0';
+          play.textContent = '▶';
+          setTimeout(() => fill.style.width = '0%', 400);
+        }
+      }, 60);
+    }
+  });
 }
 
-// bootstrap on load
 document.addEventListener('DOMContentLoaded', function(){
-  const anyVisible = ['A','B','C','D'].some(m => { const el = document.getElementById('formMode' + m); return el && el.style.display !== 'none'; });
-  if(!anyVisible) switchMode('A');
-  ['A','B','C','D'].forEach(m => { const btn = document.getElementById('btnMode' + m); if(btn) btn.addEventListener('click', () => switchMode(m)); });
-  const adminBtn = document.getElementById('roleAdminBtn'); const userBtn = document.getElementById('roleUserBtn'); if(adminBtn) adminBtn.addEventListener('click', ()=>switchRole('admin')); if(userBtn) userBtn.addEventListener('click', ()=>switchRole('user'));
-  try{ const saved = localStorage.getItem('llm_role'); if(saved) switchRole(saved); }catch(e){}
-  const directives = document.getElementById('directivesInput'); if(directives){ directives.addEventListener('input', ()=>{ const txt = directives.value || 'Your preview text here'; const overlay = document.getElementById('videoOverlay'); if(overlay) overlay.textContent = txt; }); }
-  const discovery = document.getElementById('discoveryInput'); if(discovery){ discovery.addEventListener('input', ()=>{ const txt = discovery.value || 'Your preview text here'; const overlay = document.getElementById('videoOverlay'); if(overlay) overlay.textContent = txt; }); }
-  try{ const storedUsage = localStorage.getItem('llm_usage_cost'); if(storedUsage){ const badge = document.getElementById('usageBadgeCost'); if(badge) badge.textContent = storedUsage; } const storedKey = localStorage.getItem('llm_api_key'); const status = document.getElementById('apiStatusBadge'); if(status) status.textContent = storedKey ? 'API Keys: Ready' : 'API Keys: None'; }catch(e){}
+  const anyVisible = ['A','B','C','D'].some(m => {
+    const el = document.getElementById('formMode' + m);
+    return el && el.style.display !== 'none';
+  });
+  if (!anyVisible) switchMode('A');
+
+  ['A','B','C','D'].forEach(m => {
+    const btn = document.getElementById('btnMode' + m);
+    if (btn) btn.addEventListener('click', () => switchMode(m));
+  });
+
+  const adminBtn = document.getElementById('roleAdminBtn');
+  const userBtn = document.getElementById('roleUserBtn');
+  if (adminBtn) adminBtn.addEventListener('click', () => switchRole('admin'));
+  if (userBtn) userBtn.addEventListener('click', () => switchRole('user'));
+
+  try {
+    const saved = localStorage.getItem('llm_role');
+    if (saved) switchRole(saved);
+  } catch (e) {}
+
+  const directives = document.getElementById('directivesInput');
+  if (directives) {
+    directives.addEventListener('input', ()=>{
+      const txt = directives.value || 'Your preview text here';
+      const overlay = document.getElementById('videoOverlay');
+      if (overlay) overlay.textContent = txt;
+    });
+  }
+
+  const discovery = document.getElementById('discoveryInput');
+  if (discovery) {
+    discovery.addEventListener('input', ()=>{
+      const txt = discovery.value || 'Your preview text here';
+      const overlay = document.getElementById('videoOverlay');
+      if (overlay) overlay.textContent = txt;
+    });
+  }
+
+  try {
+    const storedUsage = localStorage.getItem('llm_usage_cost');
+    if (storedUsage) {
+      const badge = document.getElementById('usageBadgeCost');
+      if (badge) badge.textContent = storedUsage;
+    }
+    const storedKey = localStorage.getItem('llm_api_key');
+    const status = document.getElementById('apiStatusBadge');
+    if (status) status.textContent = storedKey ? 'API Keys: Ready' : 'API Keys: None';
+  } catch (e) {}
+
+  renderJobs();
   _wirePlayButton();
-  try{ const loginSaved = localStorage.getItem('llm_role') || 'admin'; selectLoginRole(loginSaved); const loginAdmin = document.getElementById('loginTabAdmin'); const loginUser = document.getElementById('loginTabUser'); if(loginAdmin) loginAdmin.addEventListener('click', ()=> selectLoginRole('admin')); if(loginUser) loginUser.addEventListener('click', ()=> selectLoginRole('user')); }catch(e){}
-  // populate video provider selector
+
+  try {
+    const loginSaved = localStorage.getItem('llm_role') || 'admin';
+    selectLoginRole(loginSaved);
+    const loginAdmin = document.getElementById('loginTabAdmin');
+    const loginUser = document.getElementById('loginTabUser');
+    if (loginAdmin) loginAdmin.addEventListener('click', () => selectLoginRole('admin'));
+    if (loginUser) loginUser.addEventListener('click', () => selectLoginRole('user'));
+  } catch (e) {}
+
   loadVideoSettings();
 });
 </script>
-
 </body>
 </html>
