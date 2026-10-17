@@ -99,20 +99,35 @@ header {
 .studio-container { max-width: var(--site-max); margin: 0 auto; padding: 16px; display: grid; grid-template-columns: 1fr; gap: var(--gap); min-height: calc(100vh - 68px); z-index: 10; position: relative; }
 .panel { background: linear-gradient(180deg, rgba(13,18,31,0.96), rgba(9,13,21,0.92)); border: 1px solid rgba(0,240,255,0.06); border-radius: var(--r); padding: 16px; display:flex; flex-direction:column; }
 .panel-header { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.03); padding-bottom:10px; }
+.panel-title { font-weight:700; color:var(--text); }
 
 .input-control { background: rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px; color:#fff; }
 .input-control:focus { outline:none; border-color:var(--cyan); box-shadow:0 0 12px rgba(0,240,255,0.08); }
 .btn-produce { background: linear-gradient(135deg, var(--orange), #e04800); border:none; color:#fff; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow: 0 18px 30px rgba(224,72,0,0.12); }
 
+/* Small buttons */
+.btn-mini { background: transparent; border: 1px solid rgba(255,255,255,0.06); color: var(--cyan); padding: 8px 10px; border-radius: 8px; cursor: pointer; font-weight:600; }
+.btn-mini:hover { background: rgba(0,240,255,0.03); border-color: rgba(0,240,255,0.12); }
+
 /* Video viewport tweaks */
-.video-viewport { width:100%; aspect-ratio:16/9; background: radial-gradient(circle at center, #111827, #030712); display:flex; align-items:center; justify-content:center; position:relative; border-radius:10px; overflow:hidden; }
+.video-viewport { width:100%; aspect-ratio:16/9; background: radial-gradient(circle at center, #111827, #030712); display:flex; align-items:center; justify-content:center; position:relative; border-radius:10px; overflow:hidden; min-height:240px; }
+.player-container { display:flex; flex-direction:column; gap:12px; }
+
+/* Thumbnails and assets */
+.thumb-item { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04); padding:12px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--mut-light); cursor:pointer; }
+.thumb-item:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+
+/* Login card */
+.login-card { box-shadow: 0 18px 40px rgba(2,6,23,0.6); }
+.login-role-tab { background: transparent; border:1px solid rgba(255,255,255,0.04); padding:8px 10px; border-radius:8px; cursor:pointer; color:var(--mut-light); }
+.login-role-tab.active { background: rgba(0,240,255,0.04); color:var(--cyan); border-color: rgba(0,240,255,0.12); }
 
 /* Toasts */
 #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 60; display:flex; flex-direction:column; gap:10px; pointer-events:none; }
 .toast { background: rgba(13,18,31,0.98); border:1px solid rgba(0,240,255,0.06); padding:12px 14px; border-radius:10px; box-shadow: 0 8px 20px rgba(0,0,0,0.35); pointer-events:auto; }
 
 /* Responsive */
-@media (min-width:1100px) { .studio-container { grid-template-columns: 320px 1fr 420px; } }
+@media (min-width:1100px) { .studio-container { grid-template-columns: 340px 1fr 420px; padding:24px; } .panel { padding:18px; } }
 
 /* Accessibility focus */
 :focus { outline: none; }
@@ -167,7 +182,7 @@ button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
     </a>
   </div>
   <div style="display:flex;align-items:center;gap:12px;">
-    <button onclick="openApiModal()" style="background:transparent;border:1px solid rgba(0,240,255,0.06);padding:8px 10px;border-radius:8px;color:var(--cyan);">🔑 API KEYS & INTEGRATIONS</button>
+    <button onclick="openApiModal()" class="btn-mini">🔑 API KEYS & INTEGRATIONS</button>
     <div style="color:var(--mut-light);">💰 <span id="usageBadgeCost">$0.0000</span></div>
   </div>
 </header>
@@ -215,7 +230,7 @@ button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
   <!-- Left Sidebar -->
   <div class="panel">
     <div class="panel-header" data-role="admin"><div class="panel-title">🧪 Presets</div></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
       <button class="btn-mini" onclick="runTest('A')">A: News</button>
       <button class="btn-mini" onclick="runTest('B')">B: Sports</button>
       <button class="btn-mini" onclick="runTest('C')">C: Entertainment</button>
@@ -253,13 +268,13 @@ button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
       <div style="display:flex;align-items:center;gap:12px;margin-top:12px;"><button id="btnPlay" class="btn-mini">▶</button><div style="flex:1;background:rgba(255,255,255,0.06);height:8px;border-radius:6px;overflow:hidden;"><div id="progressFill" style="width:0%;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));"></div></div></div>
     </div>
 
-    <div style="margin-top:12px;"><div class="panel-header"><div class="panel-title">Scenes</div></div><div id="scenesContainer" style="display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto;"></div></div>
+    <div style="margin-top:12px;"><div class="panel-header"><div class="panel-title">Scenes</div></div><div id="scenesContainer" style="display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto;padding-top:8px;"></div></div>
   </div>
 
   <!-- Right Sidebar -->
   <div class="panel">
     <div class="panel-header"><div class="panel-title">🔎 QA & Assets</div></div>
-    <div id="thumbsGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;"><div class="thumb-item">Thumb 1</div><div class="thumb-item">Thumb 2</div></div>
+    <div id="thumbsGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding-top:8px;"><div class="thumb-item">Thumb 1</div><div class="thumb-item">Thumb 2</div></div>
   </div>
 
 </div>
@@ -271,7 +286,7 @@ function showToast(msg, duration=4000){ const c=document.getElementById('toast-c
 
 function doLogin(){ document.getElementById('loginScreen').style.display='none'; document.getElementById('appMain').style.display='block'; showToast('Welcome — Gemini-enabled UI'); }
 function doLogout(){ document.getElementById('appMain').style.display='none'; document.getElementById('loginScreen').style.display='block'; }
-function selectLoginRole(role){ try{ localStorage.setItem('llm_role',role); }catch(e){} }
+function selectLoginRole(role){ try{ localStorage.setItem('llm_role',role); const adminLabel=document.getElementById('loginRoleLabel'); if(adminLabel) adminLabel.textContent = role==='admin' ? '🛡 Admin Login' : '👤 User Login'; }catch(e){} }
 
 // --- Provider wiring (improved) ---
 const VIDEO_PROVIDERS = [
