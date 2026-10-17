@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06080e">
 <title>General-Purpose Automated AI Video Production System — LLM Systems</title>
 <meta name="description" content="End-to-end, topic-agnostic autonomous AI video production system for news, sports, documentaries, explainers, shorts, and storytelling.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,7 +12,8 @@
 <style>
 :root {
   --bg: #06080e;
-  --panel: #0d121f;
+  --bg-soft: #0b1020;
+  --panel: rgba(13,18,31,0.92);
   --panel-border: rgba(0, 240, 255, 0.18);
   --panel-hover: #141c2e;
   --cyan: #00f0ff;
@@ -29,38 +31,36 @@
   --gap: 20px;
 }
 
-/* Background glow layer */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 10%, rgba(0,240,255,0.10), transparent 22%),
-    radial-gradient(circle at 80% 70%, rgba(168,85,247,0.08), transparent 28%);
+    radial-gradient(circle at 20% 10%, rgba(0,240,255,0.12), transparent 22%),
+    radial-gradient(circle at 80% 70%, rgba(168,85,247,0.10), transparent 28%);
   pointer-events: none;
   z-index: 0;
 }
 
-/* Reset + base */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
 body {
-  background: var(--bg);
+  background:
+    radial-gradient(circle at top, rgba(10, 16, 30, 0.95), rgba(6, 8, 14, 1) 45%, #04070d 100%);
   color: var(--text);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
   line-height: 1.5;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   position: relative;
 }
 
-/* Header */
 header {
-  height: 68px;
+  height: 72px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   background: rgba(7, 10, 14, 0.8);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
   z-index: 20;
@@ -71,9 +71,29 @@ header {
   gap: 12px;
 }
 
-.brand-orb { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--cyan), var(--purple)); display: flex; align-items: center; justify-content: center; font-size:18px; }
+.brand-orb {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 12px 24px rgba(168,85,247,0.28);
+}
 
-/* Floating Gemini-ready status */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
 .floating-status {
   position: fixed;
   top: 18px;
@@ -95,55 +115,157 @@ header {
 .floating-status .live-dot { width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 12px rgba(16,185,129,0.9); }
 .floating-status .provider-tag { padding:4px 8px; border-radius:999px; background:rgba(0,240,255,0.10); color:var(--cyan); font-weight:700; border:1px solid rgba(0,240,255,0.12); }
 
-/* Main Layout */
 .studio-container { max-width: var(--site-max); margin: 0 auto; padding: 16px; display: grid; grid-template-columns: 1fr; gap: var(--gap); min-height: calc(100vh - 68px); z-index: 10; position: relative; }
-.panel { background: linear-gradient(180deg, rgba(13,18,31,0.96), rgba(9,13,21,0.92)); border: 1px solid rgba(0,240,255,0.06); border-radius: var(--r); padding: 16px; display:flex; flex-direction:column; }
+.panel {
+  background: linear-gradient(180deg, rgba(13,18,31,0.96), rgba(9,13,21,0.92));
+  border: 1px solid rgba(0,240,255,0.06);
+  border-radius: var(--r);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 18px 40px rgba(2,6,23,0.55);
+}
+.panel:hover { border-color: rgba(0,240,255,0.12); }
 .panel-header { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.03); padding-bottom:10px; }
 .panel-title { font-weight:700; color:var(--text); }
 
-.input-control { background: rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px 12px; color:#fff; }
-.input-control:focus { outline:none; border-color:var(--cyan); box-shadow:0 0 12px rgba(0,240,255,0.08); }
-.btn-produce { background: linear-gradient(135deg, var(--orange), #e04800); border:none; color:#fff; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; box-shadow: 0 18px 30px rgba(224,72,0,0.12); }
+.input-control {
+  width: 100%;
+  background: rgba(0,0,0,0.45);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:10px;
+  padding:10px 12px;
+  color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.input-control:focus {
+  outline:none;
+  border-color: var(--cyan);
+  box-shadow:0 0 12px rgba(0,240,255,0.08);
+}
+textarea.input-control { min-height: 100px; resize: vertical; }
 
-/* Small buttons */
-.btn-mini { background: transparent; border: 1px solid rgba(255,255,255,0.06); color: var(--cyan); padding: 8px 10px; border-radius: 8px; cursor: pointer; font-weight:600; }
+.btn-produce {
+  background: linear-gradient(135deg, var(--orange), #e04800);
+  border:none;
+  color:#fff;
+  padding:10px 14px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow: 0 18px 30px rgba(255,107,43,0.35);
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+.btn-produce:hover { transform: translateY(-1px); filter: brightness(1.05); }
+
+.btn-mini {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--cyan);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight:600;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
 .btn-mini:hover { background: rgba(0,240,255,0.03); border-color: rgba(0,240,255,0.12); }
 
-/* Video viewport tweaks */
-.video-viewport { width:100%; aspect-ratio:16/9; background: radial-gradient(circle at center, #111827, #030712); display:flex; align-items:center; justify-content:center; position:relative; border-radius:10px; overflow:hidden; min-height:240px; }
+.video-viewport {
+  width:100%;
+  aspect-ratio:16/9;
+  background: radial-gradient(circle at center, #111827, #030712);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+  overflow:hidden;
+}
 .player-container { display:flex; flex-direction:column; gap:12px; }
 
-/* Thumbnails and assets */
-.thumb-item { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.04); padding:12px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--mut-light); cursor:pointer; }
+.thumb-item {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid rgba(255,255,255,0.04);
+  padding:12px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height: 80px;
+  color: var(--mut-light);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 .thumb-item:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
 
-/* Login card */
 .login-card { box-shadow: 0 18px 40px rgba(2,6,23,0.6); }
 .login-role-tab { background: transparent; border:1px solid rgba(255,255,255,0.04); padding:8px 10px; border-radius:8px; cursor:pointer; color:var(--mut-light); }
 .login-role-tab.active { background: rgba(0,240,255,0.04); color:var(--cyan); border-color: rgba(0,240,255,0.12); }
 
-/* Toasts */
 #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 60; display:flex; flex-direction:column; gap:10px; pointer-events:none; }
-.toast { background: rgba(13,18,31,0.98); border:1px solid rgba(0,240,255,0.06); padding:12px 14px; border-radius:10px; box-shadow: 0 8px 20px rgba(0,0,0,0.35); pointer-events:auto; }
+.toast {
+  background: rgba(13,18,31,0.98);
+  border:1px solid rgba(0,240,255,0.06);
+  padding:12px 14px;
+  border-radius:10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  pointer-events:auto;
+}
 
-/* Responsive */
-@media (min-width:1100px) { .studio-container { grid-template-columns: 340px 1fr 420px; padding:24px; } .panel { padding:18px; } }
+#loginScreen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  z-index: 1;
+}
 
-/* Accessibility focus */
+#appMain {
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width:1100px) {
+  .studio-container { grid-template-columns: 340px 1fr 420px; padding:24px; }
+  .panel { padding:18px; }
+}
+
+@media (max-width: 760px) {
+  header {
+    padding: 0 14px;
+    height: auto;
+    min-height: 72px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .brand {
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+  }
+  .floating-status {
+    top: 10px;
+    right: 10px;
+    max-width: calc(100% - 20px);
+    font-size: 10px;
+  }
+  .studio-container { padding: 14px; }
+  .panel { padding: 14px; }
+}
+
 :focus { outline: none; }
 button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
 </style>
 </head>
 <body>
 
-<!-- Floating status -->
 <div class="floating-status" aria-live="polite">
   <span class="live-dot" aria-hidden="true"></span>
   <span>Gemini-ready video pipeline</span>
   <span class="provider-tag">Gemini</span>
 </div>
 
-<!-- LOGIN SCREEN -->
 <div id="loginScreen">
   <div class="login-card panel" style="max-width:420px;margin:60px auto;">
     <div class="login-logo" style="text-align:center;margin-bottom:8px;">
@@ -170,10 +292,8 @@ button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
   </div>
 </div>
 
-<!-- MAIN APP (hidden until auth) -->
 <div id="appMain" style="display:none;">
 
-<!-- Header -->
 <header>
   <div class="header-left" style="display:flex;align-items:center;gap:12px;">
     <a href="#" class="brand" style="display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none;">
@@ -187,10 +307,8 @@ button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
   </div>
 </header>
 
-<!-- Toast Notification Container -->
 <div id="toast-container"></div>
 
-<!-- API Modal -->
 <div id="apiModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:40;align-items:center;justify-content:center;padding:20px;">
   <div style="width:100%;max-width:720px;">
     <div class="panel">
@@ -219,15 +337,13 @@ button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
         <button class="btn-produce" onclick="saveVideoSettingsAndGenerate()" style="padding:8px 12px;font-size:13px;">Generate Video</button>
       </div>
 
-      <div style="margin-top:10px;font-size:12px;color:var(--mut-light);">Keys should be stored server-side for production. For this demo, provider endpoints (server proxies) may be stored in localStorage for convenience.</div>
+      <div style="margin-top:10px;font-size:12px;color:var(--mut-light);">Keys should be stored server-side for production. For this demo, provider endpoints (server proxies) may be stored in local browser storage for convenience.</div>
     </div>
   </div>
 </div>
 
-<!-- Main Studio Container -->
 <div class="studio-container">
 
-  <!-- Left Sidebar -->
   <div class="panel">
     <div class="panel-header" data-role="admin"><div class="panel-title">🧪 Presets</div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
@@ -261,17 +377,15 @@ button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
     </div>
   </div>
 
-  <!-- Center: Player -->
   <div class="panel">
     <div class="player-container">
       <div id="videoViewport" class="video-viewport"><div id="videoOverlay" style="color:var(--mut-light);padding:12px;">Your preview text here</div></div>
-      <div style="display:flex;align-items:center;gap:12px;margin-top:12px;"><button id="btnPlay" class="btn-mini">▶</button><div style="flex:1;background:rgba(255,255,255,0.06);height:8px;border-radius:6px;overflow:hidden;"><div id="progressFill" style="width:0%;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));"></div></div></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:12px;"><button id="btnPlay" class="btn-mini">▶</button><div style="flex:1;background:rgba(255,255,255,0.06);height:8px;border-radius:999px;overflow:hidden;"><div id="progressFill" style="height:100%;width:35%;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:inherit;"></div></div><span id="timeBadge" style="color:var(--mut-light);font-size:12px;">00:00</span></div>
     </div>
 
     <div style="margin-top:12px;"><div class="panel-header"><div class="panel-title">Scenes</div></div><div id="scenesContainer" style="display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto;padding-top:8px;"></div></div>
   </div>
 
-  <!-- Right Sidebar -->
   <div class="panel">
     <div class="panel-header"><div class="panel-title">🔎 QA & Assets</div></div>
     <div id="thumbsGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding-top:8px;"><div class="thumb-item">Thumb 1</div><div class="thumb-item">Thumb 2</div></div>
@@ -279,16 +393,13 @@ button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
 
 </div>
 
-<!-- Scripts -->
 <script>
-// --- Helpers ---
-function showToast(msg, duration=4000){ const c=document.getElementById('toast-container'); if(!c) return; const t=document.createElement('div'); t.className='toast'; t.textContent=msg; c.appendChild(t); setTimeout(()=>t.remove(), duration); }
+function showToast(msg, duration=4000){ const c=document.getElementById('toast-container'); if(!c) return; const t=document.createElement('div'); t.className='toast'; t.textContent=msg; c.appendChild(t); setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateY(8px)'; setTimeout(()=>t.remove(),220); }, duration); }
 
 function doLogin(){ document.getElementById('loginScreen').style.display='none'; document.getElementById('appMain').style.display='block'; showToast('Welcome — Gemini-enabled UI'); }
 function doLogout(){ document.getElementById('appMain').style.display='none'; document.getElementById('loginScreen').style.display='block'; }
-function selectLoginRole(role){ try{ localStorage.setItem('llm_role',role); const adminLabel=document.getElementById('loginRoleLabel'); if(adminLabel) adminLabel.textContent = role==='admin' ? '🛡 Admin Login' : '👤 User Login'; }catch(e){} }
+function selectLoginRole(role){ try{ localStorage.setItem('llm_role',role); const adminLabel=document.getElementById('loginRoleLabel'); if(adminLabel) adminLabel.textContent = role==='admin' ? '🛡 Admin Login' : '👤 User Login'; document.getElementById('loginTabAdmin').classList.toggle('active', role==='admin'); document.getElementById('loginTabUser').classList.toggle('active', role==='user'); document.getElementById('loginTabAdmin').setAttribute('aria-pressed', role==='admin'); document.getElementById('loginTabUser').setAttribute('aria-pressed', role==='user'); }catch(e){} }
 
-// --- Provider wiring (improved) ---
 const VIDEO_PROVIDERS = [
   { id: 'demo', name: 'Demo (local simulated)', requiresServer: false },
   { id: 'gemini', name: 'Gemini', requiresServer: true },
@@ -298,7 +409,6 @@ const VIDEO_PROVIDERS = [
   { id: 'openai_video', name: 'OpenAI Video (placeholder)', requiresServer: true }
 ];
 
-// Ensure localStorage doesn't hold stale provider keys from old builds and that Gemini option is visible.
 function ensureProvidersAndClearStale(){
   try{
     const providers = VIDEO_PROVIDERS.map(p=>p.id);
@@ -306,17 +416,13 @@ function ensureProvidersAndClearStale(){
     const keysRaw = localStorage.getItem('llm_video_keys');
     let keys = {};
     if(keysRaw){ try{ keys = JSON.parse(keysRaw); }catch(e){ keys = {}; } }
-    // If saved provider is unknown, remove it
-    if(savedProvider && !providers.includes(savedProvider)){
-      localStorage.removeItem('llm_video_provider');
-    }
-    // Remove unknown provider keys
+    if(savedProvider && !providers.includes(savedProvider)) localStorage.removeItem('llm_video_provider');
     const unknown = Object.keys(keys).filter(k=>!providers.includes(k));
     if(unknown.length){ unknown.forEach(k=>delete keys[k]); localStorage.setItem('llm_video_keys', JSON.stringify(keys)); }
   }catch(e){ console.warn('ensureProvidersAndClearStale error', e); }
 }
 
-function loadVideoSettings(){ try{ const select=document.getElementById('videoProviderSelect'); select.innerHTML=''; VIDEO_PROVIDERS.forEach(p=>{ const o=document.createElement('option'); o.value=p.id; o.textContent=p.name; select.appendChild(o); }); const savedProvider=localStorage.getItem('llm_video_provider'); if(savedProvider) try{ select.value=savedProvider; }catch(e){} renderVideoProviderFields(select.value || VIDEO_PROVIDERS[0].id); }catch(e){console.error('loadVideoSettings',e);} }
+function loadVideoSettings(){ try{ const select=document.getElementById('videoProviderSelect'); select.innerHTML=''; VIDEO_PROVIDERS.forEach(p=>{ const o=document.createElement('option'); o.value=p.id; o.textContent=p.name; select.appendChild(o); }); const saved=localStorage.getItem('llm_video_provider') || 'demo'; select.value=saved; renderVideoProviderFields(saved); select.onchange=()=>{ localStorage.setItem('llm_video_provider', select.value); renderVideoProviderFields(select.value); }; }catch(e){ console.error('loadVideoSettings', e); } }
 
 function renderVideoProviderFields(providerId){
   const container = document.getElementById('videoProviderFields'); container.innerHTML='';
@@ -330,7 +436,7 @@ function renderVideoProviderFields(providerId){
 
   const hint = document.createElement('div'); hint.style.fontSize='12px'; hint.style.color='var(--mut-light)'; hint.style.marginTop='6px'; hint.style.lineHeight='1.5';
   if(providerId==='gemini'){
-    hint.textContent = 'Gemini setup: configure GEMINI_KEY & GEMINI_MODEL on your server or Vercel, then save your server endpoint URL here (e.g. https://your-site/api/video-proxy). Do NOT store secrets in the browser.';
+    hint.textContent = 'Gemini setup: configure GEMINI_KEY & GEMINI_MODEL on your server or Vercel, then save your server endpoint URL here (e.g. https://your-site/api/video-proxy). Do NOT store secrets in the browser for production.';
   } else {
     hint.textContent = provider.requiresServer ? 'Note: Most providers require server-side proxy endpoints. Store secrets server-side and call via endpoint URL here.' : 'Runs locally for demo.';
   }
@@ -338,12 +444,8 @@ function renderVideoProviderFields(providerId){
   container.appendChild(label); container.appendChild(input); container.appendChild(hint);
 }
 
-function saveVideoSettingsAndGenerate(){ try{ const provider=document.getElementById('videoProviderSelect').value; const key=(document.getElementById('videoProviderKey')||{}).value||''; const keys=JSON.parse(localStorage.getItem('llm_video_keys')||'{}'); keys[provider]=key; localStorage.setItem('llm_video_keys', JSON.stringify(keys)); localStorage.setItem('llm_video_provider', provider); // generate immediately
-  // small delay to allow modal to close
-  setTimeout(()=>{ generateVideoFromUI(); closeApiModal(); },200);
-}catch(e){console.error('saveVideoSettingsAndGenerate',e);} }
+function saveVideoSettingsAndGenerate(){ try{ const provider=document.getElementById('videoProviderSelect').value; const key=(document.getElementById('videoProviderKey')||{}).value||''; const keys=JSON.parse(localStorage.getItem('llm_video_keys')||'{}'); keys[provider]=key; localStorage.setItem('llm_video_keys', JSON.stringify(keys)); localStorage.setItem('llm_video_provider', provider); setTimeout(()=>{ generateVideoFromUI(); closeApiModal(); },200); }catch(e){console.error('saveVideoSettingsAndGenerate',e);} }
 
-// --- Gemini polling helper (frontend) ---
 async function pollOperation(endpointUrl, operationId, timeoutMs=120000, intervalMs=2000){
   const start = Date.now();
   while(Date.now()-start < timeoutMs){
@@ -353,14 +455,12 @@ async function pollOperation(endpointUrl, operationId, timeoutMs=120000, interva
       const j = await resp.json();
       if(j.status === 'done') return j;
       if(j.status === 'error') throw new Error(JSON.stringify(j.error || j));
-      // queued -> wait
     }catch(err){ console.error('pollOperation error', err); }
     await new Promise(r=>setTimeout(r, intervalMs));
   }
   throw new Error('Polling timed out after ' + (timeoutMs/1000) + 's');
 }
 
-// --- sendToVideoModel: improved with Gemini auto-polling ---
 async function sendToVideoModel(providerId, payload){
   const keys = JSON.parse(localStorage.getItem('llm_video_keys')||'{}');
   const key = keys[providerId] || '';
@@ -374,31 +474,24 @@ async function sendToVideoModel(providerId, payload){
     throw new Error('Provider requires a server endpoint URL in the provider key field. See API modal.');
   }
 
-  // POST job
   const resp = await fetch(key, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ provider: providerId, payload }) });
   if(!resp.ok){ const t = await resp.text(); throw new Error('Server returned ' + resp.status + ': ' + t); }
   const j = await resp.json();
 
-  // If immediate done
   if(j.status === 'done') return j;
-
-  // If queued with operation id, and provider is gemini, auto-poll via gemini_poll
   if(j.status === 'queued' && j.id){
     if(providerId === 'gemini'){
       try{
         showToast('Gemini job queued, polling for completion…');
-        const done = await pollOperation(key, j.id, 2*60*1000, 2500); // 2 min timeout
+        const done = await pollOperation(key, j.id, 2*60*1000, 2500);
         return done;
       }catch(err){ console.error('Auto-poll failed', err); return { status:'queued', id:j.id, raw:j } }
     }
-    return j; // non-gemini queued
+    return j;
   }
-
-  // Unknown shape -> return raw
   return j;
 }
 
-// --- UI generation flow ---
 async function generateVideoFromUI(){
   try{
     const provider = localStorage.getItem('llm_video_provider') || document.getElementById('videoProviderSelect').value || 'demo';
@@ -410,7 +503,7 @@ async function generateVideoFromUI(){
     const result = await sendToVideoModel(provider, payload);
     if(result && result.status === 'done'){
       showToast('Video ready');
-      const thumbs = document.getElementById('thumbsGrid'); if(thumbs){ const el=document.createElement('div'); el.className='thumb-item'; el.textContent='Video'; el.onclick=()=> window.open(result.url||'#'); thumbs.appendChild(el); }
+      const thumbs = document.getElementById('thumbsGrid'); if(thumbs){ const el=document.createElement('div'); el.className='thumb-item'; el.textContent='Video'; el.onclick=()=> window.open(result.url || '#', '_blank'); thumbs.appendChild(el); }
     } else if(result && result.status === 'queued'){
       showToast('Job queued: ' + (result.id||'id not provided'));
     } else {
@@ -420,12 +513,10 @@ async function generateVideoFromUI(){
   }catch(err){ console.error('generateVideoFromUI error', err); showToast('Error: ' + (err.message||err)); }
 }
 
-// --- small utilities & bootstrapping ---
-function runTest(k){ const presets={A:'Create a 60s news-style video summarizing a recent breakthrough in AI.',B:'Produce a 90s sports highlight reel about Formula 1.',C:'Short entertainment montage with dynamic cuts and upbeat music.',D:'A 2-minute historical explainer about the Roman Empire.'}; const t=document.getElementById('topicInputA'); if(t) t.value = presets[k] || ''; }
+function runTest(k){ const presets={A:'Create a 60s news-style video summarizing a recent breakthrough in AI.',B:'Produce a 90s sports highlight reel about Formula 1.',C:'Short entertainment montage about a futuristic city lifestyle.',D:'Documentary-style 75s history explainer on the Renaissance.'}; const target=document.getElementById('topicInputA'); if(target) target.value = presets[k] || ''; }
 
-function _wirePlayButton(){ try{ const play=document.getElementById('btnPlay'); const fill=document.getElementById('progressFill'); if(!play||!fill) return; let iv=null; play.addEventListener('click', ()=>{ if(iv){ clearInterval(iv); iv=null; play.textContent='▶'; } else { play.textContent='⏸'; let pct=0; iv=setInterval(()=>{ pct+=5; fill.style.width = pct + '%'; if(pct>=100){ clearInterval(iv); iv=null; play.textContent='▶'; fill.style.width='0%'; } }, 200); } }); }catch(e){console.error('_wirePlayButton',e);} }
+function _wirePlayButton(){ try{ const play=document.getElementById('btnPlay'); const fill=document.getElementById('progressFill'); if(!play||!fill) return; let iv=null; play.addEventListener('click',()=>{ if(!iv){ iv=setInterval(()=>{ const w = parseFloat(fill.style.width || '35'); const next = w >= 100 ? 0 : w + 8; fill.style.width = next + '%'; if(next >= 100){ clearInterval(iv); iv=null; } }, 200); } else { clearInterval(iv); iv=null; } }); }catch(e){} }
 
-// DOMContent loaded
 document.addEventListener('DOMContentLoaded', ()=>{
   try{ ensureProvidersAndClearStale(); const saved=localStorage.getItem('llm_role'); if(!saved) localStorage.setItem('llm_role','admin'); }catch(e){}
   loadVideoSettings(); _wirePlayButton(); try{ const loginSaved = localStorage.getItem('llm_role')||'admin'; if(loginSaved) { document.getElementById('loginScreen').style.display='none'; document.getElementById('appMain').style.display='block'; } }catch(e){}
