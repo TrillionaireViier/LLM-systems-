@@ -337,7 +337,7 @@ button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
         <button class="btn-produce" onclick="saveVideoSettingsAndGenerate()" style="padding:8px 12px;font-size:13px;">Generate Video</button>
       </div>
 
-      <div style="margin-top:10px;font-size:12px;color:var(--mut-light);">Keys should be stored server-side for production. For this demo, provider endpoints (server proxies) may be stored in local browser storage for convenience.</div>
+      <div style="margin-top:10px;font-size:12px;color:var(--mut-light);">Keys should be stored server-side for production. For this demo, provider endpoints (server proxies) may be stored in localStorage only for convenience.</div>
     </div>
   </div>
 </div>
@@ -380,7 +380,7 @@ button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
   <div class="panel">
     <div class="player-container">
       <div id="videoViewport" class="video-viewport"><div id="videoOverlay" style="color:var(--mut-light);padding:12px;">Your preview text here</div></div>
-      <div style="display:flex;align-items:center;gap:12px;margin-top:12px;"><button id="btnPlay" class="btn-mini">▶</button><div style="flex:1;background:rgba(255,255,255,0.06);height:8px;border-radius:999px;overflow:hidden;"><div id="progressFill" style="height:100%;width:35%;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:inherit;"></div></div><span id="timeBadge" style="color:var(--mut-light);font-size:12px;">00:00</span></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:12px;"><button id="btnPlay" class="btn-mini">▶</button><div style="flex:1;background:rgba(255,255,255,0.06);height:8px;border-radius:999px;overflow:hidden;"><div id="progressFill" style="width:0%;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:999px;"></div></div></div>
     </div>
 
     <div style="margin-top:12px;"><div class="panel-header"><div class="panel-title">Scenes</div></div><div id="scenesContainer" style="display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto;padding-top:8px;"></div></div>
@@ -394,15 +394,16 @@ button:focus { outline: 2px solid rgba(0,240,255,0.14); outline-offset: 2px; }
 </div>
 
 <script>
-function showToast(msg, duration=4000){ const c=document.getElementById('toast-container'); if(!c) return; const t=document.createElement('div'); t.className='toast'; t.textContent=msg; c.appendChild(t); setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateY(8px)'; setTimeout(()=>t.remove(),220); }, duration); }
+function showToast(msg, duration=4000){ const c=document.getElementById('toast-container'); if(!c) return; const t=document.createElement('div'); t.className='toast'; t.textContent=msg; c.appendChild(t); setTimeout(()=>{ t.remove(); }, duration); }
 
 function doLogin(){ document.getElementById('loginScreen').style.display='none'; document.getElementById('appMain').style.display='block'; showToast('Welcome — Gemini-enabled UI'); }
 function doLogout(){ document.getElementById('appMain').style.display='none'; document.getElementById('loginScreen').style.display='block'; }
-function selectLoginRole(role){ try{ localStorage.setItem('llm_role',role); const adminLabel=document.getElementById('loginRoleLabel'); if(adminLabel) adminLabel.textContent = role==='admin' ? '🛡 Admin Login' : '👤 User Login'; document.getElementById('loginTabAdmin').classList.toggle('active', role==='admin'); document.getElementById('loginTabUser').classList.toggle('active', role==='user'); document.getElementById('loginTabAdmin').setAttribute('aria-pressed', role==='admin'); document.getElementById('loginTabUser').setAttribute('aria-pressed', role==='user'); }catch(e){} }
+function selectLoginRole(role){ try{ localStorage.setItem('llm_role',role); const adminLabel=document.getElementById('loginRoleLabel'); if(adminLabel) adminLabel.textContent = role==='admin' ? '🛡 Admin Login' : '👤 User Login'; const tabs=['admin','user']; tabs.forEach(t=>{ const btn=document.getElementById('loginTab'+t.charAt(0).toUpperCase()+t.slice(1)); if(btn) btn.classList.toggle('active', t===role); }); }catch(e){} }
 
 const VIDEO_PROVIDERS = [
   { id: 'demo', name: 'Demo (local simulated)', requiresServer: false },
-  { id: 'gemini', name: 'Gemini', requiresServer: true },
+  { id: 'google', name: 'Google Gemini', requiresServer: true },
+  { id: 'gemini', name: 'Gemini (legacy)', requiresServer: true },
   { id: 'pika', name: 'Pika (example)', requiresServer: true },
   { id: 'runway', name: 'Runway (example)', requiresServer: true },
   { id: 'synthesia', name: 'Synthesia (example)', requiresServer: true },
@@ -435,8 +436,8 @@ function renderVideoProviderFields(providerId){
   input.value = keys[providerId] || '';
 
   const hint = document.createElement('div'); hint.style.fontSize='12px'; hint.style.color='var(--mut-light)'; hint.style.marginTop='6px'; hint.style.lineHeight='1.5';
-  if(providerId==='gemini'){
-    hint.textContent = 'Gemini setup: configure GEMINI_KEY & GEMINI_MODEL on your server or Vercel, then save your server endpoint URL here (e.g. https://your-site/api/video-proxy). Do NOT store secrets in the browser for production.';
+  if(providerId==='google' || providerId==='gemini'){
+    hint.textContent = 'Google Gemini setup: configure GEMINI_KEY & GEMINI_MODEL on your server or Vercel, then save your server endpoint URL here (e.g. https://your-site/api/video-proxy). Do NOT store secrets in the browser for production.';
   } else {
     hint.textContent = provider.requiresServer ? 'Note: Most providers require server-side proxy endpoints. Store secrets server-side and call via endpoint URL here.' : 'Runs locally for demo.';
   }
@@ -480,7 +481,7 @@ async function sendToVideoModel(providerId, payload){
 
   if(j.status === 'done') return j;
   if(j.status === 'queued' && j.id){
-    if(providerId === 'gemini'){
+    if(providerId === 'gemini' || providerId === 'google'){
       try{
         showToast('Gemini job queued, polling for completion…');
         const done = await pollOperation(key, j.id, 2*60*1000, 2500);
@@ -513,9 +514,9 @@ async function generateVideoFromUI(){
   }catch(err){ console.error('generateVideoFromUI error', err); showToast('Error: ' + (err.message||err)); }
 }
 
-function runTest(k){ const presets={A:'Create a 60s news-style video summarizing a recent breakthrough in AI.',B:'Produce a 90s sports highlight reel about Formula 1.',C:'Short entertainment montage about a futuristic city lifestyle.',D:'Documentary-style 75s history explainer on the Renaissance.'}; const target=document.getElementById('topicInputA'); if(target) target.value = presets[k] || ''; }
+function runTest(k){ const presets={A:'Create a 60s news-style video summarizing a recent breakthrough in AI.',B:'Produce a 90s sports highlight reel about Formula 1.',C:'Short entertainment montage for a viral social clip.',D:'Create a cinematic recap of a major historical event.'}; const t=document.getElementById('topicInputA'); if(t) t.value=presets[k] || presets.A; }
 
-function _wirePlayButton(){ try{ const play=document.getElementById('btnPlay'); const fill=document.getElementById('progressFill'); if(!play||!fill) return; let iv=null; play.addEventListener('click',()=>{ if(!iv){ iv=setInterval(()=>{ const w = parseFloat(fill.style.width || '35'); const next = w >= 100 ? 0 : w + 8; fill.style.width = next + '%'; if(next >= 100){ clearInterval(iv); iv=null; } }, 200); } else { clearInterval(iv); iv=null; } }); }catch(e){} }
+function _wirePlayButton(){ try{ const play=document.getElementById('btnPlay'); const fill=document.getElementById('progressFill'); if(!play||!fill) return; let iv=null; play.addEventListener('click',()=>{ if(play.dataset.playing==='1'){ play.dataset.playing='0'; play.textContent='▶'; clearInterval(iv); } else { play.dataset.playing='1'; play.textContent='❚❚'; let p=0; iv=setInterval(()=>{ p=(p+6)%100; fill.style.width=p+'%'; if(p>=100){ clearInterval(iv); play.dataset.playing='0'; play.textContent='▶'; } }, 180); } }); }catch(e){ console.warn('_wirePlayButton error', e); } }
 
 document.addEventListener('DOMContentLoaded', ()=>{
   try{ ensureProvidersAndClearStale(); const saved=localStorage.getItem('llm_role'); if(!saved) localStorage.setItem('llm_role','admin'); }catch(e){}
