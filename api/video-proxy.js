@@ -5,7 +5,7 @@
 export default async function handler(req, res) {
   // Simple health/debug endpoint on GET (safe: does not leak API keys)
   if (req.method === 'GET') {
-    const providers = ['runway','pika','synthesia','openai_video','gemini','google'];
+    const providers = ['runway','pika','synthesia','openai_video','gemini'];
     const env = {};
     providers.forEach(p => {
       const prefix = p.toUpperCase();
@@ -46,7 +46,6 @@ export default async function handler(req, res) {
       case 'openai_video':
         return await handleOpenAIVideo(payload, res);
       case 'gemini':
-      case 'google':
         return await handleGemini(payload, res);
       default:
         return res.status(400).json({ error: 'Unsupported provider: ' + provider });
